@@ -10,11 +10,11 @@ import java.awt.image.BufferedImage;
 import static Logic.Globals.*;
 
 public class Board extends JPanel {
-    Piece[][] pieces;
-    Player player;
-    Timer timer;
-    int lastMoveNumber;
-    int timerRepeats=0;
+    private Piece[][] pieces;
+    private Player player;
+    private Timer timer;
+    private int lastMoveNumber;
+    private int timerRepeats=0;
 
     Board(){
         /**
@@ -113,16 +113,22 @@ public class Board extends JPanel {
         if (seconds%60<10)
             secs="0"+seconds%60;
         else secs= String.valueOf(seconds%60);
-        Graphics g =pieces[0][(boardSize/2)-1].getImage().getGraphics();
+        if (mins.equals("99")&secs.equals("99"))
+            return;
+        Graphics g = pieces[0][(boardSize/2)-1].getImage().getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,25,24);
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString(mins+":",0,20);
 
-        g =pieces[0][(boardSize/2)].getImage().getGraphics();
+        g = pieces[0][(boardSize/2)].getImage().getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,25,24);
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString(secs,0,20);
-
+        repaint();
     }
 
 
