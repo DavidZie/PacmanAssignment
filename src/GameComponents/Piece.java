@@ -20,9 +20,9 @@ public class Piece extends JLabel {
         super();
         this.x=x;
         this.y=y;
+        setSize(pieceSize,pieceSize);
+        image = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
         addWalls(walls);
-        if (!wall)
-            image = gameImagesArray[1];
         setIcon(new ImageIcon(image));
     }//Constructor
 
@@ -42,7 +42,6 @@ public class Piece extends JLabel {
     }
 
     public void setImage(BufferedImage image) {
-        eaten=true;
         this.image = image;
         setIcon(new ImageIcon(image));
     }
@@ -54,8 +53,11 @@ public class Piece extends JLabel {
     //-------------------Construction Time Methods------------------------//
 
     public void addWalls(Stack s){
-        image = new BufferedImage(25,25,BufferedImage.TYPE_INT_ARGB);
-        image.getGraphics().drawImage(gameImagesArray[0],0,0,null);
+        if (s==null)
+            return;
+        Graphics graphics = image.getGraphics();
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0,0,getWidth(),getHeight());
         while (!s.empty()){
             int popped = (int)s.pop();
             switch (popped){
@@ -83,25 +85,25 @@ public class Piece extends JLabel {
     private void drawNorthWall(){
         Graphics g = image.getGraphics();
         g.setColor(Color.BLUE);
-        g.fillRect(0, 0, pieceSize, 2);
+        g.fillRect(0, 0, getWidth(), 2);
         wall = true;
     }
     private void drawEastWall(){
         Graphics g = image.getGraphics();
         g.setColor(Color.BLUE);
-        g.fillRect(pieceSize-1,0,2,pieceSize);
+        g.fillRect(getWidth() - 1,0,2,getHeight());
         wall = true;
     }
     private void drawSouthWall(){
         Graphics g = image.getGraphics();
         g.setColor(Color.BLUE);
-        g.fillRect(0, pieceSize - 1, pieceSize, 2);
+        g.fillRect(0, getHeight() - 1, getWidth(), 2);
         wall = true;
     }
     private void drawWestWall(){
         Graphics g = image.getGraphics();
         g.setColor(Color.BLUE);
-        g.fillRect(0, 0, 2, pieceSize);
+        g.fillRect(0, 0, 2, getHeight());
         wall = true;
     }
 

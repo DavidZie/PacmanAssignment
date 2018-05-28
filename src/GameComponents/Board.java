@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Stack;
 
 import static Logic.Globals.*;
 
@@ -16,31 +17,32 @@ public class Board extends JPanel {
     private int lastMoveNumber;
     private int timerRepeats=0;
 
+
     Board(){
-        /**
-         * initiate GameComponents.Board..,
-         */
-        super();
+        super(new GridBagLayout());
         createBoard();
 
-        for (int i=0; i<boardSize;i++){
-            for (int j=0;j<boardSize;j++){
-                pieces[i][j] = new Piece(i,j,gameBoards.getFirst()[i][j]);
-                add(pieces[i][j]);
-            }
-        }
         drawGate(pieces[playerLocation[0]+1][playerLocation[1]]);
         swapIn();
+        drawInfo();
         drawTime(0);
         timerSetup();
-        drawLife();
+
 
     }//Constructor
 
     private void createBoard(){
-        setLayout(new GridLayout(boardSize,boardSize,0,0));
         setBorder(new LineBorder(Color.GREEN));
         pieces = new Piece[boardSize][boardSize];
+        GridBagConstraints constraints = new GridBagConstraints();
+        for (int i=0; i<boardSize;i++){
+            constraints.gridy=i;
+            for (int j=0;j<boardSize;j++){
+                constraints.gridx=j;
+                pieces[i][j] = new Piece(i,j,gameBoards.getFirst()[i][j]);
+                add(pieces[i][j],constraints);
+            }
+        }
     }
 
     private void swapIn(){
@@ -115,21 +117,35 @@ public class Board extends JPanel {
         else secs= String.valueOf(seconds%60);
         if (mins.equals("99")&secs.equals("99"))
             return;
-        Graphics g = pieces[0][(boardSize/2)-1].getImage().getGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0,0,25,24);
-        g.setColor(Color.WHITE);
+        Piece timePiece = pieces[0][(boardSize/2)-1];
+        Graphics g = timePiece.getImage().getGraphics();
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString(mins+":",0,20);
-
-        g = pieces[0][(boardSize/2)].getImage().getGraphics();
         g.setColor(Color.BLACK);
-        g.fillRect(0,0,25,24);
+        g.fillRect(0,0,timePiece.getWidth(),timePiece.getHeight()-2);
         g.setColor(Color.WHITE);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString(secs,0,20);
+        g.drawString(mins+":"+secs,0,20);
         repaint();
     }
+
+    private void drawInfo(){
+        drawLife();
+        drawTimeLabel();
+    }
+
+    private void drawTimeLabel(){
+        Piece timePiece = replaceLabels(0,(boardSize/2)-1,2,1);
+
+        Graphics g = timePiece.getImage().getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,timePiece.getWidth(),timePiece.getHeight());
+
+        Stack walls = new Stack();
+        walls.push(3);
+        timePiece.addWalls(walls);
+
+    }
+
+
 
 
 
@@ -154,6 +170,24 @@ public class Board extends JPanel {
                     lastMoveNumber = newDirection;
                 break;
         }
+    }
+
+    private Piece replaceLabels(int x, int y, int width, int height){
+        Piece newPiece = new Piece(x,y,null);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = y;
+        constraints.gridy = x;
+        for (int i=0; i<width;i++){
+            remove(pieces[x][y+i]);
+            pieces[x][y+i] = newPiece;
+        }
+        constraints.gridwidth = width;
+        constraints.gridheight = height;
+        newPiece.setSize(width*pieceSize,height*pieceSize);
+        newPiece.setImage(new BufferedImage(width*pieceSize,height*pieceSize,BufferedImage.TYPE_INT_ARGB));
+        add(newPiece,constraints);
+        return newPiece;
+
     }
 
 }
