@@ -99,11 +99,11 @@ public class Board extends JPanel {
     private void drawLife(){
         Graphics g;
         for (int i=2;i<5;i++){
-            g = pieces[0][i].getImage().getGraphics();
+            g = pieces[1][i].getImage().getGraphics();
             g.setColor(Color.YELLOW);
             g.fillOval(0,0,22,22);
         }
-        g = pieces[0][5].getImage().getGraphics();
+        g = pieces[1][5].getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawString("X3",0,20);
@@ -119,7 +119,7 @@ public class Board extends JPanel {
         else secs= String.valueOf(seconds%60);
         if (mins.equals("99")&secs.equals("99"))
             return;
-        Piece timePiece = pieces[0][(boardSize/2)-1];
+        Piece timePiece = pieces[1][(boardSize/2)-1];
         Graphics g = timePiece.getImage().getGraphics();
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.setColor(Color.BLACK);
@@ -135,7 +135,7 @@ public class Board extends JPanel {
     }
 
     private void drawTimeLabel(){
-        Piece timePiece = replaceLabels(0,(boardSize/2)-1,2,1);
+        Piece timePiece = replaceLabels(1,(boardSize/2)-1,2,1);
 
         Graphics g = timePiece.getImage().getGraphics();
         g.setColor(Color.BLACK);
