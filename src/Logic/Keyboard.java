@@ -20,6 +20,8 @@ public class Keyboard {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if (board.isPauseStatus())
+                        return;
                     board.changeDirection(1);
                 } catch (NullPointerException e1) { }
             }
@@ -27,6 +29,8 @@ public class Keyboard {
         actionMap.put("Right", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (board.isPauseStatus())
+                    return;
                 try {
                     board.changeDirection(2);
                 } catch (NullPointerException e1) { }
@@ -35,6 +39,8 @@ public class Keyboard {
         actionMap.put("Down", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (board.isPauseStatus())
+                    return;
                 try {
                     board.changeDirection(3);
                 } catch (NullPointerException e1) { }
@@ -43,6 +49,8 @@ public class Keyboard {
         actionMap.put("Left", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (board.isPauseStatus())
+                    return;
                 try {
                     board.changeDirection(4);
                 } catch (NullPointerException e1) { }

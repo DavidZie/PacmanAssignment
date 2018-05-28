@@ -16,13 +16,13 @@ public class Piece extends JLabel {
     private boolean wall;
     int x,y;
 
-    Piece(int x, int y,Stack walls){
+    Piece(int x, int y,Stack data){
         super();
         this.x=x;
         this.y=y;
         setSize(pieceSize,pieceSize);
         image = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
-        addWalls(walls);
+        drawData(data);
         setIcon(new ImageIcon(image));
     }//Constructor
 
@@ -57,7 +57,7 @@ public class Piece extends JLabel {
 
 
     //-----------------------------Methods-------------------------------//
-    public void addWalls(Stack s){
+    public void drawData(Stack s){
         if (s==null)
             return;
         Graphics graphics = image.getGraphics();
@@ -116,13 +116,13 @@ public class Piece extends JLabel {
         wall = true;
     }
 
-    public void drawRegularPill(){
+    private void drawRegularPill(){
         Graphics g = image.getGraphics();
         g.setColor(Color.WHITE);
         g.fillOval(getWidth()/2,getHeight()/2,2,2);
     }
 
-    public void drawEnergyPill(){
+    private void drawEnergyPill(){
         Graphics g = image.getGraphics();
         g.setColor(Color.RED);
         g.fillOval((getWidth()/2)-5,(getHeight()/2)-5,10,10);
