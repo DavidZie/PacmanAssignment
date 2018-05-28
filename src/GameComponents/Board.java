@@ -16,6 +16,7 @@ public class Board extends JPanel {
     private Timer timer;
     private int lastMoveNumber;
     private int timerRepeats=0;
+    private int pills=0;
 
 
     Board(){
@@ -28,7 +29,6 @@ public class Board extends JPanel {
         drawTime(0);
         timerSetup();
 
-
     }//Constructor
 
     private void createBoard(){
@@ -39,6 +39,8 @@ public class Board extends JPanel {
             constraints.gridy=i;
             for (int j=0;j<boardSize;j++){
                 constraints.gridx=j;
+                if ((int)gameBoards.getFirst()[i][j].peek()==0)
+                    pills++;
                 pieces[i][j] = new Piece(i,j,gameBoards.getFirst()[i][j]);
                 add(pieces[i][j],constraints);
             }
@@ -99,7 +101,7 @@ public class Board extends JPanel {
         for (int i=2;i<5;i++){
             g = pieces[0][i].getImage().getGraphics();
             g.setColor(Color.YELLOW);
-            g.fillOval(0,0,24,24);
+            g.fillOval(0,0,22,22);
         }
         g = pieces[0][5].getImage().getGraphics();
         g.setColor(Color.WHITE);

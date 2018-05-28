@@ -52,6 +52,11 @@ public class Piece extends JLabel {
 
     //-------------------Construction Time Methods------------------------//
 
+
+
+
+
+    //-----------------------------Methods-------------------------------//
     public void addWalls(Stack s){
         if (s==null)
             return;
@@ -62,6 +67,7 @@ public class Piece extends JLabel {
             int popped = (int)s.pop();
             switch (popped){
                 case 0:
+                    drawFood();
                     break;
                 case 1:
                     drawNorthWall();
@@ -107,5 +113,11 @@ public class Piece extends JLabel {
         wall = true;
     }
 
-    //-----------------------------Methods-------------------------------//
+    public void drawFood(){
+        Graphics g = image.getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillOval(getWidth()/2,getHeight()/2,2,2);
+    }
+
+
 }
