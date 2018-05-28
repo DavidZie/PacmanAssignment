@@ -5,6 +5,10 @@ import Logic.Movement;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
@@ -16,6 +20,7 @@ public class Board extends JPanel {
     private Timer timer;
     private int lastMoveNumber;
     private int timerRepeats=0;
+    private boolean pauseStatus;
     private int pills=-1;
 
 
@@ -28,7 +33,6 @@ public class Board extends JPanel {
         drawInfo();
         drawTime(0);
         timerSetup();
-
     }//Constructor
 
     private void createBoard(){
@@ -72,6 +76,9 @@ public class Board extends JPanel {
         this.lastMoveNumber = lastMoveNumber;
     }
 
+    public boolean isPauseStatus() {
+        return pauseStatus;
+    }
     //--------------------------Methods--------------------------//
 
     private void drawGate(Piece piece){
@@ -98,12 +105,12 @@ public class Board extends JPanel {
 
     private void drawLife(){
         Graphics g;
-        for (int i=2;i<5;i++){
+        for (int i=7;i<10;i++){
             g = pieces[1][i].getImage().getGraphics();
             g.setColor(Color.YELLOW);
             g.fillOval(0,0,22,22);
         }
-        g = pieces[1][5].getImage().getGraphics();
+        g = pieces[1][10].getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawString("X3",0,20);
@@ -132,6 +139,11 @@ public class Board extends JPanel {
     private void drawInfo(){
         drawLife();
         drawTimeLabel();
+        drawScoreLabel();
+        drawHighScoreLabel();
+        drawPauseButton();
+        drawSpeedLabel();
+
     }
 
     private void drawTimeLabel(){
@@ -141,9 +153,9 @@ public class Board extends JPanel {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,timePiece.getWidth(),timePiece.getHeight());
 
-        Stack walls = new Stack();
-        walls.push(3);
-        timePiece.addWalls(walls);
+        Stack data = new Stack();
+        data.push(3);
+        timePiece.drawData(data);
 
     }
 
@@ -180,8 +192,10 @@ public class Board extends JPanel {
         constraints.gridx = y;
         constraints.gridy = x;
         for (int i=0; i<width;i++){
-            remove(pieces[x][y+i]);
-            pieces[x][y+i] = newPiece;
+            for (int j=0;j<height;j++){
+                remove(pieces[x+j][y+i]);
+                pieces[x+j][y+i] = newPiece;
+            }
         }
         constraints.gridwidth = width;
         constraints.gridheight = height;
@@ -189,6 +203,63 @@ public class Board extends JPanel {
         newPiece.setImage(new BufferedImage(width*pieceSize,height*pieceSize,BufferedImage.TYPE_INT_ARGB));
         add(newPiece,constraints);
         return newPiece;
+    }
+
+    private void drawScoreLabel(){
+        Piece scorePiece = replaceLabels(22,7,3,2);
+        Stack data = new Stack();
+        data.push(1);
+        scorePiece.drawData(data);
+        Graphics g = scorePiece.getImage().getGraphics();
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("SCORE:",0,20);
+        g.drawString("0000000",0,40);
+    }
+    private void drawHighScoreLabel(){
+        Piece highScorePiece = replaceLabels(22,22,5,2);
+        Stack data = new Stack();
+        data.push(1);
+        highScorePiece.drawData(data);
+        Graphics g = highScorePiece.getImage().getGraphics();
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("HIGH SCORE:",0,20);
+        g.drawString("     0000000",0,40);
+    }
+    private void drawPauseButton(){
+        Piece pausePiece = replaceLabels(1,23,3,1);
+        Stack data = new Stack();
+        data.push(3);
+        pausePiece.drawData(data);
+        Graphics g = pausePiece.getImage().getGraphics();
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString(" PAUSE",3,20);
+        g.drawRect(0,0,pausePiece.getWidth()-1,pausePiece.getHeight()-3);
+        pausePiece.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (pauseStatus)
+                    timer.start();
+                else timer.stop();
+                pauseStatus=!pauseStatus;
+
+            }
+        });
+    }
+    private void drawSpeedLabel(){
+        Piece speedPiece = replaceLabels(22,15,3,2);
+        Stack data = new Stack();
+        data.push(1);
+        speedPiece.drawData(data);
+        Graphics g = speedPiece.getImage().getGraphics();
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+
+        g.drawString("SPEED",0,20);
+        g.drawString("    X2",0,40);
 
     }
 
