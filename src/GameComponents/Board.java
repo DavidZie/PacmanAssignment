@@ -16,7 +16,7 @@ public class Board extends JPanel {
     private Timer timer;
     private int lastMoveNumber;
     private int timerRepeats=0;
-    private int pills=0;
+    private int pills=-1;
 
 
     Board(){
