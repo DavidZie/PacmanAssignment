@@ -67,7 +67,7 @@ public class Piece extends JLabel {
             int popped = (int)s.pop();
             switch (popped){
                 case 0:
-                    drawFood();
+                    drawRegularPill();
                     break;
                 case 1:
                     drawNorthWall();
@@ -83,6 +83,9 @@ public class Piece extends JLabel {
                     break;
                 case 5:
                     wall = true;
+                    break;
+                case 6:
+                    drawEnergyPill();
                     break;
             }
         }
@@ -113,10 +116,17 @@ public class Piece extends JLabel {
         wall = true;
     }
 
-    public void drawFood(){
+    public void drawRegularPill(){
         Graphics g = image.getGraphics();
         g.setColor(Color.WHITE);
         g.fillOval(getWidth()/2,getHeight()/2,2,2);
+    }
+
+    public void drawEnergyPill(){
+        Graphics g = image.getGraphics();
+        g.setColor(Color.RED);
+        g.fillOval((getWidth()/2)-5,(getHeight()/2)-5,10,10);
+        
     }
 
 

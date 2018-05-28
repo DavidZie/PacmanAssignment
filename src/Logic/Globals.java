@@ -14,7 +14,7 @@ public class Globals {
 
     public static final int boardSize = 32;
     public static final int pieceSize = 25;
-    public static int[] playerLocation = {9,16};
+    public static int[] playerLocation = {10,16};
     public static final BufferedImage[] gameImagesArray = GameImages.imagesCreator();
     public static final LinkedList<Stack[][]> gameBoards = gameBoardsCreator();
 
