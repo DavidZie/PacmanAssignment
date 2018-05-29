@@ -11,7 +11,8 @@ import java.util.Stack;
 import static Logic.Globals.*;
 
 public class Board extends JPanel {
-    int[] playerLocation;
+    private boolean completed;
+    private int[] playerLocation;
     private Piece[][] pieces;
     private Player player;
     private Timer timer;
@@ -23,20 +24,18 @@ public class Board extends JPanel {
     private int currentScore;
     private int currentHighScore;
     private int pills = -1;
+    private Stack<Fruit> fruits;
 
 
-    Board() {
+    Board(Stack[][] board,int level) {
         super(new GridBagLayout());
-        createBoard();
-        swapIn();
-        drawGate(pieces[playerLocation[0] + 1][playerLocation[1]]);
-
+        createBoard(board);
         drawInfo();
-        drawTime(0);
+        levelSetup(level);
         timerSetup();
     }//Constructor
-
-    private void createBoard() {
+    //----------------Board Initiation----------------------//
+    private void createBoard(Stack[][] board) {
         setBorder(new LineBorder(Color.GREEN));
         pieces = new Piece[boardSize][boardSize];
         GridBagConstraints constraints = new GridBagConstraints();
@@ -44,9 +43,9 @@ public class Board extends JPanel {
             constraints.gridy = i;
             for (int j = 0; j < boardSize; j++) {
                 constraints.gridx = j;
-                if ((int) gameBoards.getFirst()[i][j].peek() == 0)
+                if ((int) board[i][j].peek() == 0)
                     pills++;
-                if ((int) gameBoards.getFirst()[i][j].peek() == 7 && playerLocation == null) {
+                if ((int) board[i][j].peek() == 7 && playerLocation == null) {
                     playerLocation = new int[2];
                     playerLocation[0] = i - 1;
                     playerLocation[1] = j;
@@ -56,143 +55,19 @@ public class Board extends JPanel {
             }
         }
     }
-
-    private void swapIn() {
-        player = new Player();
-        pieces[playerLocation[0]][playerLocation[1]].setImage(player.getImage());
-    }
-
+    //------------------------Board Initiation END--------------------------------------//
 
     //-----------------------Getters and Setters----------------//
 
 
-    public Piece[][] getPieces() {
-        return pieces;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public int getLastMoveNumber() {
-        return lastMoveNumber;
-    }
-
-    public void setLastMoveNumber(int lastMoveNumber) {
-        this.lastMoveNumber = lastMoveNumber;
-    }
-
-    public int getCurrentScore() {
-        return currentScore;
-    }
-
-    public void setCurrentScore(int currentScore) {
-        this.currentScore = currentScore;
+    public boolean isCompleted() {
+        return completed;
     }
 
     public boolean isPauseStatus() {
         return pauseStatus;
     }
     //--------------------------Methods--------------------------//
-
-    private void drawGate(Piece piece) {
-        Graphics g = piece.getImage().getGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, piece.getWidth(), 2);
-    }
-
-    private void timerSetup() {
-        timer = new Timer(250, e -> {
-            move(lastMoveNumber, pieces, player);
-            timerRepeats++;
-            if (timer.getDelay() == 250)
-                speedDivisor = 4;
-            else speedDivisor = 8;
-            if (timerRepeats % speedDivisor == 0)
-                drawTime(timerRepeats / speedDivisor);
-
-        });
-        timer.start();
-    }
-
-    private void drawLife() {
-        Graphics g;
-        for (int i = 7; i < 10; i++) {
-            g = pieces[1][i].getImage().getGraphics();
-            g.setColor(Color.YELLOW);
-            g.fillOval(0, 0, 22, 22);
-        }
-        g = pieces[1][10].getImage().getGraphics();
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-        g.drawString("X3", 0, 20);
-    }
-
-    private void drawTime(int seconds) {
-        String secs, mins;
-        if (seconds / 60 < 10)
-            mins = "0" + seconds / 60;
-        else mins = String.valueOf(seconds / 60);
-        if (seconds % 60 < 10)
-            secs = "0" + seconds % 60;
-        else secs = String.valueOf(seconds % 60);
-        if (mins.equals("99") & secs.equals("99"))
-            return;
-        Piece timePiece = pieces[1][(boardSize / 2) - 1];
-        Graphics g = timePiece.getImage().getGraphics();
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, timePiece.getWidth(), timePiece.getHeight() - 2);
-        g.setColor(Color.WHITE);
-        g.drawString(mins + ":" + secs, 0, 20);
-        repaint();
-    }
-
-    private void drawInfo() {
-        drawLife();
-        drawTimeLabel();
-        drawScoreLabel();
-        drawHighScoreLabel();
-        drawPauseButton();
-        drawSpeedLabel();
-
-    }
-
-    private void drawTimeLabel() {
-        Piece timePiece = replaceLabels(1, (boardSize / 2) - 1, 2, 1);
-        Graphics g = timePiece.getImage().getGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, timePiece.getWidth(), timePiece.getHeight());
-
-        Stack data = new Stack();
-        data.push(3);
-        timePiece.drawData(data);
-
-    }
-
-
-    public void changeDirection(int newDirection) {
-        if (newDirection == lastMoveNumber)
-            return;
-        switch (newDirection) {
-            case 1:
-                if (!pieces[playerLocation[0] - 1][playerLocation[1]].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 2:
-                if (!pieces[playerLocation[0]][playerLocation[1] + 1].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 3:
-                if (!pieces[playerLocation[0] + 1][playerLocation[1]].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 4:
-                if (!pieces[playerLocation[0]][playerLocation[1] - 1].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-        }
-    }
 
     private Piece replaceLabels(int x, int y, int width, int height) {
         Piece newPiece = new Piece(x, y, null);
@@ -213,6 +88,91 @@ public class Board extends JPanel {
         return newPiece;
     }
 
+    private void timerSetup() {
+        timer = new Timer(250, e -> {
+            move(lastMoveNumber, pieces, player);
+            timerRepeats++;
+            if (timer.getDelay() == 250)
+                speedDivisor = 4;
+            else speedDivisor = 8;
+            if (timerRepeats % speedDivisor == 0) {
+                drawTime(timerRepeats / speedDivisor);
+                if (timerRepeats/speedDivisor==10)
+                    insertFruits();
+            }
+
+        });
+        timer.start();
+    }
+    private void levelSetup(int level){
+        fruits = new Stack<>();
+
+    }
+
+    private void drawBlack(Piece piece) {
+        BufferedImage blackImage = new BufferedImage(piece.getWidth(), piece.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = blackImage.getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, piece.getWidth(), piece.getHeight());
+        piece.setImage(blackImage);
+    }
+
+    private void updateScore(Piece piece){
+        if (!piece.isEaten()){
+            piece.setEaten(true);
+            currentScore+=piece.getWorth();
+            reDrawScoreLabel(pieces[22][7]);
+        }
+    }
+
+    //-----------------------First Draw Methods------------------//
+
+    private void drawInfo() {
+        swapIn();
+        drawGate(pieces[playerLocation[0] + 1][playerLocation[1]]);
+        drawLife();
+        drawTimeLabel();
+        drawScoreLabel();
+        drawHighScoreLabel();
+        drawPauseButton();
+        drawSpeedLabel();
+        drawTime(0);
+    }
+
+    private void swapIn() {
+        player = new Player();
+        pieces[playerLocation[0]][playerLocation[1]].setImage(player.getImage());
+    }
+
+    private void drawGate(Piece piece) {
+        Graphics g = piece.getImage().getGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, piece.getWidth(), 2);
+    }
+
+    private void drawLife() {
+        Graphics g;
+        for (int i = 7; i < 10; i++) {
+            g = pieces[1][i].getImage().getGraphics();
+            g.setColor(Color.YELLOW);
+            g.fillOval(0, 0, 22, 22);
+        }
+        g = pieces[1][10].getImage().getGraphics();
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.drawString("X3", 0, 20);
+    }
+
+    private void drawTimeLabel() {
+        Piece timePiece = replaceLabels(1, (boardSize / 2) - 1, 2, 1);
+        Graphics g = timePiece.getImage().getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, timePiece.getWidth(), timePiece.getHeight());
+        Stack data = new Stack();
+        data.push(3);
+        timePiece.drawData(data);
+    }
+
     private void drawScoreLabel() {
         Piece scorePiece = replaceLabels(22, 7, 3, 2);
         Stack data = new Stack();
@@ -226,22 +186,6 @@ public class Board extends JPanel {
         reDrawScoreLabel(scorePiece);
     }
 
-    private void reDrawScoreLabel(Piece scorePiece){
-        Graphics g = scorePiece.getImage().getGraphics();
-        String currentScoreString = String.valueOf(currentScore);
-        while (currentScoreString.length()<7)
-            currentScoreString = "0"+currentScoreString;
-        if (currentScore>currentHighScore)
-            reDrawHighScoreLabel(pieces[22][22],currentScoreString);
-        g.setColor(Color.BLACK);
-        g.fillRect(0,scorePiece.getHeight()/2,scorePiece.getWidth(),scorePiece.getHeight());
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString(currentScoreString, 0, scorePiece.getHeight());
-        scorePiece.repaint();
-    }
-
-
     private void drawHighScoreLabel() {
         Piece highScorePiece = replaceLabels(22, 22, 5, 2);
         Stack data = new Stack();
@@ -252,18 +196,6 @@ public class Board extends JPanel {
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("HIGH SCORE:", 0, highScorePiece.getHeight()/2);
         reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0][0]));
-    }
-
-    private void reDrawHighScoreLabel(Piece highScorePiece, String highScore){
-        Graphics g = highScorePiece.getImage().getGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0,highScorePiece.getHeight()/2,highScorePiece.getWidth(),highScorePiece.getHeight());
-        while (highScore.length()<7)
-            highScore = "0"+highScore;
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("     " + highScore, 0, highScorePiece.getHeight());
-        highScorePiece.repaint();
     }
 
     private void drawPauseButton() {
@@ -309,6 +241,58 @@ public class Board extends JPanel {
         });
     }
 
+    private void drawTime(int seconds) {
+        String secs, mins;
+        if (seconds / 60 < 10)
+            mins = "0" + seconds / 60;
+        else mins = String.valueOf(seconds / 60);
+        if (seconds % 60 < 10)
+            secs = "0" + seconds % 60;
+        else secs = String.valueOf(seconds % 60);
+        if (mins.equals("99") & secs.equals("99"))
+            return;
+        Piece timePiece = pieces[1][(boardSize / 2) - 1];
+        Graphics g = timePiece.getImage().getGraphics();
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, timePiece.getWidth(), timePiece.getHeight() - 2);
+        g.setColor(Color.WHITE);
+        g.drawString(mins + ":" + secs, 0, 20);
+        timePiece.repaint();
+    }
+
+    //---------------------First Draw Methods END-----------------------//
+    //--------------------- re-draw Methods-----------------------//
+
+    private void reDrawScoreLabel(Piece scorePiece){
+        Graphics g = scorePiece.getImage().getGraphics();
+        String currentScoreString = String.valueOf(currentScore);
+        while (currentScoreString.length()<7)
+            currentScoreString = "0"+currentScoreString;
+        if (currentScore>currentHighScore)
+            reDrawHighScoreLabel(pieces[22][22],currentScoreString);
+        g.setColor(Color.BLACK);
+        g.fillRect(0,scorePiece.getHeight()/2,scorePiece.getWidth(),scorePiece.getHeight());
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString(currentScoreString, 0, scorePiece.getHeight());
+        scorePiece.repaint();
+    }
+
+    private void reDrawHighScoreLabel(Piece highScorePiece, String highScore){
+        Graphics g = highScorePiece.getImage().getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,highScorePiece.getHeight()/2,highScorePiece.getWidth(),highScorePiece.getHeight());
+        while (highScore.length()<7)
+            highScore = "0"+highScore;
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("     " + highScore, 0, highScorePiece.getHeight());
+        highScorePiece.repaint();
+    }
+
+
+
     private void reDrawPausePiece(Piece pausePiece) {
         Graphics g = pausePiece.getImage().getGraphics();
         if (pauseStatus) {
@@ -352,7 +336,38 @@ public class Board extends JPanel {
         speedPiece.repaint();
     }
 
+    //--------------------- re-draw Methods END-----------------------//
+    //------------------------Fruits--------------------------------//
 
+    private void insertFruits(){
+
+    }
+
+
+    //-----------------------Fruits END---------------------------//
+
+    public void changeDirection(int newDirection) {
+        if (newDirection == lastMoveNumber)
+            return;
+        switch (newDirection) {
+            case 1:
+                if (!pieces[playerLocation[0] - 1][playerLocation[1]].isWall())
+                    lastMoveNumber = newDirection;
+                break;
+            case 2:
+                if (!pieces[playerLocation[0]][playerLocation[1] + 1].isWall())
+                    lastMoveNumber = newDirection;
+                break;
+            case 3:
+                if (!pieces[playerLocation[0] + 1][playerLocation[1]].isWall())
+                    lastMoveNumber = newDirection;
+                break;
+            case 4:
+                if (!pieces[playerLocation[0]][playerLocation[1] - 1].isWall())
+                    lastMoveNumber = newDirection;
+                break;
+        }
+    }
     //-----------------------------Movement----------------------//
     public void move(int direction, Piece[][] pieces, Player player) {
         int x = playerLocation[0], y = playerLocation[1];
@@ -390,25 +405,5 @@ public class Board extends JPanel {
                 playerLocation[1] -= 1;
                 break;
         }
-
     }
-
-    private void drawBlack(Piece piece) {
-        BufferedImage blackImage = new BufferedImage(piece.getWidth(), piece.getHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics g = blackImage.getGraphics();
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, piece.getWidth(), piece.getHeight());
-        piece.setImage(blackImage);
-    }
-
-    private void updateScore(Piece piece){
-        if (!piece.isEaten()){
-            piece.setEaten(true);
-            currentScore+=piece.getWorth();
-            reDrawScoreLabel(pieces[22][7]);
-        }
-    }
-
-
-
 }

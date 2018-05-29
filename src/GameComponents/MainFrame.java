@@ -5,11 +5,12 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+import static Logic.Globals.gameFrame;
+
 public class MainFrame extends JFrame {
 
     JFrame mainFrame;
     JPanel containerPanel;
-    GameFrame gameFrame;
 
     public MainFrame(){
         mainFrame = new JFrame("Pac-Man");//Create Frame
@@ -24,8 +25,7 @@ public class MainFrame extends JFrame {
 
         ActionListener startGameListener = e -> {
             mainFrame.setVisible(false);
-            gameFrame = new GameFrame();
-            gameFrame.setVisible(true);
+            gameFrame.startGame(0,1);
         };
 
         exitGameButton.addActionListener(e -> System.exit(0));//Make Exit button Abort program.

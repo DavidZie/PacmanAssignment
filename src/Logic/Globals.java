@@ -1,5 +1,7 @@
 package Logic;
 
+import GameComponents.GameFrame;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -19,6 +21,7 @@ public class Globals {
     public static final BufferedImage[] gameImagesArray = loadImages();
     public static final LinkedList<Stack[][]> gameBoards = gameBoardsCreator();
     public static int[][] highScoresArray = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    public static final GameFrame gameFrame = new GameFrame();
 
 
 
@@ -87,5 +90,4 @@ public class Globals {
         catch (IOException e) { e.printStackTrace(); }
         return images;
     }
-
 }

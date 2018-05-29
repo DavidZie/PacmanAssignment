@@ -17,7 +17,7 @@ public class Piece extends JLabel {
     int x, y;
     private BufferedImage image;
     private boolean eaten = false;
-    private boolean wall;
+    private boolean wall = true;
     private boolean ghostHouse;
     private int worth;
 
@@ -99,7 +99,6 @@ public class Piece extends JLabel {
                     drawWestWall();
                     break;
                 case 5:
-                    wall = true;
                     break;
                 case 6:
                     drawEnergyPill();
@@ -146,6 +145,7 @@ public class Piece extends JLabel {
         Graphics g = image.getGraphics();
         g.setColor(Color.WHITE);
         g.fillOval(getWidth() / 2, getHeight() / 2, 2, 2);
+        wall=false;
         worth = 10;
     }
 
@@ -158,6 +158,7 @@ public class Piece extends JLabel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        wall = false;
         worth = 50;
     }
 }
