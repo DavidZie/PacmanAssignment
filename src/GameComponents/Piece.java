@@ -137,7 +137,7 @@ public class Piece extends JLabel {
     private void drawEnergyPill(){
         BufferedImage energyPill= null;
         try {
-            energyPill = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/water.png"));
+            energyPill = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/Images/water.png"));
             setImage(energyPill);
         } catch (IOException e) {
             e.printStackTrace();
