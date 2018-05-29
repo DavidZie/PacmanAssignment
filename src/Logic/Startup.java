@@ -10,8 +10,6 @@ public class Startup {
          * Load Resources Before Presenting the Main Menu.
          */
 
-        GameFrame gameFrame = new GameFrame();
-        gameFrame.setVisible(true);
 
     }
 

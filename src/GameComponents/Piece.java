@@ -1,8 +1,11 @@
 package GameComponents;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Stack;
 
 import static Logic.Globals.pieceSize;
@@ -101,8 +104,18 @@ public class Piece extends JLabel {
                     drawEnergyPill();
                     break;
                 case 7:
+<<<<<<< HEAD
                     wall = true;
                     ghostHouse = true;
+=======
+                    drawApple();
+                    break;
+                case 8:
+                    drawPineApple();
+                    break;
+                case 9:
+                    drawStrabarry();
+>>>>>>> GameWithMain
                     break;
             }
         }
@@ -143,12 +156,49 @@ public class Piece extends JLabel {
         worth = 10;
     }
 
+<<<<<<< HEAD
     private void drawEnergyPill() {
         Graphics g = image.getGraphics();
         g.setColor(Color.RED);
         g.fillOval((getWidth() / 2) - 5, (getHeight() / 2) - 5, 10, 10);
         worth = 50;
+=======
+    private void drawEnergyPill(){
+        BufferedImage energyPill= null;
+        try {
+            energyPill = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/Images/water.png"));
+            setImage(energyPill);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void drawApple(){
+        BufferedImage apple= null;
+        try {
+            apple = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/apple.png"));
+            setImage(apple);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+>>>>>>> GameWithMain
     }
 
-
+    private void drawPineApple(){
+        BufferedImage pineapple= null;
+        try {
+            pineapple = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/pineapple.png"));
+            setImage(pineapple);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void drawStrabarry(){
+        BufferedImage strabbary= null;
+        try {
+            strabbary = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/strabary.png"));
+            setImage(strabbary);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
