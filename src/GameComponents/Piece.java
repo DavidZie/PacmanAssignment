@@ -15,6 +15,7 @@ public class Piece extends JLabel {
     private boolean eaten = false;
     private boolean wall;
     private boolean ghostHouse;
+    private int worth;
 
     Piece(int x, int y, Stack data) {
         super();
@@ -60,6 +61,10 @@ public class Piece extends JLabel {
     public void setImage(BufferedImage image) {
         this.image = image;
         setIcon(new ImageIcon(image));
+    }
+
+    public int getWorth() {
+        return worth;
     }
 
     //-------------------Construction Time Methods------------------------//
@@ -135,13 +140,14 @@ public class Piece extends JLabel {
         Graphics g = image.getGraphics();
         g.setColor(Color.WHITE);
         g.fillOval(getWidth() / 2, getHeight() / 2, 2, 2);
+        worth = 10;
     }
 
     private void drawEnergyPill() {
         Graphics g = image.getGraphics();
         g.setColor(Color.RED);
         g.fillOval((getWidth() / 2) - 5, (getHeight() / 2) - 5, 10, 10);
-
+        worth = 50;
     }
 
 
