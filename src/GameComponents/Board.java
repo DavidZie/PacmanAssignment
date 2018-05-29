@@ -21,6 +21,8 @@ public class Board extends JPanel {
     private int lastMoveNumber;
     private int timerRepeats=0;
     private boolean pauseStatus;
+    private boolean speedActivated;
+    private int speedDivisor;
     private int pills=-1;
 
 
@@ -92,12 +94,14 @@ public class Board extends JPanel {
     }
 
     private void timerSetup(){
-
         timer = new Timer(250, e -> {
             Movement.move(lastMoveNumber, pieces, player);
             timerRepeats++;
+            if (timer.getDelay()==250)
+                speedDivisor = 4;
+            else speedDivisor = 8;
             if (timerRepeats%4==0)
-                drawTime(timerRepeats/4);
+                drawTime(timerRepeats/ speedDivisor);
 
         });
         timer.start();
@@ -232,20 +236,17 @@ public class Board extends JPanel {
         Stack data = new Stack();
         data.push(3);
         pausePiece.drawData(data);
-        Graphics g = pausePiece.getImage().getGraphics();
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString(" PAUSE",3,20);
-        g.drawRect(0,0,pausePiece.getWidth()-1,pausePiece.getHeight()-3);
+        reDrawPausePiece(pausePiece);
+
         pausePiece.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (pauseStatus)
-                    timer.start();
-                else timer.stop();
                 pauseStatus=!pauseStatus;
-
+                if (pauseStatus)
+                    timer.stop();
+                else timer.start();
+                reDrawPausePiece(pausePiece);
             }
         });
     }
@@ -254,13 +255,62 @@ public class Board extends JPanel {
         Stack data = new Stack();
         data.push(1);
         speedPiece.drawData(data);
-        Graphics g = speedPiece.getImage().getGraphics();
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-
-        g.drawString("SPEED",0,20);
-        g.drawString("    X2",0,40);
-
+        reDrawSpeedPiece(speedPiece);
+        speedPiece.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                speedActivated=!speedActivated;
+                if (speedActivated)
+                    timer.setDelay(timer.getDelay()/2);
+                else timer.setDelay(timer.getDelay()*2);
+                reDrawSpeedPiece(speedPiece);
+            }
+        });
     }
+
+    private void reDrawPausePiece(Piece pausePiece){
+        Graphics g = pausePiece.getImage().getGraphics();
+        if (pauseStatus){
+            g.setColor(Color.RED);
+            g.fillRect(0,0,pausePiece.getWidth(),pausePiece.getHeight()-4);
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+            g.drawString(" PAUSE",3,18);
+            g.setColor(Color.WHITE);
+        } else {
+            g.setColor(Color.BLACK);
+            g.fillRect(0,0,pausePiece.getWidth(),pausePiece.getHeight()-2);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+            g.drawString(" PAUSE",3,18);
+        }
+        g.drawRect(0,0,pausePiece.getWidth()-1,pausePiece.getHeight()-5);
+        pausePiece.repaint();
+    }
+
+    private void reDrawSpeedPiece(Piece speedPiece){
+        Graphics g = speedPiece.getImage().getGraphics();
+        if (speedActivated){
+            g.setColor(Color.RED);
+            g.fillRect(1,4,speedPiece.getWidth()-4,speedPiece.getHeight()-8);
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+            g.drawString(" SPEED",0,22);
+            g.drawString("     X2",0,42);
+            g.setColor(Color.WHITE);
+        } else {
+            g.setColor(Color.BLACK);
+            g.fillRect(0,3,speedPiece.getWidth(),speedPiece.getHeight()-2);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+
+            g.drawString(" SPEED",0,22);
+            g.drawString("     X2",0,42);
+        }
+        g.drawRect(0,4,speedPiece.getWidth()-4,speedPiece.getHeight()-8);
+        speedPiece.repaint();
+    }
+
 
 }
