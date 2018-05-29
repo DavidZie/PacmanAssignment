@@ -1,9 +1,12 @@
 package GameComponents;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Stack;
 
 import static Logic.Globals.*;
@@ -123,11 +126,12 @@ public class Piece extends JLabel {
     }
 
     private void drawEnergyPill(){
-        Graphics g = image.getGraphics();
-        g.setColor(Color.RED);
-        g.fillOval((getWidth()/2)-5,(getHeight()/2)-5,10,10);
-        
+        BufferedImage energyPill= null;
+        try {
+            energyPill = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/water.png"));
+            setImage(energyPill);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-
 }
