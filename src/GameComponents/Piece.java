@@ -33,6 +33,10 @@ public class Piece extends JLabel {
         return eaten;
     }
 
+    public void setEaten(boolean eaten) {
+        this.eaten = eaten;
+    }
+
     public boolean isWall() {
         return wall;
     }

@@ -23,6 +23,7 @@ public class Board extends JPanel {
     private boolean pauseStatus;
     private boolean speedActivated;
     private int speedDivisor;
+    private int currentScore;
     private int pills=-1;
 
 
@@ -74,6 +75,14 @@ public class Board extends JPanel {
         return lastMoveNumber;
     }
 
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
+    public void setCurrentScore(int currentScore) {
+        this.currentScore = currentScore;
+    }
+
     public void setLastMoveNumber(int lastMoveNumber) {
         this.lastMoveNumber = lastMoveNumber;
     }
@@ -95,13 +104,13 @@ public class Board extends JPanel {
 
     private void timerSetup(){
         timer = new Timer(250, e -> {
-            Movement.move(lastMoveNumber, pieces, player);
+            move(lastMoveNumber, pieces, player);
             timerRepeats++;
             if (timer.getDelay()==250)
                 speedDivisor = 4;
             else speedDivisor = 8;
-            if (timerRepeats%4==0)
-                drawTime(timerRepeats/ speedDivisor);
+            if (timerRepeats%speedDivisor==0)
+                drawTime(timerRepeats/speedDivisor);
 
         });
         timer.start();
@@ -152,7 +161,6 @@ public class Board extends JPanel {
 
     private void drawTimeLabel(){
         Piece timePiece = replaceLabels(1,(boardSize/2)-1,2,1);
-
         Graphics g = timePiece.getImage().getGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0,0,timePiece.getWidth(),timePiece.getHeight());
@@ -229,7 +237,12 @@ public class Board extends JPanel {
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("HIGH SCORE:",0,20);
-        g.drawString("     0000000",0,40);
+        String score  = String.valueOf(highScoresArray[0][0]);
+        int missingNumbers = 7-score.length();
+        for (int i=0;i<missingNumbers;i++){
+            score= "0"+score;
+        }
+        g.drawString("     "+score,0,40);
     }
     private void drawPauseButton(){
         Piece pausePiece = replaceLabels(1,23,3,1);
@@ -261,9 +274,13 @@ public class Board extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 speedActivated=!speedActivated;
-                if (speedActivated)
+                if (speedActivated){
                     timer.setDelay(timer.getDelay()/2);
-                else timer.setDelay(timer.getDelay()*2);
+                    timerRepeats=timerRepeats*2;
+                } else {
+                    timer.setDelay(timer.getDelay()*2);
+                    timerRepeats=timerRepeats/2;
+                }
                 reDrawSpeedPiece(speedPiece);
             }
         });
@@ -310,6 +327,47 @@ public class Board extends JPanel {
         }
         g.drawRect(0,4,speedPiece.getWidth()-4,speedPiece.getHeight()-8);
         speedPiece.repaint();
+    }
+
+
+
+    //-----------------------------Movement----------------------//
+    public void move(int direction, Piece[][] pieces, Player player){
+        int x = playerLocation[0],y=playerLocation[1];
+        switch (direction){
+            case 1://Move Up.
+                if(pieces[x-1][y].isWall())
+                    break;
+                pieces[x-1][y].setImage(player.getImage());
+                pieces[x][y].setImage(gameImagesArray[0]);
+                playerLocation[0]-=1;
+                break;
+            case 2://Move Right.
+                if(pieces[x][y+1].isWall())
+                    break;
+                pieces[x][y+1].setImage(player.getImage());
+                pieces[x][y].setImage(gameImagesArray[0]);
+                playerLocation[1]+=1;
+                break;
+            case 3://Move Down.
+                if(pieces[x+1][y].isWall())
+                    break;
+                pieces[x+1][y].setImage(player.getImage());
+                pieces[x][y].setImage(gameImagesArray[0]);
+                playerLocation[0]+=1;
+                break;
+            case 4://Move Left.
+                if(pieces[x][y-1].isWall())
+                    break;
+                if(!pieces[x][y-1].isEaten()){
+                    pieces[x][y-1].setEaten(true);
+                }
+                pieces[x][y-1].setImage(player.getImage());
+                pieces[x][y].setImage(gameImagesArray[0]);
+                playerLocation[1]-=1;
+                break;
+        }
+
     }
 
 
