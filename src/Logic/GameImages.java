@@ -16,11 +16,6 @@ public class GameImages {
         drawCells(0,images[0].getGraphics());//Cell that was already visited.
         drawCells(1,images[1].getGraphics());//Cell With Regular food.
         drawCells(2,images[2].getGraphics());//Cell With Special food.
-        drawWalls(3,images[3].getGraphics());//Cell With North Wall.
-        drawWalls(4,images[4].getGraphics());//Cell With East Wall.
-        drawWalls(5,images[5].getGraphics());//Cell With South Wall.
-        drawWalls(6,images[6].getGraphics());//Cell With West Wall.
-
 
         return images;
     }

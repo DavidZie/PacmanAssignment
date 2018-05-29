@@ -25,7 +25,6 @@ public class GameFrame extends JFrame {
 
     private void frameOptions(){
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         container = new JPanel();
         add(container);
 

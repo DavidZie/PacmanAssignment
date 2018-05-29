@@ -1,6 +1,8 @@
 package Logic;
 
 import GameComponents.GameFrame;
+import GameComponents.MainFrame;
+import sun.applet.Main;
 
 public class Startup {
 
@@ -10,8 +12,8 @@ public class Startup {
          * Load Resources Before Presenting the Main Menu.
          */
 
-        GameFrame gameFrame = new GameFrame();
-        gameFrame.setVisible(true);
+        MainFrame mainFrame = new MainFrame();
+        mainFrame.setVisible(true);
 
     }
 

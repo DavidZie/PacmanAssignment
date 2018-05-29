@@ -8,7 +8,6 @@ import static Logic.Globals.*;
 public class Movement {
 
 
-
     public static void move(int direction, Piece[][] pieces, Player player){
         int x = playerLocation[0],y=playerLocation[1];
         switch (direction){
