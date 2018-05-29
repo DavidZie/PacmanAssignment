@@ -178,16 +178,36 @@ public class Piece extends JLabel {
     public void addFruit(Fruit fruit){
         repeats=0;
         worth = fruit.getWorth()+worth;
-        fruitTimer = new Timer(1000,e -> {
+        fruitTimer = new Timer(500,e -> {
             repeats++;
-            if (repeats%2==0){
-                Graphics g = image.getGraphics();
-                g.drawImage(fruit.getMyImage(),0,0,null);
-                repaint();
-            } else {
-                drawBlackImage();
-                repaint();
+            if (repeats<=8) {
+                if (repeats % 2 == 0) {
+                    Graphics g = image.getGraphics();
+                    g.drawImage(fruit.getMyImage(), 0, 0, null);
+                    repaint();
+                } else {
+                    drawBlackImage();
+                    repaint();
+                }
             }
+            else if (repeats>18&repeats<40) {
+                BufferedImage blackImage = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+                Graphics g1 = blackImage.getGraphics();
+                g1.setColor(Color.BLACK);
+                g1.fillRect(0,0,pieceSize, pieceSize);
+                if (!eaten) {
+                    g1.setColor(Color.WHITE);
+                    g1.fillOval(getWidth() / 2, getHeight() / 2, 2, 2);
+                }
+
+                Graphics2D g = (Graphics2D) image.getGraphics();
+                g.setComposite(AlphaComposite.SrcOver.derive(0.1f));
+                g.drawImage(blackImage, 0, 0, null);
+                repaint();
+            } else if (repeats==20)
+                fruitTimer.stop();
+
+
         });
         fruitTimer.start();
     }
