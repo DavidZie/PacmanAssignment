@@ -90,6 +90,15 @@ public class Piece extends JLabel {
                 case 6:
                     drawEnergyPill();
                     break;
+                case 7:
+                    drawApple();
+                    break;
+                case 8:
+                    drawPineApple();
+                    break;
+                case 9:
+                    drawStrabarry();
+                    break;
             }
         }
     }
@@ -130,6 +139,34 @@ public class Piece extends JLabel {
         try {
             energyPill = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/water.png"));
             setImage(energyPill);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void drawApple(){
+        BufferedImage apple= null;
+        try {
+            apple = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/apple.png"));
+            setImage(apple);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void drawPineApple(){
+        BufferedImage pineapple= null;
+        try {
+            pineapple = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/pineapple.png"));
+            setImage(pineapple);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void drawStrabarry(){
+        BufferedImage strabbary= null;
+        try {
+            strabbary = ImageIO.read(new File("C:/Users/peleg/IdeaProjects/PacmanAssignment/src/Images/strabary.png"));
+            setImage(strabbary);
         } catch (IOException e) {
             e.printStackTrace();
         }
