@@ -11,11 +11,14 @@ import java.util.Stack;
 import static Logic.Globals.*;
 
 public class Board extends JPanel {
-    private boolean completed;
     private int[] playerLocation;
     private Piece[][] pieces;
     private Player player;
     private Timer timer;
+
+    private Timer fruitTimer;
+    private int fruitTimerRepeats;
+
     private int lastMoveNumber;
     private int timerRepeats = 0;
     private boolean pauseStatus;
@@ -24,15 +27,18 @@ public class Board extends JPanel {
     private int currentScore;
     private int currentHighScore;
     private int pills = -1;
-    private Stack<Fruit> fruits;
+    private Fruit[] fruits;
+    private int level;
 
 
     Board(Stack[][] board,int level) {
         super(new GridBagLayout());
+        this.level=level;
         createBoard(board);
         drawInfo();
-        levelSetup(level);
+        levelSetup();
         timerSetup();
+        fruitTimerSetup();
     }//Constructor
     //----------------Board Initiation----------------------//
     private void createBoard(Stack[][] board) {
@@ -58,11 +64,6 @@ public class Board extends JPanel {
     //------------------------Board Initiation END--------------------------------------//
 
     //-----------------------Getters and Setters----------------//
-
-
-    public boolean isCompleted() {
-        return completed;
-    }
 
     public boolean isPauseStatus() {
         return pauseStatus;
@@ -97,16 +98,10 @@ public class Board extends JPanel {
             else speedDivisor = 8;
             if (timerRepeats % speedDivisor == 0) {
                 drawTime(timerRepeats / speedDivisor);
-                if (timerRepeats/speedDivisor==10)
-                    insertFruits();
             }
 
         });
         timer.start();
-    }
-    private void levelSetup(int level){
-        fruits = new Stack<>();
-
     }
 
     private void drawBlack(Piece piece) {
@@ -337,15 +332,89 @@ public class Board extends JPanel {
     }
 
     //--------------------- re-draw Methods END-----------------------//
-    //------------------------Fruits--------------------------------//
+    //------------------------Level Initiation--------------------------------//
 
-    private void insertFruits(){
-
+    private void levelSetup(){
+        prepareFruits();
+        //prepareGhosts();//TO BE WRITTEN.
     }
 
 
-    //-----------------------Fruits END---------------------------//
+    //-----------------------Level Initiation END---------------------------//
+    //------------------------Fruits-----------------------------//
 
+    private void insertFruits(){
+        Piece piece;
+        Fruit fruit;
+        int index;
+        int num=1;
+        while (num!=0){
+            piece = pieces[(int)(Math.random() * 19 + 2)][(int)(Math.random() * 22 + 6)];
+            if (!piece.isWall()){
+                index = (int)Math.random()*4;
+                fruit = fruits[index];
+                piece.addFruit(fruit);
+                piece.repaint();
+                num--;
+            }
+        }
+
+
+    }
+    private void fruitTimerSetup() {
+        fruitTimerRepeats=0;
+        fruitTimer = new Timer(250, e -> {
+        fruitTimerRepeats++;
+        if (fruitTimerRepeats==4){
+            insertFruits();
+        }
+
+            });
+        fruitTimer.start();
+    }
+
+    private void prepareFruits(){
+        switch (level){
+            case 1:
+                fruits = new Fruit[4];
+                fruits[0] = new Fruit(0);
+                fruits[1] = new Fruit(1);
+                fruits[2] = new Fruit(0);
+                fruits[3] = new Fruit(1);
+                break;
+            case 2:
+                fruits = new Fruit[9];
+                fruits[0] = new Fruit(0);
+                fruits[1] = new Fruit(1);
+                fruits[2] = new Fruit(0);
+                fruits[3] = new Fruit(1);
+                fruits[4] = new Fruit(0);
+                fruits[5] = new Fruit(1);
+                fruits[6] = new Fruit(0);
+                fruits[7] = new Fruit(1);
+                fruits[8] = new Fruit(2);
+                break;
+            case 3:
+                fruits = new Fruit[12];
+                fruits[0] = new Fruit(0);
+                fruits[1] = new Fruit(1);
+                fruits[2] = new Fruit(0);
+                fruits[3] = new Fruit(1);
+                fruits[4] = new Fruit(0);
+                fruits[5] = new Fruit(1);
+                fruits[6] = new Fruit(0);
+                fruits[7] = new Fruit(1);
+                fruits[8] = new Fruit(0);
+                fruits[9] = new Fruit(1);
+                fruits[10] = new Fruit(2);
+                fruits[11] = new Fruit(2);
+                break;
+        }
+    }
+
+
+
+    //-----------------------------Movement----------------------//
     public void changeDirection(int newDirection) {
         if (newDirection == lastMoveNumber)
             return;
@@ -368,7 +437,6 @@ public class Board extends JPanel {
                 break;
         }
     }
-    //-----------------------------Movement----------------------//
     public void move(int direction, Piece[][] pieces, Player player) {
         int x = playerLocation[0], y = playerLocation[1];
         switch (direction) {

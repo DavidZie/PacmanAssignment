@@ -21,6 +21,9 @@ public class Piece extends JLabel {
     private boolean ghostHouse;
     private int worth;
 
+    private Timer fruitTimer;
+    private int repeats;
+
     Piece(int x, int y, Stack data) {
         super();
         this.x = x;
@@ -40,6 +43,8 @@ public class Piece extends JLabel {
 
     public void setEaten(boolean eaten) {
         this.eaten = eaten;
+        if (fruitTimer!=null)
+            fruitTimer.stop();
     }
 
     public boolean isWall() {
@@ -71,15 +76,17 @@ public class Piece extends JLabel {
         return worth;
     }
 
+    public void setWorth(int worth) {
+        this.worth = worth;
+    }
+
     //-------------------Construction Time Methods------------------------//
 
     //-----------------------------Methods-------------------------------//
     public void drawData(Stack s) {
         if (s == null)
             return;
-        Graphics graphics = image.getGraphics();
-        graphics.setColor(Color.BLACK);
-        graphics.fillRect(0, 0, getWidth(), getHeight());
+        drawBlackImage();
         while (!s.empty()) {
             int popped = (int) s.pop();
             switch (popped) {
@@ -112,6 +119,12 @@ public class Piece extends JLabel {
     }
 
     //------------------------Drawings-----------------------//
+
+    private void drawBlackImage(){
+        Graphics graphics = image.getGraphics();
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0, 0, getWidth(), getHeight());
+    }
 
     private void drawNorthWall() {
         Graphics g = image.getGraphics();
@@ -160,5 +173,22 @@ public class Piece extends JLabel {
         }
         wall = false;
         worth = 50;
+    }
+
+    public void addFruit(Fruit fruit){
+        repeats=0;
+        worth = fruit.getWorth()+worth;
+        fruitTimer = new Timer(1000,e -> {
+            repeats++;
+            if (repeats%2==0){
+                Graphics g = image.getGraphics();
+                g.drawImage(fruit.getMyImage(),0,0,null);
+                repaint();
+            } else {
+                drawBlackImage();
+                repaint();
+            }
+        });
+        fruitTimer.start();
     }
 }

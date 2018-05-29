@@ -1,18 +1,52 @@
 package GameComponents;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Fruit {
+import static Logic.Globals.gameImagesArray;
+import static Logic.Globals.pieceSize;
 
-    int id;
-    int value;
-    BufferedImage image;
+public class Fruit extends Label {
 
-    Fruit(int id, int value, BufferedImage image){
+    private int id;
+    private int worth;
+    private boolean eaten;
+    private BufferedImage myImage;
+    private int timerRepeats;
+    private Timer timer;
+
+    Fruit(int id){
         this.id=id;
-        this.value=value;
-        this.image=image;
+        worth=(id+1)*100;
+        myImage = gameImagesArray[id];
+        timerRepeats=0;
+        timer = new Timer(500,e -> {
+            timerRepeats++;
+            if (timerRepeats%2==1){
+                myImage = blackImage();
+            } else {myImage = gameImagesArray[id];}
+            if (timerRepeats==6)
+                timer.stop();
 
+        });
+        timer.start();
     }
 
+    public int getWorth() {
+        return worth;
+    }
+
+    public BufferedImage getMyImage() {
+        return myImage;
+    }
+
+    //---------------------------Methods-----------------------//
+    private BufferedImage blackImage(){
+        BufferedImage image = new BufferedImage(pieceSize, pieceSize,BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,pieceSize,pieceSize);
+        return image;
+    }
 }
