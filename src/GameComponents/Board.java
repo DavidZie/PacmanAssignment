@@ -21,6 +21,7 @@ public class Board extends JPanel {
     private boolean speedActivated;
     private int speedDivisor;
     private int currentScore;
+    private int currentHighScore;
     private int pills = -1;
 
 
@@ -217,12 +218,29 @@ public class Board extends JPanel {
         Stack data = new Stack();
         data.push(1);
         scorePiece.drawData(data);
+        currentScore=0;
         Graphics g = scorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("SCORE:", 0, 20);
-        g.drawString("0000000", 0, 40);
+        g.drawString("SCORE:", 0, scorePiece.getHeight()/2);
+        reDrawScoreLabel(scorePiece);
     }
+
+    private void reDrawScoreLabel(Piece scorePiece){
+        Graphics g = scorePiece.getImage().getGraphics();
+        String currentScoreString = String.valueOf(currentScore);
+        while (currentScoreString.length()<7)
+            currentScoreString = "0"+currentScoreString;
+        if (currentScore>currentHighScore)
+            reDrawHighScoreLabel(pieces[22][22],currentScoreString);
+        g.setColor(Color.BLACK);
+        g.fillRect(0,scorePiece.getHeight()/2,scorePiece.getWidth(),scorePiece.getHeight());
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString(currentScoreString, 0, scorePiece.getHeight());
+        scorePiece.repaint();
+    }
+
 
     private void drawHighScoreLabel() {
         Piece highScorePiece = replaceLabels(22, 22, 5, 2);
@@ -232,13 +250,20 @@ public class Board extends JPanel {
         Graphics g = highScorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-        g.drawString("HIGH SCORE:", 0, 20);
-        String score = String.valueOf(highScoresArray[0][0]);
-        int missingNumbers = 7 - score.length();
-        for (int i = 0; i < missingNumbers; i++) {
-            score = "0" + score;
-        }
-        g.drawString("     " + score, 0, 40);
+        g.drawString("HIGH SCORE:", 0, highScorePiece.getHeight()/2);
+        reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0][0]));
+    }
+
+    private void reDrawHighScoreLabel(Piece highScorePiece, String highScore){
+        Graphics g = highScorePiece.getImage().getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,highScorePiece.getHeight()/2,highScorePiece.getWidth(),highScorePiece.getHeight());
+        while (highScore.length()<7)
+            highScore = "0"+highScore;
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("     " + highScore, 0, highScorePiece.getHeight());
+        highScorePiece.repaint();
     }
 
     private void drawPauseButton() {
@@ -337,6 +362,7 @@ public class Board extends JPanel {
                     break;
                 pieces[x - 1][y].setImage(player.getImage());
                 drawBlack(pieces[x][y]);
+                updateScore(pieces[x-1][y]);
                 playerLocation[0] -= 1;
                 break;
             case 2://Move Right.
@@ -344,6 +370,7 @@ public class Board extends JPanel {
                     break;
                 pieces[x][y + 1].setImage(player.getImage());
                 drawBlack(pieces[x][y]);
+                updateScore(pieces[x][y+1]);
                 playerLocation[1] += 1;
                 break;
             case 3://Move Down.
@@ -351,16 +378,15 @@ public class Board extends JPanel {
                     break;
                 pieces[x + 1][y].setImage(player.getImage());
                 drawBlack(pieces[x][y]);
+                updateScore(pieces[x+1][y]);
                 playerLocation[0] += 1;
                 break;
             case 4://Move Left.
                 if (pieces[x][y - 1].isWall())
                     break;
-                if (!pieces[x][y - 1].isEaten()) {
-                    pieces[x][y - 1].setEaten(true);
-                }
                 pieces[x][y - 1].setImage(player.getImage());
                 drawBlack(pieces[x][y]);
+                updateScore(pieces[x][y-1]);
                 playerLocation[1] -= 1;
                 break;
         }
@@ -374,6 +400,15 @@ public class Board extends JPanel {
         g.fillRect(0, 0, piece.getWidth(), piece.getHeight());
         piece.setImage(blackImage);
     }
+
+    private void updateScore(Piece piece){
+        if (!piece.isEaten()){
+            piece.setEaten(true);
+            currentScore+=piece.getWorth();
+            reDrawScoreLabel(pieces[22][7]);
+        }
+    }
+
 
 
 }
