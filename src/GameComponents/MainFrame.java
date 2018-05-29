@@ -1,13 +1,9 @@
 package GameComponents;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.*;
 
 public class MainFrame extends JFrame {
 
