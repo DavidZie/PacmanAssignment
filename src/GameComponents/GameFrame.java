@@ -5,25 +5,24 @@ import Logic.Keyboard;
 import javax.swing.*;
 
 
-
 public class GameFrame extends JFrame {
 
     JPanel container;
     Board board;
 
-    public GameFrame(){
+    public GameFrame() {
         super();
         frameOptions();
         addBoard();
         pack();
-        Keyboard.bindKeyboard((JPanel)getContentPane(), board);
+        Keyboard.bindKeyboard((JPanel) getContentPane(), board);
 
     }
 
     //Contents
 
 
-    private void frameOptions(){
+    private void frameOptions() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         container = new JPanel();
@@ -31,10 +30,10 @@ public class GameFrame extends JFrame {
 
     }
 
-    private void addBoard(){
+    private void addBoard() {
         board = new Board();
         container.add(board);
 
-   }
+    }
 
 }
