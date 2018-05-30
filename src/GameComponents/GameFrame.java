@@ -16,7 +16,6 @@ public class GameFrame extends JFrame {
     public GameFrame() {
         super();
         frameOptions();
-        Keyboard.bindKeyboard((JPanel) getContentPane(), board);
     }
 
     private void frameOptions() {
@@ -30,6 +29,7 @@ public class GameFrame extends JFrame {
         if (board!=null)
             remove(board);
         board = new Board(gameBoards.get(boardIndex),level);
+        Keyboard.bindKeyboard((JPanel) getContentPane(), board);
         container.add(board);
         pack();
     }

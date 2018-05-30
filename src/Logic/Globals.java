@@ -80,13 +80,15 @@ public class Globals {
     }
 
     private static BufferedImage[] loadImages(){
-        BufferedImage[] images = new BufferedImage[3];
+        BufferedImage[] images = new BufferedImage[4];
         System.out.println(imagesPath);
         try { images[0] = ImageIO.read(new File(imagesPath+"\\pineapple.png")); }
         catch (IOException e) { e.printStackTrace(); }
         try { images[1] = ImageIO.read(new File(imagesPath+"\\apple.png")); }
         catch (IOException e) { e.printStackTrace(); }
         try { images[2] = ImageIO.read(new File(imagesPath+"\\strawberry.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        try { images[3] = ImageIO.read(new File(imagesPath+"\\water.png")); }
         catch (IOException e) { e.printStackTrace(); }
         return images;
     }
