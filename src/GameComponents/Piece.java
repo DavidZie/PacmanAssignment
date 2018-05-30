@@ -172,7 +172,7 @@ public class Piece extends JLabel {
 
     private void drawEnergyPill(){
         Graphics g = image.getGraphics();
-        g.drawImage(gameImagesArray[3],0,0,null);
+        g.drawImage(gameImagesArray[2][0],0,0,null);
         wall = false;
         worth = 50;
     }
@@ -203,7 +203,7 @@ public class Piece extends JLabel {
                         g1.setColor(Color.WHITE);
                         g1.fillOval(getWidth() / 2, getHeight() / 2, 2, 2);
                     } else if (worth-fruit.getWorth()==50){
-                        g1.drawImage(gameImagesArray[3],0,0,null);
+                        g1.drawImage(gameImagesArray[2][0],0,0,null);
                     }
                 }
 

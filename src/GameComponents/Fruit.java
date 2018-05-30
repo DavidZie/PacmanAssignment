@@ -21,14 +21,14 @@ public class Fruit extends Label {
     Fruit(int id){
         this.id=id;
         worth=(id+1)*100;
-        myImage = gameImagesArray[id];
+        myImage = gameImagesArray[3][id];
         timerRepeats=0;
         out = false;
         timer = new Timer(500,e -> {
             timerRepeats++;
             if (timerRepeats%2==1){
                 myImage = blackImage();
-            } else {myImage = gameImagesArray[id];}
+            } else {myImage = gameImagesArray[3][id];}
             if (timerRepeats==6)
                 timer.stop();
 
