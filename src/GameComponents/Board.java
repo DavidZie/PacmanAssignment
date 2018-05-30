@@ -148,10 +148,8 @@ public class Board extends JPanel {
             else speedDivisor = 8;
             if (timerRepeats % speedDivisor == 0) {
                 Drawings.drawTime(timerRepeats / speedDivisor,pieces);
-                if (fruits!=null) {
-                    if ((timerRepeats / speedDivisor) % 2 == 1) {
-                        insertFruits();
-                    }
+                if ((timerRepeats / speedDivisor)%10==0) {
+                    insertFruits();
                 }
             }
 

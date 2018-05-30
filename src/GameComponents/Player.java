@@ -3,7 +3,7 @@ package GameComponents;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-import static Logic.Globals.boardSize;
+
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
