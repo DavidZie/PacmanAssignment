@@ -62,7 +62,6 @@ public class Globals {
             }
         }
         return;
-
     }
 
     private static boolean checkLine(String line) {
