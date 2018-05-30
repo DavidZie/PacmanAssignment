@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.util.Stack;
 
 import static Logic.Globals.gameBoards;
+import static Logic.Globals.highScoresArray;
 
 
 public class GameFrame extends JFrame {
@@ -28,7 +29,7 @@ public class GameFrame extends JFrame {
         setVisible(true);
         if (board!=null)
             remove(board);
-        board = new Board(gameBoards.get(boardIndex),level);
+        board = new Board(gameBoards.get(boardIndex),level,highScoresArray[boardIndex][0]);
         Keyboard.bindKeyboard((JPanel) getContentPane(), board);
         container.add(board);
         pack();

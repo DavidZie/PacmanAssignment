@@ -18,9 +18,9 @@ public class Globals {
     public static final int boardSize = 32;
     public static final int pieceSize = 25;
     public static final String imagesPath = System.getProperty("user.dir")+"\\images";
-    public static final BufferedImage[] gameImagesArray = loadImages();
+    public static final BufferedImage[][] gameImagesArray = loadImages();
     public static final LinkedList<Stack[][]> gameBoards = gameBoardsCreator();
-    public static int[][] highScoresArray = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    public static int[][] highScoresArray = {{1000, 0, 0}, {0, 0, 0}, {0, 0, 0}};
     public static final GameFrame gameFrame = new GameFrame();
 
 
@@ -79,16 +79,41 @@ public class Globals {
         return counter == boardSize - 1;
     }
 
-    private static BufferedImage[] loadImages(){
-        BufferedImage[] images = new BufferedImage[4];
-        System.out.println(imagesPath);
-        try { images[0] = ImageIO.read(new File(imagesPath+"\\pineapple.png")); }
+    private static BufferedImage[][] loadImages(){
+        BufferedImage[][] images = new BufferedImage[14][];
+        images[0]= new BufferedImage[3];
+        try { images[0][0] = ImageIO.read(new File(imagesPath+"\\pacman1.png")); }
         catch (IOException e) { e.printStackTrace(); }
-        try { images[1] = ImageIO.read(new File(imagesPath+"\\apple.png")); }
+        try { images[0][1] = ImageIO.read(new File(imagesPath+"\\pacman2.png")); }
         catch (IOException e) { e.printStackTrace(); }
-        try { images[2] = ImageIO.read(new File(imagesPath+"\\strawberry.png")); }
+        try { images[0][2] = ImageIO.read(new File(imagesPath+"\\pacman3.png")); }
         catch (IOException e) { e.printStackTrace(); }
-        try { images[3] = ImageIO.read(new File(imagesPath+"\\water.png")); }
+        images[1] = new BufferedImage[2];
+        try { images[1][0] = ImageIO.read(new File(imagesPath+"\\blue.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        try { images[1][1] = ImageIO.read(new File(imagesPath+"\\red.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        images[2] = new BufferedImage[1];
+        try { images[2][0] = ImageIO.read(new File(imagesPath+"\\energy.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        images[3] = new BufferedImage[3];
+        try { images[3][0] = ImageIO.read(new File(imagesPath+"\\pineapple.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        try { images[3][1] = ImageIO.read(new File(imagesPath+"\\apple.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        try { images[3][2] = ImageIO.read(new File(imagesPath+"\\strawberry.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        images[4] = new BufferedImage[3];
+        try { images[4][0] = ImageIO.read(new File(imagesPath+"\\ginky.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        try { images[4][1] = ImageIO.read(new File(imagesPath+"\\inky.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        try { images[4][2] = ImageIO.read(new File(imagesPath+"\\blinky.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        images[5] = new BufferedImage[2];
+        try { images[5][0] = ImageIO.read(new File(imagesPath+"\\water.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        try { images[5][0] = ImageIO.read(new File(imagesPath+"\\fire.png")); }
         catch (IOException e) { e.printStackTrace(); }
         return images;
     }

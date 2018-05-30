@@ -32,9 +32,10 @@ public class Board extends JPanel {
     private int level;
 
 
-    Board(Stack[][] board,int level) {
+    Board(Stack[][] board,int level, int currentHighScore) {
         super(new GridBagLayout());
         this.level=level;
+        this.currentHighScore=currentHighScore;
         createBoard(board);
         drawInfo();
         levelSetup();
@@ -232,7 +233,6 @@ public class Board extends JPanel {
                     return;
 
                 fruit = fruits[index];
-                System.out.println(index);
                 piece.addFruit(fruit);
                 piece.setEaten(false);
                 fruit.setOut(true);
