@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
+import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.imagesPath;
 import static Logic.Globals.pieceSize;
 
@@ -23,6 +24,7 @@ public class Piece extends JLabel {
 
     private Timer fruitTimer;
     private int repeats;
+    private  Fruit fruit;
 
     Piece(int x, int y, Stack data) {
         super();
@@ -43,8 +45,13 @@ public class Piece extends JLabel {
 
     public void setEaten(boolean eaten) {
         this.eaten = eaten;
-        if (fruitTimer!=null)
-            fruitTimer.stop();
+        if (eaten) {
+            worth = 0;
+            if (fruit != null) {
+                fruitTimer.stop();
+                killFruit();
+            }
+        }
     }
 
     public boolean isWall() {
@@ -164,19 +171,15 @@ public class Piece extends JLabel {
 
 
     private void drawEnergyPill(){
-        BufferedImage energyPill;
-        try {
-            energyPill = ImageIO.read(new File(imagesPath+"\\water.png"));
-            setImage(energyPill);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Graphics g = image.getGraphics();
+        g.drawImage(gameImagesArray[3],0,0,null);
         wall = false;
         worth = 50;
     }
 
     public void addFruit(Fruit fruit){
         repeats=0;
+        this.fruit = fruit;
         worth = fruit.getWorth()+worth;
         fruitTimer = new Timer(500,e -> {
             repeats++;
@@ -196,19 +199,40 @@ public class Piece extends JLabel {
                 g1.setColor(Color.BLACK);
                 g1.fillRect(0,0,pieceSize, pieceSize);
                 if (!eaten) {
-                    g1.setColor(Color.WHITE);
-                    g1.fillOval(getWidth() / 2, getHeight() / 2, 2, 2);
+                    if (worth-fruit.getWorth()==10){
+                        g1.setColor(Color.WHITE);
+                        g1.fillOval(getWidth() / 2, getHeight() / 2, 2, 2);
+                    } else if (worth-fruit.getWorth()==50){
+                        g1.drawImage(gameImagesArray[3],0,0,null);
+                    }
                 }
 
                 Graphics2D g = (Graphics2D) image.getGraphics();
-                g.setComposite(AlphaComposite.SrcOver.derive(0.1f));
+                g.setComposite(AlphaComposite.SrcOver.derive(0.15f));
                 g.drawImage(blackImage, 0, 0, null);
                 repaint();
-            } else if (repeats==20)
+            } else if (repeats==40) {
                 fruitTimer.stop();
+                killFruit();
+            }
 
 
         });
         fruitTimer.start();
+    }
+    private void killFruit(){
+        Stack dataStack = new Stack();
+        if (!eaten){
+            worth -= fruit.getWorth();
+            if (worth==10){
+                dataStack.push(0);
+
+            } else if (worth == 50) {
+                dataStack.push(6);
+            }
+            drawData(dataStack);
+            fruit.setOut(false);
+        }
+
     }
 }
