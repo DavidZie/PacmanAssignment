@@ -15,7 +15,7 @@ public class OptionsFrame extends JFrame {
 
     JFrame optionsFrame;
     private JPanel containerPanel;//Frame's Background Panel.
-    private JLabel imageLabel;//Selected Image Label.
+    private JLabel imagesLabel;//Selected Image Label.
     private String path;//Path to Sample Pictures.
     int selectedImageNumber=0;//index of selected Image from Samples.
 
@@ -29,7 +29,7 @@ public class OptionsFrame extends JFrame {
 
     private void createFrame(){
         optionsFrame=new JFrame("Select Maze");
-        optionsFrame.setSize(500,500);//Set Frame dimensions.
+        optionsFrame.setSize(1150,460);//Set Frame dimensions.
         optionsFrame.setResizable(false);//Lock Frame Size.
         optionsFrame.setVisible(true);//Make Frame Visible.
         optionsFrame.setLocationRelativeTo(null);//Center the frame on the screen.
@@ -42,54 +42,47 @@ public class OptionsFrame extends JFrame {
     private void createImageOptionsPanel(){
         JPanel imageOptionsPanel = new JPanel();
         imageOptionsPanel.setBorder(new LineBorder(Color.red));
-
         JButton startGameButton = new JButton("Start Game");//Create Button with Text.
-        JButton changeImageButton = new JButton("Change Image");
-
-        ActionListener changeImageListener = e -> {
-            optionsFrame.setVisible(false);
-            //new SelectPictureFrame();
-        };//Call new SelectPictureFrame and hide this Frame.
-
+        startGameButton.setFont(new Font("Steamer",Font.PLAIN,50));
         ActionListener startGameListener = e -> {
             optionsFrame.setVisible(false);
             GameFrame gameFrame=new GameFrame();
             gameFrame.setVisible(true);
         };//Call new GameFrame and hide this Frame.
 
-        changeImageButton.addActionListener(changeImageListener);
         startGameButton.addActionListener(startGameListener);
 
-        imageOptionsPanel.add(startGameButton);//Add buttons to Panel.
-        imageOptionsPanel.add(changeImageButton);
         containerPanel.add(imageOptionsPanel);//Add imageOptions Panel to Container Panel.
+        imageOptionsPanel.add(startGameButton,BorderLayout.EAST);//Add buttons to Panel.
     }
 
     private void createImagePanel(){
         JPanel imagePanel = new JPanel();//Create image Panel
         imagePanel.setBorder(new LineBorder(Color.MAGENTA));//Set Panel Border Color.
-        imageLabel = new JLabel();//Create Label for image to be attached.
-        updateImageLabel();//Attach Default Picture to label.
-
-        imagePanel.add(imageLabel);//Attach label to panel.
+        updateImageLabel(3,imagePanel);//Attach Default Picture to label.
+     //   imagePanel.add(imagesLabel);//Attach label to panel.
         containerPanel.add(imagePanel);//Add Image Panel to Container Panel.
     }
-    private void updateImageLabel(){
-        imageLabel.setText("");//Empty Text and Icon in to make update leaves no traces of overwritten data.
+
+    private void updateImageLabel(int selectedImageNumber, JPanel panel){
         try {
-            BufferedImage image=ImageIO.read(new File(imagesPath+"\\board1.png"));
-            imageLabel.setIcon(new ImageIcon(image));
+            for (int i=0;i<selectedImageNumber;i++) {
+                JButton btn = new JButton();//Create Label for image to be attached.
+                BufferedImage image = ImageIO.read(new File(imagesPath + "\\board1.png"));
+                btn.setIcon(new ImageIcon(image));
+                panel.add(btn);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void reloadImage(String index){
+    public void reloadImage(String index, JPanel imagePanel,JButton btn){
         setVisible(true);
         int newSelection = Integer.parseInt(index);
         if (newSelection!=selectedImageNumber){
             selectedImageNumber=newSelection;
-            updateImageLabel();
+            updateImageLabel(3,imagePanel);
         }//Get Index of new Selected image and update the Image Panel if necessary.
     }
 }

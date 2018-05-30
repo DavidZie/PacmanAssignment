@@ -1,17 +1,9 @@
 package GameComponents;
-import sun.audio.AudioData;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-import sun.audio.ContinuousAudioDataStream;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -30,7 +22,7 @@ public class MainFrame extends JFrame {
         mainFrame.setSize(840,590);//Set Frame dimensions to 400 width and 400 height
         mainFrame.setLocationRelativeTo(null);//Center the frame on the screen.
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
-        music();
+
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\background.png");
             JButton startGameButton = new JButton("Start Game!");//Create Button with text.
@@ -64,16 +56,4 @@ public class MainFrame extends JFrame {
         }
     }//Create Main Frame with Buttons and assign actions to buttons.
 
-        private void music(){
-            AudioPlayer MPG=AudioPlayer.player;
-            AudioStream BGM;
-            AudioData MD;
-            ContinuousAudioDataStream loop=null;
-            try {
-                BGM=new AudioStream(new FileInputStream(songPath+"\\PacmanRemix.wav"));
-                MD=BGM.getData();
-                loop=new ContinuousAudioDataStream(MD);
-            }catch (IOException error){}
-            MPG.start(loop);
-        }
 }
