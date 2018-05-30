@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
 
     JFrame mainFrame;
     JPanel containerPanel;
-    GameFrame gameFrame;
+    OptionsFrame optionsFrame;
     public static final String songPath = System.getProperty("user.dir");
 
     public MainFrame(){
@@ -44,8 +44,8 @@ public class MainFrame extends JFrame {
 
             ActionListener startGameListener = e -> {
                 mainFrame.setVisible(false);
-                gameFrame = new GameFrame();
-                gameFrame.setVisible(true);
+                optionsFrame = new OptionsFrame();
+                optionsFrame.setVisible(true);
             };
             exitGameButton.addActionListener(e -> System.exit(0));//Make Exit button Abort program.
             startGameButton.addActionListener(startGameListener);
