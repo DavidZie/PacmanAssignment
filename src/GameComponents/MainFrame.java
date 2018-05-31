@@ -46,7 +46,7 @@ public class MainFrame extends JFrame {
             containerPanel.setLayout(new BorderLayout());
             startGameButton.setPreferredSize(new Dimension(613,68));
             exitGameButton.setPreferredSize(new Dimension(200,68));
-
+            containerPanel.add(new JLabel(new ImageIcon(imagesPath+"\\ArcadeMachine.png")));
             containerPanel.add(startGameButton, BorderLayout.CENTER);//Add Button.
             containerPanel.add(exitGameButton ,BorderLayout.EAST);
             mainFrame.add(containerPanel);
