@@ -1,5 +1,8 @@
 package GameComponents;
 
+import Visitor.Visitor;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -7,16 +10,22 @@ import java.awt.image.BufferedImage;
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
-public class Player {
+public class Pacman {
 
     private BufferedImage image;//Should be Array of Different Animations.
     private int facing;
     private int current;
 
-    Player() {
+    Pacman() {
         image = gameImagesArray[0][0];
         facing = 2;
         current =0 ;
+        Timer timer = new Timer(200, e -> {
+            current = (current+1)%3;
+            rotate(facing);
+            image = gameImagesArray[0][current];
+        });
+        timer.start();
     }
 
     public BufferedImage getImage() {
@@ -24,8 +33,6 @@ public class Player {
     }
 
     public void rotate(int direction) {
-        if (facing==direction)
-            return;
 
         switch (direction){
             case 1:
@@ -84,5 +91,6 @@ public class Player {
         image = newImage;
     }
 
+    public void impact(Visitor visitor) {visitor.visit(this);}
 
 }
