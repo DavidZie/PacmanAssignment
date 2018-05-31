@@ -5,10 +5,9 @@ import GameComponents.MainFrame;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
-import java.io.IOException;
+
+import static Logic.Globals.gameFrame;
 
 public class Startup {
 
@@ -19,10 +18,12 @@ public class Startup {
         MainFrame mainFrame = new MainFrame();
         music();
     }
-    private static void music(){
-        File clap=new File(songPath+"\\PacmanRemix.wav");
+
+    private static void music() {
+        File clap = new File(songPath + "\\PacmanRemix.wav");
         playSound(clap);
     }
+
     private static void playSound(File sound) {
         try {
             Clip clip = AudioSystem.getClip();

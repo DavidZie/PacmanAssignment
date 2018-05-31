@@ -42,7 +42,6 @@ public class MainFrame extends JFrame {
             ActionListener startGameListener = e -> {
                 mainFrame.setVisible(false);
                 optionsFrame = new OptionsFrame();
-                optionsFrame.setVisible(true);
             };
             exitGameButton.addActionListener(e -> System.exit(0));//Make Exit button Abort program.
             startGameButton.addActionListener(startGameListener);

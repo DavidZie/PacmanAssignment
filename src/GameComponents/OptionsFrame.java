@@ -6,6 +6,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+
+import static Logic.Globals.gameFrame;
 import static Logic.Globals.imagesPath;
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +23,9 @@ public class OptionsFrame extends JFrame {
 
     public OptionsFrame(){
         startGameListener = e -> {
+            System.out.println();
             optionsFrame.setVisible(false);
-            GameFrame gameFrame=new GameFrame();
-            gameFrame.setVisible(true);
+            gameFrame.startGame(Integer.parseInt(e.getActionCommand()),1);
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         createImageOptionsPanel();//Create and Add Image Options Panel.
@@ -68,10 +70,11 @@ public class OptionsFrame extends JFrame {
 
     private void updateImageLabel(int selectedImageNumber, JPanel panel){
         try {
-            for (int i=0;i<selectedImageNumber;i++) {
+            for (int i=1;i<=selectedImageNumber;i++) {
                 JButton btn = new JButton();//Create Label for image to be attached.
-                BufferedImage image = ImageIO.read(new File(imagesPath + "\\board1.png"));
+                BufferedImage image = ImageIO.read(new File(imagesPath + "\\board"+i+".png"));
                 btn.setIcon(new ImageIcon(image));
+                btn.setActionCommand(String.valueOf(i));
                 btn.addActionListener(startGameListener);
                 panel.add(btn);
             }
