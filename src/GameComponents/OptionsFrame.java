@@ -35,7 +35,7 @@ public class OptionsFrame extends JFrame {
     private void createFrame(){
         optionsFrame=new JFrame("Select Maze");
         optionsFrame.setSize(1384,498);//Set Frame dimensions.
-        optionsFrame.setResizable(true);//Lock Frame Size.
+        optionsFrame.setResizable(false);//Lock Frame Size.
         optionsFrame.setVisible(true);//Make Frame Visible.
         optionsFrame.setLocationRelativeTo(null);//Center the frame on the screen.
         optionsFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
