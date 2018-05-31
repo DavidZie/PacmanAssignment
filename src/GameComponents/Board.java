@@ -27,6 +27,7 @@ public class Board extends JPanel {
     private int pills = -1;
     private Fruit[] fruits;
     private int level;
+    private Ghost[] ghosts;
 
 
     Board(Stack[][] board,int level, int currentHighScore) {
@@ -35,7 +36,8 @@ public class Board extends JPanel {
         this.currentHighScore=currentHighScore;
         createBoard(board);
         drawInfo();
-        levelSetup();
+        prepareFruits();
+        prepareGhosts();//TO BE WRITTEN.
         timerSetup();
     }//Constructor
     //----------------Board Initiation----------------------//
@@ -146,6 +148,8 @@ public class Board extends JPanel {
                     insertFruits();
                 }
             }
+            if ((timerRepeats/speedDivisor)%speedDivisor==20){} //Every 5 Seconds Re-calculate Route.
+                //route = calculateRoute();
 
         });
         timer.start();
@@ -194,10 +198,6 @@ public class Board extends JPanel {
     //--------------------- re-draw Methods END-----------------------//
     //------------------------Level Initiation--------------------------------//
 
-    private void levelSetup(){
-        prepareFruits();
-        prepareGhosts();//TO BE WRITTEN.
-    }
 
 
     //-----------------------Level Initiation END---------------------------//
@@ -278,12 +278,13 @@ public class Board extends JPanel {
     //-------------------------Ghosts-----------------------------//
 
     private void prepareGhosts(){
-        Ghost ginky = new Ginky();
-        Ghost inky = new Inky();
-        Ghost blinky = new Blinky();
-        ginky.insert(pieces[12][16]);
-        inky.insert(pieces[12][17]);
-        blinky.insert(pieces[12][15]);
+        ghosts = new Ghost[3];
+        ghosts[0] = new Ginky();
+        ghosts[1] = new Inky();
+        ghosts[2] = new Blinky();
+        ghosts[0].insert(pieces[12][16]);
+        ghosts[1].insert(pieces[12][17]);
+        ghosts[2].insert(pieces[12][15]);
     }
 
     //-----------------------------Movement----------------------//
