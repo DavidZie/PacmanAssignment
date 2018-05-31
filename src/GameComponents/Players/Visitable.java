@@ -1,4 +1,6 @@
-package Visitor;
+package GameComponents.Players;
+
+import Visitor.Visitor;
 
 public interface Visitable {
 

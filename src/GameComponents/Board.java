@@ -1,13 +1,12 @@
 package GameComponents;
 
+import GameComponents.Players.*;
 import Logic.Drawings;
 import Logic.Movement;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
@@ -15,12 +14,10 @@ import static Logic.Drawings.*;
 import static Logic.Globals.*;
 
 public class Board extends JPanel {
-    private int[] playerLocation;
     private Piece[][] pieces;
     private Pacman pacman;
     private Timer timer;
 
-    private int lastMoveNumber;
     private int timerRepeats = 0;
     private boolean pauseStatus;
     private boolean speedActivated;
@@ -43,6 +40,7 @@ public class Board extends JPanel {
     }//Constructor
     //----------------Board Initiation----------------------//
     private void createBoard(Stack[][] board) {
+        pacman = new Pacman();
         setBorder(new LineBorder(Color.GREEN));
         pieces = new Piece[boardSize][boardSize];
         GridBagConstraints constraints = new GridBagConstraints();
@@ -52,12 +50,11 @@ public class Board extends JPanel {
                 constraints.gridx = j;
                 if ((int) board[i][j].peek() == 0)
                     pills++;
-                if ((int) board[i][j].peek() == 7 && playerLocation == null) {
-                    playerLocation = new int[2];
-                    playerLocation[0] = i - 1;
-                    playerLocation[1] = j;
+                if ((int) board[i][j].peek() == 7 && pacman.getLocation() == null) {
+                    int[] playerLocation = {i-1,j};
+                    pacman.setLocation(playerLocation);
                 }
-                pieces[i][j] = new Piece(i, j, gameBoards.getFirst()[i][j]);
+                pieces[i][j] = new Piece(i, j, board[i][j]);
                 add(pieces[i][j], constraints);
             }
         }
@@ -70,9 +67,6 @@ public class Board extends JPanel {
         return pauseStatus;
     }
 
-    public int[] getPacmanLocation() {
-        return playerLocation;
-    }
 
     public Piece[][] getPieces() {
         return pieces;
@@ -141,7 +135,7 @@ public class Board extends JPanel {
 
     private void timerSetup() {
         timer = new Timer(250, e -> {
-            Movement.move(lastMoveNumber,this);
+            Movement.move(pacman.getLastMoveNumber(),this);
             timerRepeats++;
             if (timer.getDelay() == 250)
                 speedDivisor = 4;
@@ -177,7 +171,7 @@ public class Board extends JPanel {
 
     private void drawInfo() {
         swapIn();
-        Drawings.drawGate(pieces[playerLocation[0] + 1][playerLocation[1]]);
+        Drawings.drawGate(pieces[pacman.getLocation()[0] + 1][pacman.getLocation()[1]]);
         drawLife(pieces);
         drawTimeLabel(this);
         drawScoreLabel(this);
@@ -188,8 +182,8 @@ public class Board extends JPanel {
     }
 
     private void swapIn() {
-        pacman = new Pacman();
-        pieces[playerLocation[0]][playerLocation[1]].setImage(pacman.getImage());
+
+        pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].setImage(pacman.getImage());
     }
 
 
@@ -202,7 +196,7 @@ public class Board extends JPanel {
 
     private void levelSetup(){
         prepareFruits();
-        //prepareGhosts();//TO BE WRITTEN.
+        prepareGhosts();//TO BE WRITTEN.
     }
 
 
@@ -219,7 +213,7 @@ public class Board extends JPanel {
             x = (int)(Math.random() * 19 + 2);
             y = (int)(Math.random() * 22 + 6);
             piece = pieces[x][y];
-            if (!piece.isWall()&&!(x==playerLocation[0]&&y==playerLocation[1])){
+            if (!piece.isWall()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])){
                 index = (int)(Math.random()*fruits.length);
                 if (fruits[index].isOut()){
                     index = 0;
@@ -281,30 +275,18 @@ public class Board extends JPanel {
         }
     }
 
+    //-------------------------Ghosts-----------------------------//
 
+    private void prepareGhosts(){
+        Ghost ginky = new Ginky();
+        Ghost inky = new Inky();
+        Ghost blinky = new Blinky();
+        ginky.insert(pieces[12][16]);
+        inky.insert(pieces[12][17]);
+        blinky.insert(pieces[12][15]);
+    }
 
     //-----------------------------Movement----------------------//
-    public void changeDirection(int newDirection) {
-        if (newDirection == lastMoveNumber)
-            return;
-        switch (newDirection) {
-            case 1:
-                if (!pieces[playerLocation[0] - 1][playerLocation[1]].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 2:
-                if (!pieces[playerLocation[0]][playerLocation[1] + 1].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 3:
-                if (!pieces[playerLocation[0] + 1][playerLocation[1]].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 4:
-                if (!pieces[playerLocation[0]][playerLocation[1] - 1].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-        }
-    }
+
 
 }

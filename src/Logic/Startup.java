@@ -16,7 +16,7 @@ public class Startup {
     public static void main(String[] args) {
 
         MainFrame mainFrame = new MainFrame();
-        music();
+        //music();
     }
 
     private static void music() {

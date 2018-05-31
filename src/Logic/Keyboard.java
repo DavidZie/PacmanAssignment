@@ -22,7 +22,7 @@ public class Keyboard {
                 try {
                     if (board.isPauseStatus())
                         return;
-                    board.changeDirection(1);
+                    board.getPacman().changeDirection(1,board.getPieces());
                 } catch (NullPointerException e1) {
                 }
             }
@@ -33,7 +33,7 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    board.changeDirection(2);
+                    board.getPacman().changeDirection(2,board.getPieces());
                 } catch (NullPointerException e1) {
                 }
             }
@@ -44,7 +44,7 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    board.changeDirection(3);
+                    board.getPacman().changeDirection(3,board.getPieces());
                 } catch (NullPointerException e1) {
                 }
             }
@@ -55,7 +55,7 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    board.changeDirection(4);
+                    board.getPacman().changeDirection(4,board.getPieces());
                 } catch (NullPointerException e1) {
                 }
             }

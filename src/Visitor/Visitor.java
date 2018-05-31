@@ -1,8 +1,8 @@
 package Visitor;
 
 
-import GameComponents.Ghost;
-import GameComponents.Pacman;
+import GameComponents.Players.Ghost;
+import GameComponents.Players.Pacman;
 
 public interface Visitor {
 

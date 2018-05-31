@@ -29,7 +29,7 @@ public class GameFrame extends JFrame {
         setVisible(true);
         if (board!=null)
             remove(board);
-        board = new Board(gameBoards.get(boardIndex-1),level,highScoresArray[boardIndex][0]);
+        board = new Board((Stack[][]) gameBoards[boardIndex-1],level,highScoresArray[boardIndex][0]);
         Keyboard.bindKeyboard((JPanel) getContentPane(), board);
         container.add(board);
         pack();

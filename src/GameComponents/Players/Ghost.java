@@ -1,5 +1,6 @@
-package GameComponents;
+package GameComponents.Players;
 
+import GameComponents.Piece;
 import Visitor.Visitor;
 
 import javax.swing.*;
@@ -8,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import static Logic.Globals.*;
 
-public class Ghost /*implements Visitor.Visitable*/ {
+public abstract class Ghost implements Visitable {
 
     BufferedImage image;
     Timer timer;
@@ -22,20 +23,17 @@ public class Ghost /*implements Visitor.Visitable*/ {
         g.drawImage(gameImagesArray[4][id],0,0,pieceSize, pieceSize,null);
     }
 
-    public int getRepeats() {
-        return repeats;
-    }
-
-    public void setRepeats(int repeats) {
-        this.repeats = repeats;
-    }
-
     public int getId() {
         return id;
     }
 
     public void setImage(BufferedImage image) {
         this.image = image;
+    }
+
+    public void insert(Piece piece){
+        piece.setImage(image);
+        piece.repaint();
     }
 
     public void impact(Visitor visitor) {
