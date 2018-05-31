@@ -19,7 +19,7 @@ public class Globals {
     public static final int pieceSize = 25;
     public static final String imagesPath = System.getProperty("user.dir")+"\\images";
     public static final BufferedImage[][] gameImagesArray = loadImages();
-    public static final LinkedList<Stack[][]> gameBoards = gameBoardsCreator();
+    public static final Object[]gameBoards = gameBoardsArrayCreator();
     public static int[][] highScoresArray = {{1000, 0, 0}, {0, 0, 0}, {0, 0, 0}};
     public static final GameFrame gameFrame = new GameFrame();
 
@@ -27,8 +27,15 @@ public class Globals {
 
     //--------------Variables Generators--------------------//
 
-    private static LinkedList<Stack[][]> gameBoardsCreator() {
-        LinkedList<Stack[][]> boardsToLoad = new LinkedList<>();
+    private static Object[] gameBoardsArrayCreator(){
+        Object[] array = new Object[3];
+        for (int i=0; i<3;i++){
+            array[i] = gameBoardsCreator(i+1);
+        }
+        return array;
+    }
+
+    private static Stack[][] gameBoardsCreator(int index) {
         Stack[][] cellsInfo = new Stack[boardSize][boardSize];
         File file = new File(System.getProperty("user.dir") + "\\maze.csv");
         Scanner scanner = null;
@@ -39,8 +46,7 @@ public class Globals {
             System.exit(0);
         }
         mazeFileParser(cellsInfo, scanner);
-        boardsToLoad.add(cellsInfo);
-        return boardsToLoad;
+        return cellsInfo;
     }
 
     private static void mazeFileParser(Stack[][] cellsInfo, Scanner scanner) {

@@ -1,5 +1,6 @@
-package GameComponents;
+package GameComponents.Players;
 
+import GameComponents.Piece;
 import Visitor.Visitor;
 
 import javax.swing.*;
@@ -10,13 +11,15 @@ import java.awt.image.BufferedImage;
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
-public class Pacman {
+public class Pacman implements Visitable {
 
     private BufferedImage image;//Should be Array of Different Animations.
     private int facing;
+    private int[] location;
     private int current;
+    private int lastMoveNumber;
 
-    Pacman() {
+    public Pacman() {
         image = gameImagesArray[0][0];
         facing = 2;
         current =0 ;
@@ -28,8 +31,20 @@ public class Pacman {
         timer.start();
     }
 
+    public int[] getLocation() {
+        return location;
+    }
+
+    public void setLocation(int[] location) {
+        this.location = location;
+    }
+
     public BufferedImage getImage() {
         return image;
+    }
+
+    public int getLastMoveNumber() {
+        return lastMoveNumber;
     }
 
     public void rotate(int direction) {
@@ -90,6 +105,31 @@ public class Pacman {
         g.drawImage(gameImagesArray[0][current],pieceSize,0,-pieceSize,pieceSize,null);
         image = newImage;
     }
+
+    public void changeDirection(int newDirection, Piece[][] pieces) {
+        if (newDirection == lastMoveNumber)
+            return;
+        switch (newDirection) {
+            case 1:
+                if (!pieces[location[0] - 1][location[1]].isWall())
+                    lastMoveNumber = newDirection;
+                break;
+            case 2:
+                if (!pieces[location[0]][location[1] + 1].isWall())
+                    lastMoveNumber = newDirection;
+                break;
+            case 3:
+                if (!pieces[location[0] + 1][location[1]].isWall())
+                    lastMoveNumber = newDirection;
+                break;
+            case 4:
+                if (!pieces[location[0]][location[1] - 1].isWall())
+                    lastMoveNumber = newDirection;
+                break;
+        }
+    }
+
+
 
     public void impact(Visitor visitor) {visitor.visit(this);}
 

@@ -1,11 +1,12 @@
 package Logic;
 
 import GameComponents.*;
+import GameComponents.Players.Pacman;
 
 public class Movement {
 
     public static void move(int direction, Board board) {
-        int[] pacmanLocation = board.getPacmanLocation();
+        int[] pacmanLocation = board.getPacman().getLocation();
         Piece[][] pieces = board.getPieces();
         Pacman pacman = board.getPacman();
         int x = pacmanLocation[0], y = pacmanLocation[1];
