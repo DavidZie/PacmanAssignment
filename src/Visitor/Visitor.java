@@ -6,6 +6,6 @@ import GameComponents.Pacman;
 
 public interface Visitor {
 
-    public void visit(Pacman pacman);
-    public void visit(Ghost ghost);
+    void visit(Pacman pacman);
+    void visit(Ghost ghost);
 }

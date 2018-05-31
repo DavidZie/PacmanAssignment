@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 
 import static Logic.Globals.*;
 
-public class Ghost implements Visitor.Visitable {
+public class Ghost /*implements Visitor.Visitable*/ {
 
     BufferedImage image;
     Timer timer;

@@ -2,6 +2,6 @@ package Visitor;
 
 public interface Visitable {
 
-    public void impact(Visitor visitor);
+    void impact(Visitor visitor);
 
 }
