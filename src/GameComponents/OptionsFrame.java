@@ -64,7 +64,6 @@ public class OptionsFrame extends JFrame {
         JPanel imagePanel = new JPanel();//Create image Panel
         imagePanel.setBorder(new LineBorder(Color.MAGENTA));//Set Panel Border Color.
         updateImageLabel(3,imagePanel);//Attach Default Picture to label.
-     //   imagePanel.add(imagesLabel);//Attach label to panel.
         containerPanel.add(imagePanel);//Add Image Panel to Container Panel.
     }
 
@@ -81,14 +80,5 @@ public class OptionsFrame extends JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void reloadImage(String index, JPanel imagePanel,JButton btn){
-        setVisible(true);
-        int newSelection = Integer.parseInt(index);
-        if (newSelection!=selectedImageNumber){
-            selectedImageNumber=newSelection;
-            updateImageLabel(3,imagePanel);
-        }//Get Index of new Selected image and update the Image Panel if necessary.
     }
 }
