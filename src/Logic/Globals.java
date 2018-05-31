@@ -37,7 +37,7 @@ public class Globals {
 
     private static Stack[][] gameBoardsCreator(int index) {
         Stack[][] cellsInfo = new Stack[boardSize][boardSize];
-        File file = new File(System.getProperty("user.dir") + "\\maze.csv");
+        File file = new File(System.getProperty("user.dir") + "\\maze"+index+".csv");
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
