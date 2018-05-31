@@ -3,6 +3,10 @@ package GameComponents;
 import Logic.Keyboard;
 
 import javax.swing.*;
+import java.util.Stack;
+
+import static Logic.Globals.gameBoards;
+import static Logic.Globals.highScoresArray;
 
 
 public class GameFrame extends JFrame {
@@ -13,27 +17,22 @@ public class GameFrame extends JFrame {
     public GameFrame() {
         super();
         frameOptions();
-        addBoard();
-        pack();
-        Keyboard.bindKeyboard((JPanel) getContentPane(), board);
-
     }
-
-    //Contents
-
 
     private void frameOptions() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         container = new JPanel();
         add(container);
-
     }
 
-    private void addBoard() {
-        board = new Board();
+    public void startGame(int boardIndex,int level){
+        setVisible(true);
+        if (board!=null)
+            remove(board);
+        board = new Board(gameBoards.get(boardIndex),level,highScoresArray[boardIndex][0]);
+        Keyboard.bindKeyboard((JPanel) getContentPane(), board);
         container.add(board);
-
+        pack();
     }
 
 }

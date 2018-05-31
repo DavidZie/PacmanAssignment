@@ -12,6 +12,8 @@ import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
 
+import static Logic.Globals.gameFrame;
+
 public class MainFrame extends JFrame {
 
     JFrame mainFrame;
