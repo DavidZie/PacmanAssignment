@@ -34,7 +34,7 @@ public class OptionsFrame extends JFrame {
 
     private void createFrame(){
         optionsFrame=new JFrame("Select Maze");
-        optionsFrame.setSize(1468,498);//Set Frame dimensions.
+        optionsFrame.setSize(1473,498);//Set Frame dimensions.
         optionsFrame.setResizable(false);//Lock Frame Size.
         optionsFrame.setVisible(true);//Make Frame Visible.
         optionsFrame.setLocationRelativeTo(null);//Center the frame on the screen.

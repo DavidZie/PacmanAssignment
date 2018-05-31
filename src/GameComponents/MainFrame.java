@@ -17,7 +17,6 @@ public class MainFrame extends JFrame {
     JFrame mainFrame;
     JPanel containerPanel;
     OptionsFrame optionsFrame;
-    public static final String songPath = System.getProperty("user.dir");
 
     public MainFrame(){
         mainFrame = new JFrame("Pac-Man");//Create Frame
