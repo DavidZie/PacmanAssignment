@@ -10,7 +10,6 @@ import static Logic.Globals.imagesPath;
 import java.io.File;
 import java.io.IOException;
 
-
 public class OptionsFrame extends JFrame {
 
     JFrame optionsFrame;
@@ -18,8 +17,14 @@ public class OptionsFrame extends JFrame {
     private JLabel imagesLabel;//Selected Image Label.
     private String path;//Path to Sample Pictures.
     int selectedImageNumber=0;//index of selected Image from Samples.
+    ActionListener startGameListener;
 
     public OptionsFrame(){
+        startGameListener = e -> {
+            optionsFrame.setVisible(false);
+            GameFrame gameFrame=new GameFrame();
+            gameFrame.setVisible(true);
+        };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         createImageOptionsPanel();//Create and Add Image Options Panel.
         createImagePanel();//Create and Add Image Panel.
@@ -29,31 +34,28 @@ public class OptionsFrame extends JFrame {
 
     private void createFrame(){
         optionsFrame=new JFrame("Select Maze");
-        optionsFrame.setSize(1150,460);//Set Frame dimensions.
-        optionsFrame.setResizable(false);//Lock Frame Size.
+        optionsFrame.setSize(1384,498);//Set Frame dimensions.
+        optionsFrame.setResizable(true);//Lock Frame Size.
         optionsFrame.setVisible(true);//Make Frame Visible.
         optionsFrame.setLocationRelativeTo(null);//Center the frame on the screen.
         optionsFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
-        containerPanel = new JPanel();//Create Container Panel.
-        containerPanel.setBackground(Color.blue);
-        optionsFrame.add(containerPanel);//Add Container Panel to Frame.
+        try {
+            containerPanel=new JPanelWithBackground(imagesPath+"\\misgeret.png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        optionsFrame.add(containerPanel,BorderLayout.CENTER);//Add Container Panel to Frame.
     }
 
     private void createImageOptionsPanel(){
         JPanel imageOptionsPanel = new JPanel();
-        imageOptionsPanel.setBorder(new LineBorder(Color.red));
-        JButton startGameButton = new JButton("Start Game");//Create Button with Text.
-        startGameButton.setFont(new Font("Steamer",Font.PLAIN,50));
-        ActionListener startGameListener = e -> {
-            optionsFrame.setVisible(false);
-            GameFrame gameFrame=new GameFrame();
-            gameFrame.setVisible(true);
-        };//Call new GameFrame and hide this Frame.
-
-        startGameButton.addActionListener(startGameListener);
-
+        imageOptionsPanel.setBorder(new LineBorder(Color.blue));
+        JLabel startLbl = new JLabel("Press the board you want play with-> ");//Create Button with Text.
+        startLbl.setFont(new Font("Steamer",Font.PLAIN,50));
+        startLbl.setForeground(Color.black);
+        startLbl.setBackground(Color.blue);
         containerPanel.add(imageOptionsPanel);//Add imageOptions Panel to Container Panel.
-        imageOptionsPanel.add(startGameButton,BorderLayout.EAST);//Add buttons to Panel.
+        imageOptionsPanel.add(startLbl,BorderLayout.PAGE_START);//Add buttons to Panel.
     }
 
     private void createImagePanel(){
@@ -70,6 +72,7 @@ public class OptionsFrame extends JFrame {
                 JButton btn = new JButton();//Create Label for image to be attached.
                 BufferedImage image = ImageIO.read(new File(imagesPath + "\\board1.png"));
                 btn.setIcon(new ImageIcon(image));
+                btn.addActionListener(startGameListener);
                 panel.add(btn);
             }
         } catch (IOException e) {
