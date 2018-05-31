@@ -17,7 +17,7 @@ import static Logic.Globals.*;
 public class Board extends JPanel {
     private int[] playerLocation;
     private Piece[][] pieces;
-    private Player player;
+    private Pacman pacman;
     private Timer timer;
 
     private int lastMoveNumber;
@@ -70,7 +70,7 @@ public class Board extends JPanel {
         return pauseStatus;
     }
 
-    public int[] getPlayerLocation() {
+    public int[] getPacmanLocation() {
         return playerLocation;
     }
 
@@ -78,8 +78,8 @@ public class Board extends JPanel {
         return pieces;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Pacman getPacman() {
+        return pacman;
     }
 
     public void setCurrentScore(int currentScore) {
@@ -188,8 +188,8 @@ public class Board extends JPanel {
     }
 
     private void swapIn() {
-        player = new Player();
-        pieces[playerLocation[0]][playerLocation[1]].setImage(player.getImage());
+        pacman = new Pacman();
+        pieces[playerLocation[0]][playerLocation[1]].setImage(pacman.getImage());
     }
 
 
