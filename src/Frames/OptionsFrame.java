@@ -1,4 +1,6 @@
-package GameComponents;
+package Frames;
+
+import GameComponents.JPanelWithBackground;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

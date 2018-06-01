@@ -30,7 +30,7 @@ public class Board extends JPanel {
     private Ghost[] ghosts;
 
 
-    Board(Stack[][] board,int level, int currentHighScore) {
+    public Board(Stack[][] board, int level, int currentHighScore) {
         super(new GridBagLayout());
         this.level=level;
         this.currentHighScore=currentHighScore;

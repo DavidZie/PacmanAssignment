@@ -1,18 +1,14 @@
-package GameComponents;
+package Frames;
 
-import javax.imageio.ImageIO;
+import GameComponents.JPanelWithBackground;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
-
-import static Logic.Globals.gameFrame;
 
 public class MainFrame extends JFrame {
 

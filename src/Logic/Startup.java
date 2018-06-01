@@ -1,13 +1,10 @@
 package Logic;
 
-import GameComponents.GameFrame;
-import GameComponents.MainFrame;
+import Frames.MainFrame;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
-
-import static Logic.Globals.gameFrame;
 
 public class Startup {
 
