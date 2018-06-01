@@ -27,11 +27,15 @@ public class MainFrame extends JFrame {
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\background.jpg");
             JButton startGameButton = new JButton("Start Game!");//Create Button with text.
-            startGameButton.setFont(new Font("Steamer",Font.PLAIN,60));
+            startGameButton.setFont(new Font("Monotype Corsiva",Font.PLAIN,50));
             startGameButton.setBackground(Color.BLACK);
             startGameButton.setForeground(Color.red);
+            JButton winTableButton = new JButton("Champions Table");//Create Button with text.
+            winTableButton.setFont(new Font("Monotype Corsiva",Font.PLAIN,50));
+            winTableButton.setBackground(Color.BLACK);
+            winTableButton.setForeground(Color.red);
             JButton exitGameButton  = new JButton("Exit");
-            exitGameButton.setFont(new Font("Steamer",Font.PLAIN,50));
+            exitGameButton.setFont(new Font("Monotype Corsiva",Font.PLAIN,40));
             exitGameButton.setForeground(Color.red);
             exitGameButton.setBackground(Color.BLACK);
 
@@ -39,14 +43,22 @@ public class MainFrame extends JFrame {
                 mainFrame.setVisible(false);
                 optionsFrame = new OptionsFrame();
             };
+            ActionListener winTableListener = e -> {
+                mainFrame.setVisible(false);
+                WinnerTableFrame winnerTableFrame = new WinnerTableFrame();
+            };
+
             exitGameButton.addActionListener(e -> System.exit(0));//Make Exit button Abort program.
+            winTableButton.addActionListener(winTableListener);
             startGameButton.addActionListener(startGameListener);
 
             containerPanel.setBorder(new EmptyBorder(455,0,0,0));
             containerPanel.setLayout(new BorderLayout());
-            startGameButton.setPreferredSize(new Dimension(675,68));
-            exitGameButton.setPreferredSize(new Dimension(209,68));
+            startGameButton.setPreferredSize(new Dimension(333,68));
+            winTableButton.setPreferredSize(new Dimension(400,68));
+            exitGameButton.setPreferredSize(new Dimension(150,68));
             containerPanel.add(startGameButton,BorderLayout.WEST);//Add Button.
+            containerPanel.add(winTableButton ,BorderLayout.CENTER);
             containerPanel.add(exitGameButton ,BorderLayout.EAST);
             mainFrame.add(containerPanel);
             mainFrame.pack();

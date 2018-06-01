@@ -18,9 +18,7 @@ public class OptionsFrame extends JFrame {
 
     JFrame optionsFrame;
     private JPanel containerPanel;//Frame's Background Panel.
-    private JLabel imagesLabel;//Selected Image Label.
-    private String path;//Path to Sample Pictures.
-    int selectedImageNumber=0;//index of selected Image from Samples.
+
     ActionListener startGameListener;
 
     public OptionsFrame(){
