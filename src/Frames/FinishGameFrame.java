@@ -13,6 +13,7 @@ public class FinishGameFrame {
 
         JFrame finishFrame;
         private JPanel containerPanel;//Frame's Background Panel.
+        JPanel cont;
         ActionListener backToMainListener;
         ActionListener saveGameListener;
 
@@ -31,8 +32,8 @@ public class FinishGameFrame {
             createFrame();//Create Frame.
             addLabel1();
             addLabel2();
-            addButton1();
-            addButton2();
+            addTextBox();
+            addButtons();
         }//Constructor
 
         private void createFrame(){
@@ -63,17 +64,23 @@ public class FinishGameFrame {
             containerPanel.add(label);
         }
 
-        private void addButton1() {
-            JButton backBtn=new JButton("Save");
-            backBtn.setFont(new Font("Matura MT Script Capitals",Font.PLAIN,45));
-            backBtn.addActionListener(saveGameListener);
-            containerPanel.add(backBtn,BorderLayout.WEST);
+        private void addTextBox(){
+            JTextField text=new JTextField(20);
+            text.setFont(new Font("Forte",Font.PLAIN,40));
+            containerPanel.add(text, BorderLayout.CENTER);
         }
-        private void addButton2() {
-            JButton backBtn=new JButton("Return");
-            backBtn.setFont(new Font("Matura MT Script Capitals",Font.PLAIN,45));
-            backBtn.addActionListener(backToMainListener);
-            containerPanel.add(backBtn,BorderLayout.EAST);
+
+        private void addButtons() {
+            cont=new JPanel();
+            JButton backBtn1=new JButton("Save");
+            backBtn1.setFont(new Font("Matura MT Script Capitals",Font.PLAIN,45));
+            backBtn1.addActionListener(saveGameListener);
+            cont.add(backBtn1,BorderLayout.WEST);
+            JButton backBtn2=new JButton("Return");
+            backBtn2.setFont(new Font("Matura MT Script Capitals",Font.PLAIN,45));
+            backBtn2.addActionListener(backToMainListener);
+            cont.add(backBtn2,BorderLayout.EAST);
+            containerPanel.add(cont,BorderLayout.PAGE_END);
         }
   }
 
