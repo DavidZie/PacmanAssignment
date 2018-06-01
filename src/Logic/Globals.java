@@ -1,13 +1,12 @@
 package Logic;
 
-import GameComponents.GameFrame;
+import Frames.GameFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
 
