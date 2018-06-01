@@ -28,7 +28,7 @@ public class WinnerTableFrame {
     }//Constructor
 
     private void createFrame(){
-        winnerTableFrame=new JFrame("Select Maze");
+        winnerTableFrame=new JFrame("Winner Table");
         winnerTableFrame.setSize(686,458);//Set Frame dimensions.
         winnerTableFrame.setResizable(true);//Lock Frame Size.
         winnerTableFrame.setVisible(true);//Make Frame Visible.
