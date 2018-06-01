@@ -36,7 +36,7 @@ public class OptionsFrame extends JFrame {
 
     private void createFrame(){
         optionsFrame=new JFrame("Select Maze");
-        optionsFrame.setSize(1473,498);//Set Frame dimensions.
+        optionsFrame.setSize(1200,421);//Set Frame dimensions.
         optionsFrame.setResizable(false);//Lock Frame Size.
         optionsFrame.setVisible(true);//Make Frame Visible.
         optionsFrame.setLocationRelativeTo(null);//Center the frame on the screen.
@@ -52,8 +52,8 @@ public class OptionsFrame extends JFrame {
     private void createImageOptionsPanel(){
         JPanel imageOptionsPanel = new JPanel();
         imageOptionsPanel.setBorder(new LineBorder(Color.blue));
-        JLabel startLbl = new JLabel("Press the board you want play with-> ");//Create Button with Text.
-        startLbl.setFont(new Font("Steamer",Font.PLAIN,50));
+        JLabel startLbl = new JLabel("Press the board you want play with");//Create Button with Text.
+        startLbl.setFont(new Font("Forte",Font.PLAIN,35));
         startLbl.setForeground(Color.black);
         startLbl.setBackground(Color.blue);
         containerPanel.add(imageOptionsPanel);//Add imageOptions Panel to Container Panel.
