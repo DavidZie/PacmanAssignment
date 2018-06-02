@@ -10,6 +10,7 @@ import java.util.Stack;
 
 import static Logic.Globals.boardSize;
 import static Logic.Globals.highScoresArray;
+import static Logic.Globals.pieceSize;
 
 public class Drawings {
 
@@ -23,17 +24,25 @@ public class Drawings {
         g.fillRect(0, 0, piece.getWidth(), 2);
     }
 
-    public static void drawLife(Piece[][] pieces) {
+    public static void drawLife(Piece[][] pieces, int lives) {
         Graphics g;
-        for (int i = 7; i < 10; i++) {
+        for (int i=7;i<10-lives;i++){
+            g = pieces[1][i].getImage().getGraphics();
+            g.setColor(Color.BLACK);
+            g.fillRect(0,0,pieceSize,pieceSize-2);
+        }
+
+        for (int i = 10-lives; i < 10; i++) {
             g = pieces[1][i].getImage().getGraphics();
             g.setColor(Color.YELLOW);
             g.fillOval(0, 0, 22, 22);
         }
         g = pieces[1][10].getImage().getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,pieceSize,pieceSize-2);
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-        g.drawString("X3", 0, 20);
+        g.drawString("X"+String.valueOf(lives), 0, 20);
     }
 
     public static void drawTimeLabel(Board board) {
@@ -84,8 +93,8 @@ public class Drawings {
                 super.mouseClicked(e);
                 board.setPauseStatus(!board.isPauseStatus());
                 if (board.isPauseStatus())
-                    board.getTimer().stop();
-                else board.getTimer().start();
+                    board.stop();
+                else board.start();
                 reDrawPausePiece(pausePiece, board.isPauseStatus());
             }
         });
@@ -103,11 +112,9 @@ public class Drawings {
                 super.mouseClicked(e);
                 board.setSpeedActivated(!board.isSpeedActivated());
                 if (board.isSpeedActivated()) {
-                    board.getTimer().setDelay(board.getTimer().getDelay() / 2);
-                    board.setTimerRepeats(board.getTimerRepeats()*2);;
+                    board.speedUp();
                 } else {
-                    board.getTimer().setDelay(board.getTimer().getDelay() * 2);
-                    board.setTimerRepeats(board.getTimerRepeats() / 2);
+                    board.speedDown();
                 }
                 reDrawSpeedPiece(speedPiece, board.isSpeedActivated());
             }

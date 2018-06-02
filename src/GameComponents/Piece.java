@@ -54,6 +54,10 @@ public class Piece extends JLabel {
         }
     }
 
+    public Fruit getFruit() {
+        return fruit;
+    }
+
     public boolean isWall() {
         return wall;
     }
@@ -118,7 +122,7 @@ public class Piece extends JLabel {
                     drawEnergyPill();
                     break;
                 case 7:
-                    wall = true;
+                    wall = false;
                     ghostHouse = true;
                     break;
             }
@@ -220,7 +224,7 @@ public class Piece extends JLabel {
         });
         fruitTimer.start();
     }
-    private void killFruit(){
+    public void killFruit(){
         Stack dataStack = new Stack();
         if (!eaten){
             worth -= fruit.getWorth();

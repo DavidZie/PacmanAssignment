@@ -6,12 +6,14 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
 
+import static Logic.Globals.gameFrame;
+
 public class Startup {
 
     public static final String songPath = System.getProperty("user.dir");
 
     public static void main(String[] args) {
-
+        //gameFrame.startGame(1,3,3,0);
         MainFrame mainFrame = new MainFrame();
         //music();
     }

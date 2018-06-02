@@ -1,7 +1,6 @@
 package GameComponents.Players;
 
 import GameComponents.Piece;
-import Visitor.Visitor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,22 +10,18 @@ import java.awt.image.BufferedImage;
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
-public class Pacman implements Visitable {
+public class Pacman implements Visited {
 
     private BufferedImage image;//Should be Array of Different Animations.
-    private int facing;
     private int[] location;
-    private int current;
-    private int lastMoveNumber;
+    private int currentImage;
 
     public Pacman() {
         image = gameImagesArray[0][0];
-        facing = 2;
-        current =0 ;
+        currentImage =0 ;
         Timer timer = new Timer(200, e -> {
-            current = (current+1)%3;
-            rotate(facing);
-            image = gameImagesArray[0][current];
+            currentImage = (currentImage+1)%3;
+            image = gameImagesArray[0][currentImage];
         });
         timer.start();
     }
@@ -41,10 +36,6 @@ public class Pacman implements Visitable {
 
     public BufferedImage getImage() {
         return image;
-    }
-
-    public int getLastMoveNumber() {
-        return lastMoveNumber;
     }
 
     public void rotate(int direction) {
@@ -63,7 +54,6 @@ public class Pacman implements Visitable {
                 lookLeft();
                 break;
         }
-        facing = direction;
     }
 
     private void lookUp(){
@@ -72,7 +62,7 @@ public class Pacman implements Visitable {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         g.rotate(Math.toRadians(-90), pieceSize/2, pieceSize/2);
-        g.drawImage(gameImagesArray[0][current],null,0,0);
+        g.drawImage(gameImagesArray[0][currentImage],null,0,0);
         image = newImage;
     }
 
@@ -82,7 +72,7 @@ public class Pacman implements Visitable {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         g.rotate(Math.toRadians(0), pieceSize/2, pieceSize/2);
-        g.drawImage(gameImagesArray[0][current],null,0,0);
+        g.drawImage(gameImagesArray[0][currentImage],null,0,0);
         image = newImage;
     }
 
@@ -92,7 +82,7 @@ public class Pacman implements Visitable {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         g.rotate(Math.toRadians(90), pieceSize/2, pieceSize/2);
-        g.drawImage(gameImagesArray[0][current],null,0,0);
+        g.drawImage(gameImagesArray[0][currentImage],null,0,0);
         image = newImage;
     }
 
@@ -102,35 +92,23 @@ public class Pacman implements Visitable {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         g.rotate(Math.toRadians(0), pieceSize/2, pieceSize/2);
-        g.drawImage(gameImagesArray[0][current],pieceSize,0,-pieceSize,pieceSize,null);
+        g.drawImage(gameImagesArray[0][currentImage],pieceSize,0,-pieceSize,pieceSize,null);
         image = newImage;
     }
 
-    public void changeDirection(int newDirection, Piece[][] pieces) {
-        if (newDirection == lastMoveNumber)
-            return;
-        switch (newDirection) {
-            case 1:
-                if (!pieces[location[0] - 1][location[1]].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 2:
-                if (!pieces[location[0]][location[1] + 1].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 3:
-                if (!pieces[location[0] + 1][location[1]].isWall())
-                    lastMoveNumber = newDirection;
-                break;
-            case 4:
-                if (!pieces[location[0]][location[1] - 1].isWall())
-                    lastMoveNumber = newDirection;
-                break;
+
+    public void visit(Pacman pacman){
+        Graphics g = pacman.getImage().getGraphics();
+        g.setColor(Color.BLACK);
+        for (int i=0;i<pieceSize;i++){
+            for (int j=0;j<pieceSize;j++){
+                g.fillRect(j,i,1,1);
+            }
         }
     }
 
+    @Override
+    public void impact(Visitor visitor) {
 
-
-    public void impact(Visitor visitor) {visitor.visit(this);}
-
+    }
 }

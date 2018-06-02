@@ -1,8 +1,6 @@
 package GameComponents.Players;
 
-import Visitor.Visitor;
-
-public interface Visitable {
+public interface Visited {
 
     void impact(Visitor visitor);
 
