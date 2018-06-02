@@ -64,8 +64,9 @@ public class GameOverFrame {
     }
 
     private void addTextBox(){
-        JTextField text=new JTextField(20);
-        text.setFont(new Font("Forte",Font.PLAIN,30));
+        JTextField text=new JTextField(15);
+        text.setFont(new Font("David",Font.PLAIN,35));
+        text.setHorizontalAlignment(JTextField.CENTER);
         containerPanel.add(text, BorderLayout.CENTER);
     }
 

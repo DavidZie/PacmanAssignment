@@ -66,7 +66,8 @@ public class FinishGameFrame {
 
         private void addTextBox(){
             JTextField text=new JTextField(20);
-            text.setFont(new Font("Forte",Font.PLAIN,40));
+            text.setFont(new Font("David",Font.PLAIN,40));
+            text.setHorizontalAlignment(JTextField.CENTER);
             containerPanel.add(text, BorderLayout.CENTER);
         }
 
