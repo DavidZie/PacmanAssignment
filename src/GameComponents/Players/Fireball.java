@@ -20,10 +20,6 @@ public class Fireball extends Ghost {
         });
     }
 
-    @Override
-    public void dismiss() {
-
-    }
 
     @Override
     public void visit(Pacman pacman) {

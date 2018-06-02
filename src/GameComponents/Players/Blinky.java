@@ -27,7 +27,7 @@ public class Blinky extends Ghost implements Visitor  {
                 Movement.moveGhost((int)getRoute().pop(), this);
 
             if (repeats==2){
-                setChasing(true);
+                setChasing();
                 charging=true;
             }
             if (charging)
@@ -45,11 +45,6 @@ public class Blinky extends Ghost implements Visitor  {
         weaponRepeater = 0;
         charging=false;
         loaded=false;
-    }
-
-    @Override
-    public void dismiss() {
-
     }
 
     private void changeImage(int num){

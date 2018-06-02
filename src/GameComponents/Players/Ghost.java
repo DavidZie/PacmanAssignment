@@ -1,28 +1,28 @@
 package GameComponents.Players;
 
 import GameComponents.Piece;
-import Logic.Movement;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
-import static Logic.Globals.*;
+import static Logic.Globals.gameImagesArray;
+import static Logic.Globals.pieceSize;
 
 public abstract class Ghost implements Visitor {
 
-    protected int id;
+    private int id;
     protected BufferedImage image;
     private BufferedImage coveredImage;
     private int[] location;
     protected Timer timer;
-    protected int repeats;
+    int repeats;
     private Stack route;
-    protected boolean chasing;
-    protected int facing;
-    protected Ghost weapon;
-    protected boolean loaded;
+    private boolean chasing;
+    int facing;
+    Ghost weapon;
+    boolean loaded;
 
 
     Ghost(int id,boolean ghost){
@@ -49,10 +49,6 @@ public abstract class Ghost implements Visitor {
 
     public void setRepeats(int repeats) {
         this.repeats = repeats;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Timer getTimer() {
@@ -93,11 +89,11 @@ public abstract class Ghost implements Visitor {
         location[1] = y;
     }
 
-    public Stack getRoute() {
+    Stack getRoute() {
         return route;
     }
 
-    public void setRoute(Stack route) {
+    void setRoute(Stack route) {
         this.route = route;
     }
 
@@ -105,8 +101,8 @@ public abstract class Ghost implements Visitor {
         return chasing;
     }
 
-    public void setChasing(boolean chasing) {
-        this.chasing = chasing;
+    void setChasing() {
+        this.chasing = true;
     }
 
     public int getFacing() {
@@ -162,7 +158,7 @@ public abstract class Ghost implements Visitor {
         return loaded;
     }
 
+
     public void fired(){}
 
-    public void dismiss(){}
 }

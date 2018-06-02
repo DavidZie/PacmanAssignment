@@ -68,7 +68,8 @@ public class Movement {
                 if (pieces[x-1][y].isWall()){
                     if (!weaponCheck(x-1,y,ghost));
                     {
-                        pieces[x][y].getImage().getGraphics().drawImage(ghost.getCoveredImage(),0,0,null);
+                        pieces[x][y].setImage(ghost.getCoveredImage());
+                        ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
                             board.getGhosts()[3]=null;//Kill Water.
                         else board.getGhosts()[4]=null;//Kill Fire.
@@ -85,7 +86,8 @@ public class Movement {
                 if (pieces[x][y+1].isWall()){
                     if (!weaponCheck(x,y+1,ghost));
                     {
-                        pieces[x][y].getImage().getGraphics().drawImage(ghost.getCoveredImage(),0,0,null);
+                        pieces[x][y].setImage(ghost.getCoveredImage());
+                        ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
                             board.getGhosts()[3]=null;//Kill Water.
                         else board.getGhosts()[4]=null;//Kill Fire.
@@ -102,7 +104,8 @@ public class Movement {
                 if (pieces[x+1][y].isWall()){
                     if (!weaponCheck(x+1,y,ghost));
                     {
-                        pieces[x][y].getImage().getGraphics().drawImage(ghost.getCoveredImage(),0,0,null);
+                        pieces[x][y].setImage(ghost.getCoveredImage());
+                        ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
                             board.getGhosts()[3]=null;//Kill Water.
                         else board.getGhosts()[4]=null;//Kill Fire.
@@ -120,7 +123,8 @@ public class Movement {
                     if (!weaponCheck(x,y-1,ghost));
                     {
 
-                        pieces[x][y].getImage().getGraphics().drawImage(ghost.getCoveredImage(),0,0,null);
+                        pieces[x][y].setImage(ghost.getCoveredImage());
+                        ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
                             board.getGhosts()[3]=null;//Kill Water.
                         else board.getGhosts()[4]=null;//Kill Fire.

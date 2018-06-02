@@ -11,8 +11,7 @@ import static Logic.Globals.gameImagesArray;
 
 public class Inky extends Ghost {
 
-    boolean charging;
-    int weaponRepeater;
+    private boolean charging;
 
     public Inky() {
         super(1,true);
@@ -29,7 +28,7 @@ public class Inky extends Ghost {
                 Movement.moveGhost((int)getRoute().pop(), this);
 
             if (repeats==6){
-                setChasing(true);
+                setChasing();
                 charging=true;
             }
             if (charging)
@@ -44,10 +43,11 @@ public class Inky extends Ghost {
     @Override
     public void fired(){
         repeats=0;
-        weaponRepeater = 0;
         charging=false;
         loaded=false;
     }
+
+
 
     private void changeImage(int num){
         switch (num){

@@ -24,7 +24,7 @@ public class Ginky extends Ghost {
                 Movement.moveGhost((int)getRoute().pop(), this);
 
             if (repeats/3>=6)
-                setChasing(true);
+                setChasing();
 
             repeats++;
         });

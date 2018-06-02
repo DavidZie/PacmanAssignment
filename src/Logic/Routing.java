@@ -38,104 +38,147 @@ public class Routing {
         if (s.size() > 50)
             return;
 
-        //boolean up = !pieces[myX-1][myY].isWall(), right = !pieces[myX][myY+1].isWall(), down = !pieces[myX+1][myY].isWall(),left = !pieces[myX][myY-1].isWall();
+        boolean up = !pieces[myX-1][myY].isWall(), right = !pieces[myX][myY+1].isWall(), down = !pieces[myX+1][myY].isWall(),left = !pieces[myX][myY-1].isWall();
 
         if (destX == myX){
             if (destY < myY) {
-                if (!pieces[myX][myY - 1].isWall() && ghost.getFacing() != 2) {
+                if (left && ghost.getFacing() != 2) {
                     s.push(4);
                     cal(destX, destY, myX, myY - 1, s, ghost);
                     return;
-                }
-            }else {
-                if (!pieces[myX][myY + 1].isWall() && ghost.getFacing() != 4) {
+                } else if (up && ghost.getFacing() != 3) {
+                    s.push(1);
+                    cal(destX, destY, myX-1, myY, s, ghost);
+                    return;
+                } else if (down && ghost.getFacing() != 1) {
+                    s.push(3);
+                    cal(destX, destY, myX +1, myY, s, ghost);
+                    return;
+                } else if (right && ghost.getFacing() != 4) {
                     s.push(2);
                     cal(destX, destY, myX, myY + 1, s, ghost);
+                    return;
+                }
+            }else {
+                if (right && ghost.getFacing() != 4) {
+                    s.push(2);
+                    cal(destX, destY, myX, myY + 1, s, ghost);
+                    return;
+                } else if (up && ghost.getFacing() != 3) {
+                    s.push(1);
+                    cal(destX, destY, myX-1, myY, s, ghost);
+                    return;
+                } else if (down && ghost.getFacing() != 1) {
+                    s.push(3);
+                    cal(destX, destY, myX +1, myY, s, ghost);
+                    return;
+                } if (left && ghost.getFacing() != 2) {
+                    s.push(4);
+                    cal(destX, destY, myX, myY - 1, s, ghost);
                     return;
                 }
             }
         } else if (destY == myY){
             if (destX < myX) {
-                if (!pieces[myX -1][myY].isWall() && ghost.getFacing() != 3) {
+                if (up && ghost.getFacing() != 3) {
                     s.push(1);
                     cal(destX, destY, myX-1, myY, s, ghost);
                     return;
-                }
-            }else {
-                if (!pieces[myX+1][myY].isWall() && ghost.getFacing() != 1) {
+                } else if (left && ghost.getFacing() != 2) {
+                    s.push(4);
+                    cal(destX, destY, myX, myY - 1, s, ghost);
+                    return;
+                } else if (right && ghost.getFacing()!= 4) {
+                    s.push(2);
+                    cal(destX, destY, myX, myY + 1, s,ghost);
+                    return;
+                } else if (down && ghost.getFacing() != 1) {
                     s.push(3);
                     cal(destX, destY, myX+1, myY, s, ghost);
+                    return;
+                }
+            }else {
+                if (down && ghost.getFacing() != 1) {
+                    s.push(3);
+                    cal(destX, destY, myX+1, myY, s, ghost);
+                    return;
+                } else if (left && ghost.getFacing() != 2) {
+                    s.push(4);
+                    cal(destX, destY, myX, myY - 1, s, ghost);
+                    return;
+                } else if (right && ghost.getFacing()!= 4) {
+                    s.push(2);
+                    cal(destX, destY, myX, myY + 1, s,ghost);
+                    return;
+                } else if (up && ghost.getFacing() != 3) {
+                    s.push(1);
+                    cal(destX, destY, myX-1, myY, s, ghost);
                     return;
                 }
             }
         }
 
-
-
-
-
         if (destX < myX) {
-            if (!pieces[myX - 1][myY].isWall() && ghost.getFacing()!=3) {
+            if (up && ghost.getFacing()!=3) {
                 s.push(1);
                 cal(destX, destY, myX - 1, myY, s,ghost);
                 return;
             } else if (destY <= myY) {
-                if (!pieces[myX][myY - 1].isWall() && ghost.getFacing()!=2) {
+                if (left && ghost.getFacing()!=2) {
                     s.push(4);
                     cal(destX, destY, myX, myY - 1, s,ghost);
                     return;
-                } else if (!pieces[myX+1][myY].isWall() && ghost.getFacing()!= 1) {
+                } else if (down && ghost.getFacing()!= 1) {
                     s.push(3);
                     cal(destX, destY, myX+1, myY, s,ghost);
                     return;
-                } else if (!pieces[myX][myY + 1].isWall() && ghost.getFacing()!= 4) {
+                } else if (right && ghost.getFacing()!= 4) {
                     s.push(2);
                     cal(destX, destY, myX, myY + 1, s,ghost);
                     return;
                 }
             } else if (destY > myY) {
-                if (!pieces[myX][myY + 1].isWall() && ghost.getFacing()!= 4) {
+                if (right && ghost.getFacing()!= 4) {
                     s.push(2);
                     cal(destX, destY, myX, myY + 1, s,ghost);
                     return;
-                } else if (!pieces[myX+1][myY].isWall() && ghost.getFacing()!= 1) {
+                } else if (down && ghost.getFacing()!= 1) {
                     s.push(3);
                     cal(destX, destY, myX+1, myY, s,ghost);
                     return;
                 }
             }
         } else {
-            if (!pieces[myX + 1][myY].isWall() && ghost.getFacing()!=1) {
+            if (down && ghost.getFacing()!=1) {
                 s.push(3);
                 cal(destX, destY, myX + 1, myY, s,ghost);
                 return;
             } else if (destY <= myY) {
-                if (!pieces[myX][myY - 1].isWall() && ghost.getFacing()!=2) {
+                if (left && ghost.getFacing()!=2) {
                     s.push(4);
                     cal(destX, destY, myX, myY - 1, s,ghost);
                     return;
-                } else if (!pieces[myX+1][myY].isWall() && ghost.getFacing()!=1) {
+                } else if (down && ghost.getFacing()!=1) {
                     s.push(3);
                     cal(destX, destY, myX+1, myY, s,ghost);
                     return;
                 }
             } else if (destY > myY) {
-                if (!pieces[myX][myY + 1].isWall() && ghost.getFacing()!= 4) {
+                if (right && ghost.getFacing()!= 4) {
                     s.push(2);
                     cal(destX, destY, myX, myY + 1, s,ghost);
                     return;
-                } else if (!pieces[myX+1][myY].isWall() && ghost.getFacing()!= 1) {
+                } else if (down && ghost.getFacing()!= 1) {
                     s.push(3);
                     cal(destX, destY, myX+1, myY, s,ghost);
                     return;
                 }
-            } else if (!pieces[myX - 1][myY].isWall() && ghost.getFacing()!= 3) {
+            } else if (up && ghost.getFacing()!= 3) {
                 s.push(1);
                 cal(destX, destY, myX - 1, myY, s,ghost);
                 return;
             }
         }
     }
-
 
 }

@@ -1,6 +1,7 @@
 package Logic;
 
 import GameComponents.Board;
+import GameComponents.Fruit;
 import GameComponents.Piece;
 
 import java.awt.*;
@@ -140,6 +141,14 @@ public class Drawings {
         g.drawString(mins + ":" + secs, 0, 20);
         timePiece.repaint();
     }
+
+    public static void drawFruitsLabel(Board board){
+        Piece fruitsPiece = board.replaceLabels(9,27,1,12);
+        Stack data = new Stack();
+        data.push(4);
+        fruitsPiece.drawData(data);
+
+    }
     //---------------------First Draw Methods END-----------------------//
 
     //--------------------- re-draw Methods-----------------------//
@@ -215,6 +224,14 @@ public class Drawings {
         g.drawRect(0, 4, speedPiece.getWidth() - 4, speedPiece.getHeight() - 8);
         speedPiece.repaint();
     }
+
+    public static void reDrawFruitsLabel(Board board, int eatenFruits, Fruit fruit){
+        Piece fruitPiece = board.getPieces()[9][27];
+        fruitPiece.getImage().getGraphics().drawImage(fruit.getMyImage(),2,(pieceSize-1)*eatenFruits,null);
+        fruitPiece.repaint();
+    }
+
+
 
     //--------------------- re-draw Methods END-----------------------//
 
