@@ -39,7 +39,7 @@ public class FinishGameFrame {
         private void createFrame(){
             finishFrame=new JFrame("Bravo!");
             finishFrame.setSize(968,502);//Set Frame dimensions.
-            finishFrame.setResizable(true);//Lock Frame Size.
+            finishFrame.setResizable(false);//Lock Frame Size.
             finishFrame.setVisible(true);//Make Frame Visible.
             finishFrame.setLocationRelativeTo(null);//Center the frame on the screen.
             finishFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
