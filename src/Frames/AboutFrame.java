@@ -18,7 +18,6 @@ public class AboutFrame {
 
     JFrame about;
     JPanel containerPanel;
-    public static final String txtPath = System.getProperty("user.dir");
 
     public AboutFrame() {
 
@@ -58,7 +57,7 @@ public class AboutFrame {
         about.setResizable(false);//Lock Frame Size.
         about.setVisible(true);//Make Frame Visible.
         about.setLocationRelativeTo(null);//Center the frame on the screen.
-        about.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
+
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\about.png");
         } catch (IOException e) {

@@ -34,7 +34,6 @@ public class MainFrame extends JFrame {
                 optionsFrame = new OptionsFrame();
             };
             ActionListener winTableListener = e -> {
-                mainFrame.setVisible(false);
                 WinnerTableFrame winnerTableFrame = new WinnerTableFrame();
             };
             ActionListener finishListener = e -> {
@@ -42,12 +41,10 @@ public class MainFrame extends JFrame {
             };
 
             ActionListener introdactionsListener = e -> {
-                mainFrame.setVisible(false);
                 InstructionsFrame instructions = new InstructionsFrame();
             };
 
             ActionListener aboutListener = e -> {
-                mainFrame.setVisible(false);
                 AboutFrame aboutFrame = new AboutFrame();
             };
 

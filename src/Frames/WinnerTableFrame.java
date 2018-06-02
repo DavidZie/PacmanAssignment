@@ -33,7 +33,6 @@ public class WinnerTableFrame {
         winnerTableFrame.setResizable(true);//Lock Frame Size.
         winnerTableFrame.setVisible(true);//Make Frame Visible.
         winnerTableFrame.setLocationRelativeTo(null);//Center the frame on the screen.
-        winnerTableFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\misgeret2.png");
         } catch (IOException e) {
