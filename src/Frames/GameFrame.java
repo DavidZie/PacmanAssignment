@@ -20,20 +20,33 @@ public class GameFrame extends JFrame {
         frameOptions();
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     private void frameOptions() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         container = new JPanel();
         add(container);
     }
 
-    public void startGame(int boardIndex,int level){
+    public void startGame(int boardIndex,int level, int lives,int currentScore){
         setVisible(true);
         if (board!=null)
             remove(board);
-        board = new Board((Stack[][]) gameBoards[boardIndex - 1], level, highScoresArray[boardIndex-1][0]);
+        board = new Board((Stack[][]) gameBoards[boardIndex - 1], level, highScoresArray[boardIndex-1][0],lives,currentScore);
         Keyboard.bindKeyboard((JPanel) getContentPane(), board);
         container.add(board);
         pack();
+    }
+
+    public void endGame(){
+        remove(container);
+        repaint();
     }
 
 }

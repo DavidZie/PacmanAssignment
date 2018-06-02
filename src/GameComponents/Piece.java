@@ -8,9 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
-import static Logic.Globals.gameImagesArray;
-import static Logic.Globals.imagesPath;
-import static Logic.Globals.pieceSize;
+import static Logic.Globals.*;
 
 public class Piece extends JLabel {
 
@@ -50,12 +48,17 @@ public class Piece extends JLabel {
             if (fruit != null) {
                 fruitTimer.stop();
                 killFruit();
+                gameFrame.getBoard().eatenFruit(fruit);
             }
         }
     }
 
     public boolean isWall() {
         return wall;
+    }
+
+    public Fruit getFruit() {
+        return fruit;
     }
 
     public void setWall(boolean wall) {
@@ -118,7 +121,7 @@ public class Piece extends JLabel {
                     drawEnergyPill();
                     break;
                 case 7:
-                    wall = true;
+                    wall = false;
                     ghostHouse = true;
                     break;
             }
@@ -220,7 +223,7 @@ public class Piece extends JLabel {
         });
         fruitTimer.start();
     }
-    private void killFruit(){
+    public void killFruit(){
         Stack dataStack = new Stack();
         if (!eaten){
             worth -= fruit.getWorth();
@@ -232,6 +235,8 @@ public class Piece extends JLabel {
             }
             drawData(dataStack);
             fruit.setOut(false);
+            fruit.getTimer().stop();
+            fruit.setRepeats(0);
         }
 
     }
