@@ -15,22 +15,24 @@ public class Fruit extends Label {
     private boolean out;
 
     private BufferedImage myImage;
-    private int timerRepeats;
+    private int repeats;
     private Timer timer;
 
     Fruit(int id){
         this.id=id;
         worth=(id+1)*100;
         myImage = gameImagesArray[3][id];
-        timerRepeats=0;
+        repeats=0;
         out = false;
         timer = new Timer(500,e -> {
-            timerRepeats++;
-            if (timerRepeats%2==1){
+            repeats++;
+            if (repeats%2==1){
                 myImage = blackImage();
             } else {myImage = gameImagesArray[3][id];}
-            if (timerRepeats==6)
+            if (repeats==6){
                 timer.stop();
+                repeats=0;
+            }
 
         });
         timer.start();
@@ -44,6 +46,13 @@ public class Fruit extends Label {
         this.out = out;
     }
 
+    public int getRepeats() {
+        return repeats;
+    }
+
+    public void setRepeats(int repeats) {
+        this.repeats = repeats;
+    }
 
     public int getWorth() {
         return worth;
@@ -51,6 +60,10 @@ public class Fruit extends Label {
 
     public BufferedImage getMyImage() {
         return myImage;
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 
     //---------------------------Methods-----------------------//

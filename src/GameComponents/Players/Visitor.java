@@ -1,4 +1,4 @@
-package Visitor;
+package GameComponents.Players;
 
 
 import GameComponents.Players.Ghost;

@@ -3,11 +3,14 @@ package GameComponents;
 import GameComponents.Players.*;
 import Logic.Drawings;
 import Logic.Movement;
+import Logic.Routing;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 import static Logic.Drawings.*;
@@ -17,8 +20,8 @@ public class Board extends JPanel {
     private Piece[][] pieces;
     private Pacman pacman;
     private Timer timer;
-
-    private int timerRepeats = 0;
+    private int eatenFruits;
+    private int timerRepeats;
     private boolean pauseStatus;
     private boolean speedActivated;
     private int speedDivisor;
@@ -28,17 +31,23 @@ public class Board extends JPanel {
     private Fruit[] fruits;
     private int level;
     private Ghost[] ghosts;
+    private int lives;
+    private int[] gate;
 
 
-    public Board(Stack[][] board, int level, int currentHighScore) {
+    public Board(Stack[][] board, int level, int currentHighScore, int lives, int currentScore) {
         super(new GridBagLayout());
         this.level=level;
         this.currentHighScore=currentHighScore;
+        this.currentScore = currentScore;
+        this.lives = lives;
+        eatenFruits=0;
         createBoard(board);
         drawInfo();
         prepareFruits();
         prepareGhosts();//TO BE WRITTEN.
         timerSetup();
+
     }//Constructor
     //----------------Board Initiation----------------------//
     private void createBoard(Stack[][] board) {
@@ -55,6 +64,9 @@ public class Board extends JPanel {
                 if ((int) board[i][j].peek() == 7 && pacman.getLocation() == null) {
                     int[] playerLocation = {i-1,j};
                     pacman.setLocation(playerLocation);
+                    gate = new int[2];
+                    gate[0]=i;
+                    gate[1]=j;
                 }
                 pieces[i][j] = new Piece(i, j, board[i][j]);
                 add(pieces[i][j], constraints);
@@ -69,6 +81,13 @@ public class Board extends JPanel {
         return pauseStatus;
     }
 
+    public Ghost[] getGhosts() {
+        return ghosts;
+    }
+
+    public void setGhosts(Ghost[] ghosts) {
+        this.ghosts = ghosts;
+    }
 
     public Piece[][] getPieces() {
         return pieces;
@@ -136,10 +155,10 @@ public class Board extends JPanel {
     }
 
     private void timerSetup() {
+        timerRepeats=0;
         timer = new Timer(250, e -> {
-            Movement.move(pacman.getLastMoveNumber(),this);
             timerRepeats++;
-            if (timer.getDelay() == 250)
+            if (!speedActivated)
                 speedDivisor = 4;
             else speedDivisor = 8;
             if (timerRepeats % speedDivisor == 0) {
@@ -148,9 +167,31 @@ public class Board extends JPanel {
                     insertFruits();
                 }
             }
-            if ((timerRepeats/speedDivisor)%speedDivisor==20){} //Every 5 Seconds Re-calculate Route.
-                //route = calculateRoute();
 
+            if (((timerRepeats / speedDivisor)>=7)) {
+                ghosts[0].getTimer().start();
+            }
+
+            if (((timerRepeats / speedDivisor)>=9)){
+                ghosts[1].getTimer().start();
+            }
+
+            if (((timerRepeats / speedDivisor)>=11)){
+                ghosts[2].getTimer().start();
+            }
+
+            if (((timerRepeats / speedDivisor)==15)){
+                pieces[gate[0]][gate[1]].setWall(true);
+            }
+
+
+            if (ghosts[1].isLoaded())
+                fire(ghosts[1]);
+
+            if (ghosts[2].isLoaded())
+                fire(ghosts[2]);
+
+            checkKill();
         });
         timer.start();
     }
@@ -175,19 +216,20 @@ public class Board extends JPanel {
 
     private void drawInfo() {
         swapIn();
-        Drawings.drawGate(pieces[pacman.getLocation()[0] + 1][pacman.getLocation()[1]]);
-        drawLife(pieces);
+        drawGate(pieces[pacman.getLocation()[0] + 1][pacman.getLocation()[1]]);
+        drawLife(pieces,lives);
         drawTimeLabel(this);
         drawScoreLabel(this);
         drawHighScoreLabel(this);
         drawPauseButton(this);
         drawSpeedLabel(this);
         drawTime(0,pieces);
+        drawFruitsLabel(this);
     }
 
     private void swapIn() {
 
-        pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].setImage(pacman.getImage());
+        pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].getImage().getGraphics().drawImage(pacman.getImage(),0,0,null);//setImage(pacman.getImage());
     }
 
 
@@ -213,7 +255,7 @@ public class Board extends JPanel {
             x = (int)(Math.random() * 19 + 2);
             y = (int)(Math.random() * 22 + 6);
             piece = pieces[x][y];
-            if (!piece.isWall()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])){
+            if (!piece.isWall()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])&&checkCell(x,y)){
                 index = (int)(Math.random()*fruits.length);
                 if (fruits[index].isOut()){
                     index = 0;
@@ -278,16 +320,124 @@ public class Board extends JPanel {
     //-------------------------Ghosts-----------------------------//
 
     private void prepareGhosts(){
-        ghosts = new Ghost[3];
+        ghosts = new Ghost[5];
         ghosts[0] = new Ginky();
         ghosts[1] = new Inky();
         ghosts[2] = new Blinky();
+        ghosts[0].setLocation(12,16);
+        ghosts[1].setLocation(12,17);
+        ghosts[2].setLocation(12,15);
+
         ghosts[0].insert(pieces[12][16]);
         ghosts[1].insert(pieces[12][17]);
         ghosts[2].insert(pieces[12][15]);
     }
 
     //-----------------------------Movement----------------------//
+
+
+
+    private boolean checkCell(int x,int y){
+        if (pieces[x][y].getFruit()!=null)
+            return false;
+        for (int i=0;i<3;i++){
+            if (ghosts[i].getLocation()[0]==x&&ghosts[i].getLocation()[1]==y)
+                return false;
+        }
+        return true;
+    }
+
+    private void fire(Ghost ghost){
+        ghosts[ghost.getId()+2] = ghost.getWeapon();
+        ghost.fire(pieces);
+        ghost.fired();
+    }
+
+    private void checkKill(){
+        int myX,myY;
+        for (int i=0;i<5;i++){
+            if (ghosts[i]!=null){
+                myX = ghosts[i].getLocation()[0];
+                myY = ghosts[i].getLocation()[1];
+                if (pacman.getLocation()[0] == myX && pacman.getLocation()[1] == myY){
+                    lives--;
+                    if (lives==0){
+                        gameFrame.endGame();
+                    } else cleanBoard();
+                }
+            }
+        }
+    }
+
+    private void cleanBoard(){
+
+        for (int i=0;i<boardSize;i++){
+            for (int j=0;j<boardSize;j++){
+                if (!pieces[i][j].isWall())
+                    if (pieces[i][j].getFruit()!=null)
+                        pieces[i][j].killFruit();
+            }
+        }
+
+        for (int i=0;i<5;i++){
+            if (ghosts[i]!=null){
+                ghosts[i].getTimer().stop();
+                pieces[ghosts[i].getLocation()[0]][ghosts[i].getLocation()[1]].setImage(ghosts[i].getCoveredImage());
+
+            }
+        }
+        ghosts=null;
+
+        drawBlack(pieces[pacman.getLocation()[0]][pacman.getLocation()[1]]);
+        pieces[gate[0]][gate[1]].setWall(false);
+        int[] reset = {10,16};
+        pacman.setLocation(reset);
+        swapIn();
+        drawLife(pieces,lives);
+        repaint();
+        prepareGhosts();
+        timerRepeats = 0;
+    }
+
+    public void start(){
+        for (int i=0;i<3;i++){
+            ghosts[i].getTimer().start();
+        }
+        timer.stop();
+    }
+
+    public void stop(){
+
+        for (int i=0;i<3;i++){
+            ghosts[i].getTimer().stop();
+        }
+        timer.stop();
+    }
+    public void speedUp(){
+        for (int i=0;i<3;i++){
+            ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()/2);
+            ghosts[i].setRepeats(ghosts[i].getRepeats()*2);
+        }
+        timer.setDelay(timer.getDelay()/2);
+        timerRepeats = timerRepeats*2;
+        speedActivated=true;
+    }
+
+
+    public void speedDown(){
+        for (int i=0;i<3;i++){
+            ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()*2);
+            ghosts[i].setRepeats(ghosts[i].getRepeats()/2);
+        }
+        timer.setDelay(timer.getDelay()*2);
+        timerRepeats = timerRepeats/2;
+        speedActivated=false;
+    }
+
+    public void eatenFruit(Fruit fruit){
+        eatenFruits++;
+        reDrawFruitsLabel(this,eatenFruits, fruit);
+    }
 
 
 }

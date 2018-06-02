@@ -2,6 +2,7 @@ package Visitor;
 
 import GameComponents.Players.Ghost;
 import GameComponents.Players.Pacman;
+import GameComponents.Players.Visitor;
 
 import javax.swing.*;
 import java.awt.*;
