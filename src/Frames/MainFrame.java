@@ -13,6 +13,7 @@ import static Logic.Globals.imagesPath;
 public class MainFrame extends JFrame {
 
     JFrame mainFrame;
+    JMenuBar menuBar;
     JPanel containerPanel;
     OptionsFrame optionsFrame;
 
@@ -26,6 +27,58 @@ public class MainFrame extends JFrame {
         mainFrame.pack();
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\background.jpg");
+
+
+            ActionListener startGameListener = e -> {
+                mainFrame.setVisible(false);
+                optionsFrame = new OptionsFrame();
+            };
+            ActionListener winTableListener = e -> {
+                mainFrame.setVisible(false);
+                WinnerTableFrame winnerTableFrame = new WinnerTableFrame();
+            };
+            ActionListener finishListener = e -> {
+                System.exit(0);
+            };
+
+            ActionListener introdactionsListener = e -> {
+                mainFrame.setVisible(false);
+                InstructionsFrame instructions = new InstructionsFrame();
+            };
+
+            ActionListener aboutListener = e -> {
+                mainFrame.setVisible(false);
+                AboutFrame aboutFrame = new AboutFrame();
+            };
+
+
+            menuBar=new JMenuBar();
+            mainFrame.setJMenuBar(menuBar);
+
+            JMenu game=new JMenu("Game");
+            menuBar.add(game);
+            JMenu help=new JMenu("Help");
+            menuBar.add(help);
+
+            JMenuItem start=new JMenuItem("Start Game");
+            game.add(start);
+            JMenuItem records=new JMenuItem("Records Table");
+            game.add(records);
+            JMenuItem exit=new JMenuItem("Exit");
+            game.add(exit);
+
+            start.addActionListener(startGameListener);
+            records.addActionListener(winTableListener);
+            exit.addActionListener(finishListener);
+
+            JMenuItem instructions=new JMenuItem("Instructions");
+            help.add(instructions);
+            JMenuItem about=new JMenuItem("About");
+            help.add(about);
+
+            instructions.addActionListener(introdactionsListener);
+            about.addActionListener(aboutListener);
+
             JButton startGameButton = new JButton("Start Game!");//Create Button with text.
             startGameButton.setFont(new Font("Monotype Corsiva",Font.PLAIN,50));
             startGameButton.setBackground(Color.BLACK);
@@ -38,15 +91,6 @@ public class MainFrame extends JFrame {
             exitGameButton.setFont(new Font("Monotype Corsiva",Font.PLAIN,40));
             exitGameButton.setForeground(Color.red);
             exitGameButton.setBackground(Color.BLACK);
-
-            ActionListener startGameListener = e -> {
-                mainFrame.setVisible(false);
-                optionsFrame = new OptionsFrame();
-            };
-            ActionListener winTableListener = e -> {
-                mainFrame.setVisible(false);
-                WinnerTableFrame winnerTableFrame = new WinnerTableFrame();
-            };
 
             exitGameButton.addActionListener(e -> System.exit(0));//Make Exit button Abort program.
             winTableButton.addActionListener(winTableListener);
