@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class Globals {
 
@@ -19,7 +18,7 @@ public class Globals {
     public static final String imagesPath = System.getProperty("user.dir")+"\\images";
     public static final BufferedImage[][] gameImagesArray = loadImages();
     public static final Object[]gameBoards = gameBoardsArrayCreator();
-    public static int[][] highScoresArray = {{1000, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+    public static int[] highScoresArray = {1000, 0, 0,0,0};
     public static final GameFrame gameFrame = new GameFrame();
 
 
@@ -34,8 +33,8 @@ public class Globals {
         return array;
     }
 
-    private static Stack[][] gameBoardsCreator(int index) {
-        Stack[][] cellsInfo = new Stack[boardSize][boardSize];
+    private static String[][] gameBoardsCreator(int index) {
+        String[][] cellsInfo = new String[boardSize][boardSize];
         File file = new File(System.getProperty("user.dir") + "\\maze"+index+".csv");
         Scanner scanner = null;
         try {
@@ -48,7 +47,7 @@ public class Globals {
         return cellsInfo;
     }
 
-    private static void mazeFileParser(Stack[][] cellsInfo, Scanner scanner) {
+    private static void mazeFileParser(String[][] cellsInfo, Scanner scanner) {
         String line;
         int lineNumber = -1;
         while (scanner.hasNext()) {
@@ -62,11 +61,7 @@ public class Globals {
                 return;
             String[] strings = line.split(",");
             for (int i = 0; i < 32; i++) {
-                cellsInfo[lineNumber][i] = new Stack();
-                for (int j = 0; j < strings[i].length(); j++) {
-                    int numberToPush = Character.getNumericValue(strings[i].charAt(j));
-                    cellsInfo[lineNumber][i].push(numberToPush);
-                }
+                cellsInfo[lineNumber][i] = strings[i];
             }
         }
         return;

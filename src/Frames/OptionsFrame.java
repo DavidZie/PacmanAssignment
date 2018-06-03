@@ -8,11 +8,11 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import static Logic.Globals.gameFrame;
 import static Logic.Globals.imagesPath;
-import java.io.File;
-import java.io.IOException;
 
 public class OptionsFrame extends JFrame {
 
@@ -23,9 +23,9 @@ public class OptionsFrame extends JFrame {
 
     public OptionsFrame(){
         startGameListener = e -> {
-            System.out.println();
+
             optionsFrame.setVisible(false);
-            gameFrame.startGame(Integer.parseInt(e.getActionCommand()),3,3,0);
+            gameFrame.startGame(Integer.parseInt(e.getActionCommand()),1,3,0);
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         createImageOptionsPanel();//Create and Add Image Options Panel.

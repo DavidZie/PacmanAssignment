@@ -6,11 +6,11 @@ import Logic.Movement;
 import javax.swing.*;
 
 import static Logic.Globals.gameImagesArray;
+import static Logic.Globals.pieceSize;
 
 public class Blinky extends Ghost implements Visitor  {
 
     boolean charging;
-    int weaponRepeater;
 
     public Blinky() {
         super(2,true);
@@ -21,19 +21,26 @@ public class Blinky extends Ghost implements Visitor  {
     private void setupTimer(){
         repeats = 0;
         timer = new Timer(1000, e -> {
-
+            if (repeats<=13){
+                repeats++;
+                return;
+            }
+            if (!charging)
+                image.getGraphics().drawImage(gameImagesArray[4][2], 0, 0, pieceSize, pieceSize, null);
             setRoute(AStar.search(this));
             if (!getRoute().empty())
                 Movement.moveGhost((int)getRoute().pop(), this);
 
-            if (repeats==2){
+            if (repeats==15)
                 setChasing();
+
+            if (repeats==17)
                 charging=true;
-            }
+
             if (charging)
                 changeImage(repeats%2);
 
-            if (repeats==7)
+            if (repeats==22)
                 loaded=true;
 
             repeats++;
@@ -41,8 +48,7 @@ public class Blinky extends Ghost implements Visitor  {
     }
 
     public void fired(){
-        repeats=0;
-        weaponRepeater = 0;
+        repeats=14;
         charging=false;
         loaded=false;
     }

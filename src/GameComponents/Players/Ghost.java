@@ -162,4 +162,5 @@ public abstract class Ghost implements Visitor {
 
     public void fired(){}
 
+
 }

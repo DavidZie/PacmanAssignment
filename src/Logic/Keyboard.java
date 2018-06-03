@@ -1,10 +1,14 @@
 package Logic;
 
 import GameComponents.Board;
+import GameComponents.Piece;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+
+import static Logic.Drawings.reDrawPausePiece;
+import static Logic.Globals.gameFrame;
 
 
 public class Keyboard {
@@ -15,6 +19,7 @@ public class Keyboard {
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "Right");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "Up");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0), "Down");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "Space");
         ActionMap actionMap = jPanel.getActionMap();
         actionMap.put("Up", new AbstractAction() {
             @Override
@@ -58,6 +63,18 @@ public class Keyboard {
                     Movement.movePacman(4);
                 } catch (NullPointerException e1) {
                 }
+            }
+        });
+        actionMap.put("Space", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                board.setPauseStatus(!board.isPauseStatus());
+                gameFrame.getGlass().setVisible(false);
+                if (board.isPauseStatus())
+                    board.stop();
+                else board.start();
+                Piece pausePiece = board.getPieces()[1][23];
+                reDrawPausePiece(pausePiece, board.isPauseStatus());
             }
         });
     }//Bind Key Buttons to Corresponding Actions. Arrows Move Piece of Possible and update Moves Counter.

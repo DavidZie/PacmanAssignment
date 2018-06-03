@@ -7,11 +7,8 @@ import GameComponents.Piece;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Stack;
 
-import static Logic.Globals.boardSize;
-import static Logic.Globals.highScoresArray;
-import static Logic.Globals.pieceSize;
+import static Logic.Globals.*;
 
 public class Drawings {
 
@@ -51,16 +48,12 @@ public class Drawings {
         Graphics g = timePiece.getImage().getGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, timePiece.getWidth(), timePiece.getHeight());
-        Stack data = new Stack();
-        data.push(3);
-        timePiece.drawData(data);
+        timePiece.drawData("3");
     }
 
     public static void drawScoreLabel(Board board) {
         Piece scorePiece = board.replaceLabels(22, 7, 3, 2);
-        Stack data = new Stack();
-        data.push(1);
-        scorePiece.drawData(data);
+        scorePiece.drawData("1");
         board.setCurrentScore(0);
         Graphics g = scorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
@@ -71,21 +64,17 @@ public class Drawings {
 
     public static void drawHighScoreLabel(Board board) {
         Piece highScorePiece = board.replaceLabels(22, 22, 5, 2);
-        Stack data = new Stack();
-        data.push(1);
-        highScorePiece.drawData(data);
+        highScorePiece.drawData("1");
         Graphics g = highScorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("HIGH SCORE:", 0, highScorePiece.getHeight()/2);
-        reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0][0]));
+        reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0]));
     }
 
     public static void drawPauseButton(Board board) {
         Piece pausePiece = board.replaceLabels(1, 23, 3, 1);
-        Stack data = new Stack();
-        data.push(3);
-        pausePiece.drawData(data);
+        pausePiece.drawData("3");
         reDrawPausePiece(pausePiece, board.isPauseStatus());
 
         pausePiece.addMouseListener(new MouseAdapter() {
@@ -103,9 +92,7 @@ public class Drawings {
 
     public static void drawSpeedLabel(Board board) {
         Piece speedPiece = board.replaceLabels(22, 15, 3, 2);
-        Stack data = new Stack();
-        data.push(1);
-        speedPiece.drawData(data);
+        speedPiece.drawData("1");
         reDrawSpeedPiece(speedPiece, board.isSpeedActivated());
         speedPiece.addMouseListener(new MouseAdapter() {
             @Override
@@ -144,9 +131,7 @@ public class Drawings {
 
     public static void drawFruitsLabel(Board board){
         Piece fruitsPiece = board.replaceLabels(9,27,1,12);
-        Stack data = new Stack();
-        data.push(4);
-        fruitsPiece.drawData(data);
+        fruitsPiece.drawData("4");
 
     }
     //---------------------First Draw Methods END-----------------------//

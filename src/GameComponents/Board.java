@@ -31,12 +31,14 @@ public class Board extends JPanel {
     private int[] gate;
 
 
-    public Board(Stack[][] board, int level, int currentHighScore, int lives, int currentScore) {
+    public Board(String[][] board, int level, int currentHighScore, int lives, int currentScore) {
         super(new GridBagLayout());
+
         this.level=level;
         this.currentHighScore=currentHighScore;
         this.currentScore = currentScore;
         this.lives = lives;
+        pauseStatus=true;
         pills=0;
         eatenFruits=new Stack();
         createBoard(board);
@@ -44,11 +46,12 @@ public class Board extends JPanel {
         prepareFruits();
         prepareGhosts();//TO BE WRITTEN.
         timerSetup();
-        //replaceLabels(10,15,1,1);
+        stop();
+        //System.out.println(level);
 
     }//Constructor
     //----------------Board Initiation----------------------//
-    private void createBoard(Stack[][] board) {
+    private void createBoard(String[][] board) {
         pacman = new Pacman();
         setBorder(new LineBorder(Color.GREEN));
         pieces = new Piece[boardSize][boardSize];
@@ -57,9 +60,9 @@ public class Board extends JPanel {
             constraints.gridy = i;
             for (int j = 0; j < boardSize; j++) {
                 constraints.gridx = j;
-                if ((int) board[i][j].peek() == 0||(int) board[i][j].peek() == 6)
+                if ( board[i][j].equals("0")||board[i][j].equals("6"))
                     pills++;
-                if ((int) board[i][j].peek() == 7 && pacman.getLocation() == null) {
+                if (board[i][j].equals("7")&& pacman.getLocation() == null) {
                     int[] playerLocation = {i-1,j};
                     pacman.setLocation(playerLocation);
                     gate = new int[2];
@@ -159,7 +162,6 @@ public class Board extends JPanel {
     private void timerSetup() {
         timerRepeats=0;
         timer = new Timer(250, e -> {
-            timerRepeats++;
             if (!speedActivated)
                 speedDivisor = 4;
             else speedDivisor = 8;
@@ -170,34 +172,21 @@ public class Board extends JPanel {
                 }
             }
 
-            if (((timerRepeats / speedDivisor)>=7)) {
-                ghosts[0].getTimer().start();
-            }
-
-            if (((timerRepeats / speedDivisor)>=9)){
-                ghosts[1].getTimer().start();
-            }
-
-            if (((timerRepeats / speedDivisor)>=11)){
-                ghosts[2].getTimer().start();
-            }
-
-            if (((timerRepeats / speedDivisor)==15)){
+            if (((timerRepeats / speedDivisor)==20)){
                 pieces[gate[0]][gate[1]].setWall(true);
             }
 
 
-            if (ghosts[1].isLoaded())
+            if (level>1&&ghosts[1].isLoaded())
                 fire(ghosts[1]);
 
-            if (ghosts[2].isLoaded())
+            if (level>2&&ghosts[2].isLoaded())
                 fire(ghosts[2]);
 
             checkKill();
-
-
+            timerRepeats++;
+            System.out.println(level);
         });
-        timer.start();
     }
 
     public void drawBlack(Piece piece) {
@@ -279,6 +268,8 @@ public class Board extends JPanel {
 
                 fruit = fruits[index];
                 piece.addFruit(fruit);
+                fruit.setX(x);
+                fruit.setY(y);
                 piece.setEaten(false);
                 fruit.setOut(true);
                 piece.repaint();
@@ -342,6 +333,11 @@ public class Board extends JPanel {
         ghosts[0].insert(pieces[12][16]);
         ghosts[1].insert(pieces[12][17]);
         ghosts[2].insert(pieces[12][15]);
+        if (level==1){
+            ghosts[1]=null;
+            ghosts[2]=null;
+        }else if (level==2)
+            ghosts[2]=null;
     }
 
     //-----------------------------Movement----------------------//
@@ -351,9 +347,11 @@ public class Board extends JPanel {
     private boolean checkCell(int x,int y){
         if (pieces[x][y].getFruit()!=null)
             return false;
-        for (int i=0;i<3;i++){
-            if (ghosts[i].getLocation()[0]==x&&ghosts[i].getLocation()[1]==y)
-                return false;
+        for (int i=0;i<3;i++) {
+            if (ghosts[i] != null) {
+                if (ghosts[i].getLocation()[0] == x && ghosts[i].getLocation()[1] == y)
+                    return false;
+            }
         }
         return true;
     }
@@ -406,22 +404,44 @@ public class Board extends JPanel {
         drawLife(pieces,lives);
         repaint();
         prepareGhosts();
+        pauseStatus=true;
+        Drawings.drawPauseButton(this);
+        gameFrame.getGlass().setVisible(true);
+        stop();
         timerRepeats = 0;
+        drawTime(0,pieces);
+
     }
 
     public void start(){
-        for (int i=0;i<3;i++){
-            ghosts[i].getTimer().start();
+        for (int i=0;i<5;i++){
+            try{ghosts[i].getTimer().start();}
+            catch (NullPointerException ignored){}
         }
-        timer.stop();
+        timer.start();
+        for (int i=0;i<fruits.length;i++) {
+            try {
+                if (fruits[i].isOut()){
+                fruits[i].getTimer().start();
+                pieces[fruits[i].getX()][fruits[i].getY()].getFruitTimer().start();
+                }
+            }
+            catch (NullPointerException ignored) { }
+        }
     }
 
     public void stop(){
 
-        for (int i=0;i<3;i++){
-            ghosts[i].getTimer().stop();
+        for (int i=0;i<5;i++){
+            try{ghosts[i].getTimer().stop();}
+            catch (NullPointerException ignored){}
         }
         timer.stop();
+        for (int i=0;i<fruits.length;i++){
+            try{fruits[i].getTimer().stop();
+                pieces[fruits[i].getX()][fruits[i].getY()].getFruitTimer().stop();}
+            catch (NullPointerException ignored){}
+        }
     }
     public void speedUp(){
         for (int i=0;i<3;i++){
@@ -450,9 +470,13 @@ public class Board extends JPanel {
     }
 
     public void checkCompletion(){
+        pills=0;
         if (pills==0){
-            gameFrame.finishBoard();
+            stop();
+            gameFrame.finishBoard(level,lives,currentScore);
+
         }
     }
+
 
 }

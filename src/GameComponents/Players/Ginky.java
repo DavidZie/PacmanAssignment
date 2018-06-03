@@ -6,6 +6,9 @@ import Logic.Movement;
 
 import javax.swing.*;
 
+import static Logic.Globals.gameImagesArray;
+import static Logic.Globals.pieceSize;
+
 public class Ginky extends Ghost {
     public Ginky() {
         super(0,true);
@@ -16,7 +19,11 @@ public class Ginky extends Ghost {
     private void setupTimer(){
         repeats = 0;
         timer = new Timer(333, e -> {
-
+            if (repeats<=21){
+                repeats++;
+                return;
+            }
+            image.getGraphics().drawImage(gameImagesArray[4][0], 0, 0, pieceSize, pieceSize, null);
             setRoute(AStar.search(this));
             if (!getRoute().empty())
                 Movement.moveGhost((int)getRoute().pop(), this);
