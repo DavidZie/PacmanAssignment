@@ -58,8 +58,8 @@ public class GameFrame extends JFrame {
     }
 
     public void finishBoard(){
-        while(board.getEatenFruits().empty())
-        Fruit fruit=(Fruit)board.getEatenFruits().pop();
+        while(board.getEatenFruits().empty());
+        //Fruit fruit=(Fruit)board.getEatenFruits().pop();
     }
 
 }
