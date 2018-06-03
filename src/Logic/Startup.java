@@ -1,10 +1,10 @@
 package Logic;
 
-import Frames.MainFrame;
-
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.io.File;
+
+import static Logic.Globals.mainFrame;
 
 public class Startup {
 
@@ -12,7 +12,7 @@ public class Startup {
 
     public static void main(String[] args) {
 
-        MainFrame mainFrame = new MainFrame();
+        mainFrame.setVisible(true);
         //music();
 
     }

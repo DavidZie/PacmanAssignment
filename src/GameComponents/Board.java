@@ -185,7 +185,8 @@ public class Board extends JPanel {
 
             checkKill();
             timerRepeats++;
-            System.out.println(level);
+            if (timerRepeats==8)
+                pills=1;
         });
     }
 
@@ -470,10 +471,9 @@ public class Board extends JPanel {
     }
 
     public void checkCompletion(){
-        pills=0;
         if (pills==0){
             stop();
-            gameFrame.finishBoard(level,lives,currentScore);
+            gameFrame.finishBoard(lives,currentScore);
 
         }
     }

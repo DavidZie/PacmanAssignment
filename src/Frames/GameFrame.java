@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 
 import static Logic.Globals.gameBoards;
 import static Logic.Globals.highScoresArray;
+import static Logic.Globals.mainFrame;
 
 
 public class GameFrame extends JFrame {
@@ -17,6 +18,7 @@ public class GameFrame extends JFrame {
     Board board;
     private int boardIndex;
     private JPanel glass;
+    private int level = 1;
 
     public GameFrame() {
         super();
@@ -40,8 +42,7 @@ public class GameFrame extends JFrame {
         add(container);
     }
 
-    public void startGame(int boardIndex,int level, int lives,int currentScore){
-        System.out.println(level);
+    public void startGame(int boardIndex, int lives,int currentScore){
         frameOptions();
         this.boardIndex=boardIndex;
         setVisible(true);
@@ -61,21 +62,22 @@ public class GameFrame extends JFrame {
     public void endGame(){
         if (board.getCurrentScore()>highScoresArray[4])
             new GameOverFrame();
-        else new MainFrame();
+        else mainFrame.setVisible(true);
         remove(board);
         remove(container);
         setVisible(false);
         repaint();
     }
 
-    public void finishBoard(int level,int lives,int currentScore){
+    public void finishBoard(int lives,int currentScore){
 
         if (level==3)
             endGame();
         else {
             remove(board);
             remove(container);
-            startGame((boardIndex + 1) % 3, level+1, lives, currentScore);
+            level++;
+            startGame((boardIndex + 1) % 3, lives, currentScore);
         }
     }
 
