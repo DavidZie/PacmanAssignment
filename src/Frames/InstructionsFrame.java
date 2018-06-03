@@ -14,6 +14,7 @@ public class InstructionsFrame {
     JPanel panel1;
     JPanel panel2;
     JPanel panel3;
+    JPanel panel4;
 
     public InstructionsFrame(){
         createFrame();
@@ -42,6 +43,11 @@ public class InstructionsFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try {
+            panel4=new JPanelWithBackground(imagesPath+"\\intro4.png");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //frame.add(panel1, BorderLayout.CENTER);//Add Container Panel to Frame.
     }
 
@@ -50,6 +56,7 @@ public class InstructionsFrame {
         tp.addTab("Pacman Players", panel1);
         tp.addTab("Gosts",panel2);
         tp.addTab("Irteraction",panel3);
+        tp.addTab("Score",panel4);
         frame.add(tp);
     }
 
