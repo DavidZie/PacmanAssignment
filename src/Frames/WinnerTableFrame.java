@@ -19,7 +19,6 @@ public class WinnerTableFrame {
     public WinnerTableFrame(){
         backListener = e -> {
             winnerTableFrame.setVisible(false);
-           MainFrame mainFrame=new MainFrame();
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         addLabel();
