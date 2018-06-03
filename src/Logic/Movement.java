@@ -56,6 +56,7 @@ public class Movement {
                 pacmanLocation[1] -= 1;
                 break;
         }
+        board.checkCompletion();
     }
 
     public static void moveGhost(int direction, Ghost ghost) {
@@ -66,8 +67,7 @@ public class Movement {
         switch (direction) {
             case 1://Move Up.
                 if (pieces[x-1][y].isWall()){
-                    if (!weaponCheck(x-1,y,ghost));
-                    {
+                    if (killWeapon(x-1,y,ghost)) {
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
@@ -84,8 +84,7 @@ public class Movement {
                 break;
             case 2://Move Right.
                 if (pieces[x][y+1].isWall()){
-                    if (!weaponCheck(x,y+1,ghost));
-                    {
+                    if (killWeapon(x,y+1,ghost)) {
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
@@ -102,8 +101,7 @@ public class Movement {
                 break;
             case 3://Move Down.
                 if (pieces[x+1][y].isWall()){
-                    if (!weaponCheck(x+1,y,ghost));
-                    {
+                    if (killWeapon(x+1,y,ghost)) {
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
@@ -120,9 +118,7 @@ public class Movement {
                 break;
             case 4://Move Left.
                 if (pieces[x][y-1].isWall()){
-                    if (!weaponCheck(x,y-1,ghost));
-                    {
-
+                    if (killWeapon(x,y-1,ghost)){
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
@@ -156,15 +152,15 @@ public class Movement {
         return temp;
     }
 
-    private static boolean weaponCheck(int x, int y, Ghost ghost){
-        if (x==1|y==5|x==21|y==27){
-            return false;
+    private static boolean killWeapon(int x, int y, Ghost ghost){
+        if (x==1|y==5|x==22|y==27){
+            return true;
         }
         if (board.getGhosts()[4]!=null){
             if (board.getGhosts()[4]==ghost)
-                return true;
+                return false;
         }
-        return false;
+        return true;
     }
 
 

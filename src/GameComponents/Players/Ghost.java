@@ -133,13 +133,14 @@ public abstract class Ghost implements Visitor {
                 myY=location[1]-1;
                 break;
         }
+        if (pieces[myX][myY].isWall())
+            return;
         weapon.setLocation(myX,myY);
         weapon.setFacing(facing);
         weapon.insert(pieces[myX][myY]);
         weapon.getTimer().start();
         loaded=false;
-
-
+        fired();
     }
 
     private BufferedImage drawBlackImage(){
