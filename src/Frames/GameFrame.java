@@ -1,6 +1,7 @@
 package Frames;
 
 import GameComponents.Board;
+import GameComponents.Fruit;
 import Logic.Keyboard;
 
 import javax.swing.*;
@@ -14,10 +15,15 @@ public class GameFrame extends JFrame {
 
     JPanel container;
     Board board;
+    private int[] eatenFruitsArray;
 
     public GameFrame() {
         super();
         frameOptions();
+        eatenFruitsArray=new int[6];
+        for (int i=0;i<6;i++)
+            eatenFruitsArray[i]=0;
+
     }
 
     public Board getBoard() {
@@ -52,7 +58,8 @@ public class GameFrame extends JFrame {
     }
 
     public void finishBoard(){
-
+        while(board.getEatenFruits().empty())
+        Fruit fruit=(Fruit)board.getEatenFruits().pop();
     }
 
 }

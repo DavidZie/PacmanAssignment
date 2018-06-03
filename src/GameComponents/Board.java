@@ -135,6 +135,8 @@ public class Board extends JPanel {
 
     public void setLives(int lives) { this.lives = lives; }
 
+    public Stack getEatenFruits() { return eatenFruits; }
+
     //--------------------------Methods--------------------------//
 
     public Piece replaceLabels(int x, int y, int width, int height) {
@@ -446,6 +448,7 @@ public class Board extends JPanel {
 
     public void eatenFruit(Fruit fruit){
         eatenFruits.push(fruit);
+
         reDrawFruitsLabel(this,eatenFruits.size(), fruit);
     }
 
