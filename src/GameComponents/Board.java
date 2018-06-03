@@ -2,15 +2,11 @@ package GameComponents;
 
 import GameComponents.Players.*;
 import Logic.Drawings;
-import Logic.Movement;
-import Logic.Routing;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Stack;
 
 import static Logic.Drawings.*;
@@ -20,14 +16,14 @@ public class Board extends JPanel {
     private Piece[][] pieces;
     private Pacman pacman;
     private Timer timer;
-    private int eatenFruits;
+    private Stack eatenFruits;
     private int timerRepeats;
     private boolean pauseStatus;
     private boolean speedActivated;
     private int speedDivisor;
     private int currentScore;
     private int currentHighScore;
-    private int pills = -1;
+    private int pills;
     private Fruit[] fruits;
     private int level;
     private Ghost[] ghosts;
@@ -41,12 +37,14 @@ public class Board extends JPanel {
         this.currentHighScore=currentHighScore;
         this.currentScore = currentScore;
         this.lives = lives;
-        eatenFruits=0;
+        pills=0;
+        eatenFruits=new Stack();
         createBoard(board);
         drawInfo();
         prepareFruits();
         prepareGhosts();//TO BE WRITTEN.
         timerSetup();
+        //replaceLabels(10,15,1,1);
 
     }//Constructor
     //----------------Board Initiation----------------------//
@@ -59,7 +57,7 @@ public class Board extends JPanel {
             constraints.gridy = i;
             for (int j = 0; j < boardSize; j++) {
                 constraints.gridx = j;
-                if ((int) board[i][j].peek() == 0)
+                if ((int) board[i][j].peek() == 0||(int) board[i][j].peek() == 6)
                     pills++;
                 if ((int) board[i][j].peek() == 7 && pacman.getLocation() == null) {
                     int[] playerLocation = {i-1,j};
@@ -192,6 +190,8 @@ public class Board extends JPanel {
                 fire(ghosts[2]);
 
             checkKill();
+
+
         });
         timer.start();
     }
@@ -207,6 +207,13 @@ public class Board extends JPanel {
     public void updateScore(Piece piece){
         if (!piece.isEaten()){
             currentScore+=piece.getWorth();
+            if (piece.getFruit()==null)
+                pills--;
+            else {
+                if (piece.getWorth()-piece.getFruit().getWorth()!=0)
+                    pills--;
+            }
+
             piece.setEaten(true);
             Drawings.reDrawScoreLabel(pieces[22][7],currentScore,currentHighScore,pieces);
         }
@@ -228,7 +235,7 @@ public class Board extends JPanel {
     }
 
     private void swapIn() {
-
+        pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].setWorth(0);
         pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].getImage().getGraphics().drawImage(pacman.getImage(),0,0,null);//setImage(pacman.getImage());
     }
 
@@ -350,7 +357,6 @@ public class Board extends JPanel {
     private void fire(Ghost ghost){
         ghosts[ghost.getId()+2] = ghost.getWeapon();
         ghost.fire(pieces);
-        ghost.fired();
     }
 
     private void checkKill(){
@@ -435,9 +441,14 @@ public class Board extends JPanel {
     }
 
     public void eatenFruit(Fruit fruit){
-        eatenFruits++;
-        reDrawFruitsLabel(this,eatenFruits, fruit);
+        eatenFruits.push(fruit);
+        reDrawFruitsLabel(this,eatenFruits.size(), fruit);
     }
 
+    public void checkCompletion(){
+        if (pills==0){
+            gameFrame.finishBoard();
+        }
+    }
 
 }

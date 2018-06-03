@@ -1,12 +1,10 @@
 package GameComponents.Players;
 
 
-import GameComponents.Piece;
+import Logic.AStar;
 import Logic.Movement;
-import Logic.Routing;
 
 import javax.swing.*;
-import java.util.Stack;
 
 public class Ginky extends Ghost {
     public Ginky() {
@@ -19,7 +17,7 @@ public class Ginky extends Ghost {
         repeats = 0;
         timer = new Timer(333, e -> {
 
-            setRoute(Routing.calculate(this));
+            setRoute(AStar.search(this));
             if (!getRoute().empty())
                 Movement.moveGhost((int)getRoute().pop(), this);
 
