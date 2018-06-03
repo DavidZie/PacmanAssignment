@@ -53,10 +53,7 @@ public class AStar {
                     for (int l=0;l<nodes[i][j].adjacencies.length;l++){
                         nodes[i][j].adjacencies[l]=edges.pop();
                     }
-
                 }
-
-
             }
         }
         int destX,destY,myX,myY;
@@ -74,8 +71,6 @@ public class AStar {
 
         Stack moves = route(nodes[destX][destY]);
         return moves;
-
-
     }
 
     public static Stack route(Node target){
@@ -95,7 +90,6 @@ public class AStar {
                     moves.push(4);
                 path.push(node);
             }
-
         }
         //Collections.reverse(path);
         return moves;
@@ -121,7 +115,6 @@ public class AStar {
                             return 0;
                         }
                     }
-
                 }
         );
 
@@ -177,13 +170,9 @@ public class AStar {
                     queue.add(child);
 
                 }
-
             }
-
         }
-
     }
-
 }
 
 class Node{

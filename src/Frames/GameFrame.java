@@ -47,6 +47,9 @@ public class GameFrame extends JFrame {
 
     public void endGame(){
         remove(container);
+        setVisible(false);
+        MainFrame mainFrame=new MainFrame();
+        GameOverFrame game=new GameOverFrame();
         repaint();
     }
 

@@ -20,7 +20,6 @@ public class GameOverFrame {
 
         backToMainListener = e -> {
             finishFrame.setVisible(false);
-            MainFrame mainFrame=new MainFrame();
         };//Call new GameFrame and hide this Frame.
 
         saveGameListener = e -> {

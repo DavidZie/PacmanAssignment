@@ -131,6 +131,10 @@ public class Board extends JPanel {
         return currentHighScore;
     }
 
+    public int getLives() { return lives; }
+
+    public void setLives(int lives) { this.lives = lives; }
+
     //--------------------------Methods--------------------------//
 
     public Piece replaceLabels(int x, int y, int width, int height) {
