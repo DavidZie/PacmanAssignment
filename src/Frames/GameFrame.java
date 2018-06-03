@@ -24,9 +24,7 @@ public class GameFrame extends JFrame {
         return board;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
+    public void setBoard(Board board) { this.board = board; }
 
     private void frameOptions() {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
