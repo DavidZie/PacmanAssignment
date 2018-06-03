@@ -1,8 +1,8 @@
 package GameComponents.Players;
 
 
+import Logic.AStar;
 import Logic.Movement;
-import Logic.Routing;
 
 import javax.swing.*;
 
@@ -23,7 +23,7 @@ public class Inky extends Ghost {
         repeats = 0;
         timer = new Timer(666, e -> {
 
-            setRoute(Routing.calculate(this));
+            setRoute(AStar.search(this));
             if (!getRoute().empty())
                 Movement.moveGhost((int)getRoute().pop(), this);
 

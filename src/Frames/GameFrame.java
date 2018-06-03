@@ -42,11 +42,16 @@ public class GameFrame extends JFrame {
         Keyboard.bindKeyboard((JPanel) getContentPane(), board);
         container.add(board);
         pack();
+
     }
 
     public void endGame(){
         remove(container);
         repaint();
+    }
+
+    public void finishBoard(){
+
     }
 
 }
