@@ -109,18 +109,6 @@ public class WinnerTableFrame {
         data[0][0]=tmp;
     }
 
-    private void swapRows(int index, Object[][] data,String name, Object[] curr) {
-
-        Object[] tmp=curr;
-
-        for (int i = 0; i < data[index].length; i++)
-        data[index+1][i]=data[index][i];
-
-        for (int i = 0; i < data[index].length; i++)
-        data[index][i]=tmp[i];
-
-    }
-
     private void addButton() {
         JButton backBtn=new JButton("Return Back");
         backBtn.setFont(new Font("Algerian",Font.PLAIN,30));
