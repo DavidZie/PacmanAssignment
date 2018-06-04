@@ -1,6 +1,7 @@
 package GameComponents.Players;
 
 
+import GameComponents.Board;
 import Logic.AStar;
 import Logic.Movement;
 
@@ -35,7 +36,7 @@ public class Inky extends Ghost {
                 Movement.moveGhost((int)getRoute().pop(), this,gameFrame.getBoard());
 
             if (repeats==18)
-                setChasing();
+                setChasing(true);
 
             if (repeats==21)
                 charging=true;
@@ -76,12 +77,29 @@ public class Inky extends Ghost {
 
 
     @Override
-    public void visit(Pacman pacman) {
-
+    public void visit(Pacman pacman, Board board) {
+        switch (pacman.getLevel()){
+            case 1:
+                board.setLives(board.getLives()-1);
+                if (board.getLives()==0){
+                    gameFrame.endGame();
+                } else board.cleanBoard();
+                break;
+            case 2:
+                pacman.freeze();
+                setChasing(false);
+                break;
+            case 3:
+                //Freeze
+                repeats=7;
+                setChasing(false);
+                break;
+        }
+        board.repaint();
     }
 
     @Override
-    public void visit(Ghost ghost) {
+    public void visit(Ghost ghost, Board board) {
 
     }
 }

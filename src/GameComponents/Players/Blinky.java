@@ -1,5 +1,6 @@
 package GameComponents.Players;
 
+import GameComponents.Board;
 import Logic.AStar;
 import Logic.Movement;
 
@@ -22,7 +23,7 @@ public class Blinky extends Ghost implements Visitor  {
     private void setupTimer(){
         repeats = 0;
         timer = new Timer(1000, e -> {
-            if (repeats<=13){
+            if (repeats<=15){
                 repeats++;
                 return;
             }
@@ -33,7 +34,7 @@ public class Blinky extends Ghost implements Visitor  {
                 Movement.moveGhost((int)getRoute().pop(), this,gameFrame.getBoard());
 
             if (repeats==15)
-                setChasing();
+                setChasing(true);
 
             if (repeats==17)
                 charging=true;
@@ -66,12 +67,15 @@ public class Blinky extends Ghost implements Visitor  {
     }
 
     @Override
-    public void visit(Pacman pacman) {
-
+    public void visit(Pacman pacman, Board board) {
+        board.setLives(board.getLives()-1);
+        if (board.getLives()==0){
+            gameFrame.endGame();
+        } else board.cleanBoard();
     }
 
     @Override
-    public void visit(Ghost ghost) {
+    public void visit(Ghost ghost, Board board) {
 
     }
 

@@ -1,11 +1,8 @@
 package GameComponents.Players;
 
-import GameComponents.Piece;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
 
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
@@ -15,19 +12,47 @@ public class Pacman implements Visited {
     private BufferedImage image;//Should be Array of Different Animations.
     private int[] location;
     private int currentImage;
+    private int level;
+    private boolean frozen;
+    private int repeats;
 
-    public Pacman() {
-        image = gameImagesArray[0][0];
+    public Pacman(int level) {
+        repeats=0;
+        image = gameImagesArray[level/2][level/3];
+        this.level=level;
         currentImage =0 ;
         Timer timer = new Timer(200, e -> {
-            currentImage = (currentImage+1)%3;
-            image = gameImagesArray[0][currentImage];
+            if (level<2) {
+                currentImage = (currentImage + 1) % 3;
+                image = gameImagesArray[0][currentImage];
+            } else {image = gameImagesArray[1][level-2];}
+            if (repeats==15)
+                frozen=false;
+            repeats++;
+
         });
         timer.start();
     }
 
+    public boolean isFrozen() {
+        return frozen;
+    }
+
+    public void freeze() {
+        frozen=true;
+        repeats=0;
+    }
+
+    public void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
     public int[] getLocation() {
         return location;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public void setLocation(int[] location) {
@@ -62,7 +87,7 @@ public class Pacman implements Visited {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         g.rotate(Math.toRadians(-90), pieceSize/2, pieceSize/2);
-        g.drawImage(gameImagesArray[0][currentImage],null,0,0);
+        g.drawImage(gameImagesArray[level/2][level/3],null,0,0);
         image = newImage;
     }
 
@@ -72,7 +97,7 @@ public class Pacman implements Visited {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         g.rotate(Math.toRadians(0), pieceSize/2, pieceSize/2);
-        g.drawImage(gameImagesArray[0][currentImage],null,0,0);
+        g.drawImage(gameImagesArray[level/2][level/3],null,0,0);
         image = newImage;
     }
 
@@ -82,7 +107,7 @@ public class Pacman implements Visited {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         g.rotate(Math.toRadians(90), pieceSize/2, pieceSize/2);
-        g.drawImage(gameImagesArray[0][currentImage],null,0,0);
+        g.drawImage(gameImagesArray[level/2][level/3],null,0,0);
         image = newImage;
     }
 
@@ -92,7 +117,7 @@ public class Pacman implements Visited {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         g.rotate(Math.toRadians(0), pieceSize/2, pieceSize/2);
-        g.drawImage(gameImagesArray[0][currentImage],pieceSize,0,-pieceSize,pieceSize,null);
+        g.drawImage(gameImagesArray[level/2][level/3],pieceSize,0,-pieceSize,pieceSize,null);
         image = newImage;
     }
 
@@ -106,6 +131,8 @@ public class Pacman implements Visited {
             }
         }
     }
+
+
 
     @Override
     public void impact(Visitor visitor) {

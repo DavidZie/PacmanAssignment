@@ -57,7 +57,7 @@ public class Board extends JPanel {
     }//Constructor
     //----------------Board Initiation----------------------//
     private void createBoard(String[][] board) {
-        pacman = new Pacman();
+        pacman = new Pacman(level);
         setBorder(new LineBorder(Color.GREEN));
         pieces = new Piece[boardSize][boardSize];
         GridBagConstraints constraints = new GridBagConstraints();
@@ -82,6 +82,15 @@ public class Board extends JPanel {
     //------------------------Board Initiation END--------------------------------------//
 
     //-----------------------Getters and Setters----------------//
+
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
 
     public boolean isPauseStatus() {
         return pauseStatus;
@@ -173,12 +182,12 @@ public class Board extends JPanel {
             if (level>2&&ghosts[2].isLoaded())
                 fire(ghosts[2]);
 
-            checkKill();
+            checkImpact();
             timerRepeats++;
 
-            if (timerRepeats==4)
-                pills=50;
+
             checkCompletion();
+
         });
     }
 
@@ -326,11 +335,6 @@ public class Board extends JPanel {
         ghosts[0].insert(pieces[12][16]);
         ghosts[1].insert(pieces[12][17]);
         ghosts[2].insert(pieces[12][15]);
-        if (level==1){
-            ghosts[1]=null;
-            ghosts[2]=null;
-        }else if (level==2)
-            ghosts[2]=null;
     }
 
     //-----------------------------Movement----------------------//
@@ -354,23 +358,22 @@ public class Board extends JPanel {
         ghost.fire(pieces);
     }
 
-    private void checkKill(){
+    private void checkImpact(){
         int myX,myY;
         for (int i=0;i<5;i++){
             if (ghosts[i]!=null){
                 myX = ghosts[i].getLocation()[0];
                 myY = ghosts[i].getLocation()[1];
                 if (pacman.getLocation()[0] == myX && pacman.getLocation()[1] == myY){
-                    lives--;
-                    if (lives==0){
-                        gameFrame.endGame();
-                    } else cleanBoard();
+
+                    ghosts[i].visit(getPacman(),this);
+
                 }
             }
         }
     }
 
-    private void cleanBoard(){
+    public void cleanBoard(){
 
         for (int i=0;i<boardSize;i++){
             for (int j=0;j<boardSize;j++){
@@ -395,7 +398,6 @@ public class Board extends JPanel {
         pacman.setLocation(reset);
         swapIn();
         drawLife(pieces,lives);
-        repaint();
         prepareGhosts();
         pauseStatus=true;
         Drawings.drawPauseButton(this);

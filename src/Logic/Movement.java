@@ -15,6 +15,8 @@ public class Movement {
 
 
     public static void movePacman(int direction, Board board) {
+        if (board.getPacman().isFrozen())
+            return;
         int[] pacmanLocation = board.getPacman().getLocation();
         Piece[][] pieces = board.getPieces();
         Pacman pacman = board.getPacman();
@@ -122,7 +124,7 @@ public class Movement {
                     if (killWeapon(x,y-1,ghost,board)){
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
-                        if (board.getGhosts()[3]==ghost)
+                        if (board.getGhosts()[3]==ghost)//
                             board.getGhosts()[3]=null;//Kill Water.
                         else board.getGhosts()[4]=null;//Kill Fire.
                         return;

@@ -3,10 +3,13 @@ package Logic;
 import GameComponents.Board;
 import GameComponents.Fruit;
 import GameComponents.Piece;
+import GameComponents.Players.Ghost;
+import GameComponents.Players.Pacman;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.TimeUnit;
 
 import static Logic.Globals.*;
 
@@ -222,5 +225,31 @@ public class Drawings {
 
 
     //--------------------- re-draw Methods END-----------------------//
+
+    public static void drawDeath(Pacman pacman, Ghost ghost, Board board){
+
+
+
+        /*for (int i=0;i<pieceSize;i++){
+            for (int j=0;j<pieceSize;j++){
+                g.fillRect(i,j,1,1);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                board.repaint();
+            }
+        }*/
+
+
+
+
+
+
+
+
+    }
+
 
 }

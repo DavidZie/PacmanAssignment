@@ -101,8 +101,8 @@ public abstract class Ghost implements Visitor {
         return chasing;
     }
 
-    void setChasing() {
-        this.chasing = true;
+    void setChasing(boolean chasing) {
+        this.chasing = chasing;
     }
 
     public void setFacing(int facing) {
@@ -148,7 +148,6 @@ public abstract class Ghost implements Visitor {
     }
 
     public void impact(Visitor visitor) {
-        visitor.visit(this);
     }
 
     public boolean isLoaded() {

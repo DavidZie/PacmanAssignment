@@ -16,9 +16,7 @@ public class GameFrame extends JFrame {
 
     private JPanel container;
     private Board board;
-    private int boardIndex;
     private JPanel glass;
-    private int level = 1;
 
     public GameFrame() {
         super();
@@ -35,12 +33,9 @@ public class GameFrame extends JFrame {
         return board;
     }
 
-    public void setBoard(Board board) { this.board = board; }
-
     public void startGame(int boardIndex, int lives,int level, int currentScore){
         container = new JPanel();
         add(container);
-        this.boardIndex=boardIndex;
         setVisible(true);
         if (board!=null)
             remove(board);
