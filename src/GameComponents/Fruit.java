@@ -69,6 +69,8 @@ public class Fruit extends Label {
         return timer;
     }
 
+    public int getId() { return id; }
+
     //---------------------------Methods-----------------------//
     private BufferedImage blackImage(){
         BufferedImage image = new BufferedImage(pieceSize, pieceSize,BufferedImage.TYPE_INT_ARGB);

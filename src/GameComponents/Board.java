@@ -30,7 +30,7 @@ public class Board extends JPanel {
     private int lives;
     private int[] gate;
     private int id;
-
+    private int[] points;
 
     public Board(int id, int level, int currentHighScore, int lives, int currentScore) {
         super(new GridBagLayout());
@@ -52,6 +52,11 @@ public class Board extends JPanel {
         prepareGhosts();//TO BE WRITTEN.
         timerSetup();
         stop();
+
+        points=new int[6];
+        for (int i=0;i<6;i++)
+            points[i]=0;
+
         //System.out.println(level);
 
     }//Constructor
@@ -128,6 +133,8 @@ public class Board extends JPanel {
         return currentHighScore;
     }
 
+    public int[] getPoints() { return points; }
+
     //--------------------------Methods--------------------------//
 
     public Piece replaceLabels(int x, int y, int width, int height) {
@@ -193,11 +200,20 @@ public class Board extends JPanel {
     public void updateScore(Piece piece){
         if (!piece.isEaten()){
             currentScore+=piece.getWorth();
-            if (piece.getFruit()==null)
+            points[0]=currentScore;
+            if (piece.getFruit()==null) {
                 pills--;
+                points[1]=points[1]+1;
+            }
             else {
                 if (piece.getWorth()-piece.getFruit().getWorth()!=0)
                     pills--;
+                if (piece.getFruit().getId()==0)
+                    points[3]=points[3]+1;
+                if (piece.getFruit().getId()==1)
+                    points[4]=points[4]+1;
+                if (piece.getFruit().getId()==2)
+                    points[5]=points[5]+1;
             }
 
             piece.setEaten(true);
@@ -363,7 +379,7 @@ public class Board extends JPanel {
                 if (pacman.getLocation()[0] == myX && pacman.getLocation()[1] == myY){
                     lives--;
                     if (lives==0){
-                        gameFrame.endGame();
+                        gameFrame.endGame(points);
                     } else cleanBoard();
                 }
             }
@@ -471,8 +487,7 @@ public class Board extends JPanel {
         if (pills<=0){
             stop();
             getGraphics().dispose();
-            gameFrame.finishBoard(id,lives,level,currentScore);
-
+            gameFrame.finishBoard(id,lives,level,currentScore,points);
         }
     }
 

@@ -54,20 +54,21 @@ public class GameFrame extends JFrame {
 
     }
 
-    public void endGame(){
+    public void endGame(int[] points){
         if (board.getCurrentScore()>highScoresArray[4])
-            new GameOverFrame();
-        else mainFrame.setVisible(true);
+            new FinishGameFrame(points);
+        else
+            new GameOverFrame(points);
         remove(board);
         remove(container);
         setVisible(false);
         repaint();
     }
 
-    public void finishBoard(int boardIndex,int lives,int level,int currentScore){
+    public void finishBoard(int boardIndex,int lives,int level,int currentScore,int[] points){
 
         if (level==3)
-            endGame();
+            endGame(points);
         else {
             remove(container);
             repaint();

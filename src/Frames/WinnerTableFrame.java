@@ -15,6 +15,8 @@ public class WinnerTableFrame {
     JFrame winnerTableFrame;
     private JPanel containerPanel;//Frame's Background Panel.
     ActionListener backListener;
+    String[] columNames={"Name","Score","Regular Pill","Energy Pill","Pineapple","Apple","Strawberry"};
+    Object[][] data;
 
     public WinnerTableFrame(){
         backListener = e -> {
@@ -23,6 +25,17 @@ public class WinnerTableFrame {
         createFrame();//Create Frame.
         addLabel();
         createTable();//Create and Add Image Options Panel.
+        addButton();
+    }//Constructor
+
+    public WinnerTableFrame(String name, int[] points){
+        backListener = e -> {
+            winnerTableFrame.setVisible(false);
+        };//Call new GameFrame and hide this Frame.
+        createFrame();//Create Frame.
+        addLabel();
+        createTable();//Create and Add Image Options Panel.
+        addRowToTable(name, points);
         addButton();
     }//Constructor
 
@@ -48,8 +61,7 @@ public class WinnerTableFrame {
     }
 
     private void createTable(){
-        String[] columNames={"Name","Score","Regular Pill","Energy Pill","Pineapple","Apple","Strawberry"};
-        Object[][] data=new Object[5][7];
+        data=new Object[5][7];
         for (int i=0;i<5;i++)
             for (int j=0;j<7;j++)
                 if (j==0)
@@ -61,6 +73,15 @@ public class WinnerTableFrame {
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane=new JScrollPane(table);
         containerPanel.add(scrollPane);
+    }
+
+    private void addRowToTable(String name, int[] points){
+        int index=0;
+        while (data[index][0]!="")
+            index++;
+        data[index][0]=name;
+        for (int i=0;i<points.length;i++)
+            data[index][i+1]=points[i];
     }
 
     private void addButton() {
