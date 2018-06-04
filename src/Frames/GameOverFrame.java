@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
+import static Logic.Globals.mainFrame;
 
 public class GameOverFrame {
     JFrame finishFrame;
@@ -20,6 +21,7 @@ public class GameOverFrame {
 
         backToMainListener = e -> {
             finishFrame.setVisible(false);
+            if (mainFrame.isVisible()==false) mainFrame.setVisible(true);
         };//Call new GameFrame and hide this Frame.
 
         createFrame();//Create Frame.
@@ -41,6 +43,7 @@ public class GameOverFrame {
 
         saveGameListener = e -> {
             finishFrame.setVisible(false);
+            if (mainFrame.isVisible()==false) mainFrame.setVisible(true);
             WinnerTableFrame winnerTableFrame=new WinnerTableFrame(text.getText(),points);
         };//Call new GameFrame and hide this Frame.
 
