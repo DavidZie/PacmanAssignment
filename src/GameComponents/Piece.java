@@ -1,19 +1,14 @@
 package GameComponents;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Stack;
 
 import static Logic.Globals.*;
 
 public class Piece extends JLabel {
 
 
-    int x, y;
     private BufferedImage image;
     private boolean eaten = false;
     private boolean wall = true;
@@ -24,10 +19,8 @@ public class Piece extends JLabel {
     private int repeats;
     private  Fruit fruit;
 
-    Piece(int x, int y, Stack data) {
+    Piece(String data) {
         super();
-        this.x = x;
-        this.y = y;
         setSize(pieceSize, pieceSize);
         image = new BufferedImage(pieceSize, pieceSize, BufferedImage.TYPE_INT_ARGB);
         drawData(data);
@@ -53,6 +46,10 @@ public class Piece extends JLabel {
         }
     }
 
+    public Timer getFruitTimer() {
+        return fruitTimer;
+    }
+
     public boolean isWall() {
         return wall;
     }
@@ -67,10 +64,6 @@ public class Piece extends JLabel {
 
     public boolean isGhostHouse() {
         return ghostHouse;
-    }
-
-    public void setGhostHouse(boolean ghostHouse) {
-        this.ghostHouse = ghostHouse;
     }
 
     public BufferedImage getImage() {
@@ -93,34 +86,33 @@ public class Piece extends JLabel {
     //-------------------Construction Time Methods------------------------//
 
     //-----------------------------Methods-------------------------------//
-    public void drawData(Stack s) {
+    public void drawData(String s) {
         if (s == null)
             return;
         drawBlackImage();
-        while (!s.empty()) {
-            int popped = (int) s.pop();
-            switch (popped) {
-                case 0:
+        for (int i=0;i<s.length();i++){
+            switch (s.charAt(i)) {
+                case '0':
                     drawRegularPill();
                     break;
-                case 1:
+                case '1':
                     drawNorthWall();
                     break;
-                case 2:
+                case '2':
                     drawEastWall();
                     break;
-                case 3:
+                case '3':
                     drawSouthWall();
                     break;
-                case 4:
+                case '4':
                     drawWestWall();
                     break;
-                case 5:
+                case '5':
                     break;
-                case 6:
+                case '6':
                     drawEnergyPill();
                     break;
-                case 7:
+                case '7':
                     wall = false;
                     ghostHouse = true;
                     break;
@@ -219,21 +211,20 @@ public class Piece extends JLabel {
                 killFruit();
             }
 
-
         });
         fruitTimer.start();
     }
     public void killFruit(){
-        Stack dataStack = new Stack();
+        String dataString = "";
         if (!eaten){
             worth -= fruit.getWorth();
             if (worth==10){
-                dataStack.push(0);
+                dataString+="0";
 
             } else if (worth == 50) {
-                dataStack.push(6);
+                dataString+="6";
             }
-            drawData(dataStack);
+            drawData(dataString);
             fruit.setOut(false);
             fruit.getTimer().stop();
             fruit.setRepeats(0);

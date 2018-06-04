@@ -8,24 +8,24 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-
-import static Logic.Globals.gameFrame;
-import static Logic.Globals.imagesPath;
 import java.io.File;
 import java.io.IOException;
 
+import static Logic.Globals.gameFrame;
+import static Logic.Globals.imagesPath;
+
 public class OptionsFrame extends JFrame {
 
-    JFrame optionsFrame;
     private JPanel containerPanel;//Frame's Background Panel.
 
-    ActionListener startGameListener;
+    private ActionListener startGameListener;
 
     public OptionsFrame(){
+        super("Select Maze");
         startGameListener = e -> {
-            System.out.println();
-            optionsFrame.setVisible(false);
-            gameFrame.startGame(Integer.parseInt(e.getActionCommand()),3,3,0);
+
+            setVisible(false);
+            gameFrame.startGame(Integer.parseInt(e.getActionCommand())-1,3,1,0);
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         createImageOptionsPanel();//Create and Add Image Options Panel.
@@ -35,18 +35,17 @@ public class OptionsFrame extends JFrame {
     //------------------------Functions-------------------------//
 
     private void createFrame(){
-        optionsFrame=new JFrame("Select Maze");
-        optionsFrame.setSize(1200,421);//Set Frame dimensions.
-        optionsFrame.setResizable(false);//Lock Frame Size.
-        optionsFrame.setVisible(true);//Make Frame Visible.
-        optionsFrame.setLocationRelativeTo(null);//Center the frame on the screen.
-        optionsFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
+
+        setSize(1200,421);//Set Frame dimensions.
+        setResizable(false);//Lock Frame Size.
+        setLocationRelativeTo(null);//Center the frame on the screen.
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\misgeret.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        optionsFrame.add(containerPanel,BorderLayout.CENTER);//Add Container Panel to Frame.
+        add(containerPanel,BorderLayout.CENTER);//Add Container Panel to Frame.
     }
 
     private void createImageOptionsPanel(){

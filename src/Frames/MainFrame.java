@@ -9,32 +9,30 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
+import static Logic.Globals.optionsFrame;
 
 public class MainFrame extends JFrame {
 
-    JFrame mainFrame;
     JMenuBar menuBar;
     JPanel containerPanel;
-    OptionsFrame optionsFrame;
 
     public MainFrame(){
-        mainFrame = new JFrame("Pac-Man");//Create Frame
-        mainFrame.setVisible(true);
-        mainFrame.setSize(883,590);//Set Frame dimensions to 400 width and 400 height
-        mainFrame.setResizable(false);
-        mainFrame.setLocationRelativeTo(null);//Center the frame on the screen.
-        mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
-        mainFrame.pack();
+        super("Pac-Man");//Create Frame
+        setSize(883,590);//Set Frame dimensions to 400 width and 400 height
+        setResizable(false);
+        setLocationRelativeTo(null);//Center the frame on the screen.
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
+        pack();
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\background.jpg");
 
 
             ActionListener startGameListener = e -> {
-                mainFrame.setVisible(false);
-                optionsFrame = new OptionsFrame();
+                setVisible(false);
+                optionsFrame.setVisible(true);
             };
             ActionListener winTableListener = e -> {
-                WinnerTableFrame winnerTableFrame = new WinnerTableFrame();
+                new WinnerTableFrame();
             };
             ActionListener finishListener = e -> {
                 System.exit(0);
@@ -50,7 +48,7 @@ public class MainFrame extends JFrame {
 
 
             menuBar=new JMenuBar();
-            mainFrame.setJMenuBar(menuBar);
+            setJMenuBar(menuBar);
 
             JMenu game=new JMenu("Game");
             menuBar.add(game);
@@ -99,8 +97,8 @@ public class MainFrame extends JFrame {
             containerPanel.add(startGameButton,BorderLayout.WEST);//Add Button.
             containerPanel.add(winTableButton ,BorderLayout.CENTER);
             containerPanel.add(exitGameButton ,BorderLayout.EAST);
-            mainFrame.add(containerPanel);
-            mainFrame.pack();
+            add(containerPanel);
+            pack();
         } catch (IOException e) {
             e.printStackTrace();
         }

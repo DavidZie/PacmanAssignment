@@ -1,6 +1,7 @@
 package Logic;
 
-import GameComponents.*;
+import GameComponents.Board;
+import GameComponents.Piece;
 import GameComponents.Players.Ghost;
 import GameComponents.Players.Pacman;
 
@@ -11,9 +12,9 @@ import static Logic.Globals.pieceSize;
 
 public class Movement {
 
-    private static Board board = gameFrame.getBoard();
 
-    public static void movePacman(int direction) {
+
+    public static void movePacman(int direction, Board board) {
         int[] pacmanLocation = board.getPacman().getLocation();
         Piece[][] pieces = board.getPieces();
         Pacman pacman = board.getPacman();
@@ -56,10 +57,10 @@ public class Movement {
                 pacmanLocation[1] -= 1;
                 break;
         }
-        board.checkCompletion();
+        gameFrame.repaint();
     }
 
-    public static void moveGhost(int direction, Ghost ghost) {
+    public static void moveGhost(int direction, Ghost ghost, Board board) {
         ghost.setFacing(direction);
         BufferedImage temp;
         Piece[][] pieces = board.getPieces();
@@ -67,7 +68,7 @@ public class Movement {
         switch (direction) {
             case 1://Move Up.
                 if (pieces[x-1][y].isWall()){
-                    if (killWeapon(x-1,y,ghost)) {
+                    if (killWeapon(x-1,y,ghost,board)) {
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
@@ -76,7 +77,7 @@ public class Movement {
                         return;
                     }
                 }
-                temp = tempCreator(x-1,y);
+                temp = tempCreator(x-1,y,board);
                 pieces[x - 1][y].setImage(ghost.getImage());
                 pieces[x][y].setImage(ghost.getCoveredImage());
                 ghost.setCoveredImage(temp);
@@ -84,7 +85,7 @@ public class Movement {
                 break;
             case 2://Move Right.
                 if (pieces[x][y+1].isWall()){
-                    if (killWeapon(x,y+1,ghost)) {
+                    if (killWeapon(x,y+1,ghost,board)) {
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
@@ -93,7 +94,7 @@ public class Movement {
                         return;
                     }
                 }
-                temp = tempCreator(x,y+1);
+                temp = tempCreator(x,y+1,board);
                 pieces[x][y+1].setImage(ghost.getImage());
                 pieces[x][y].setImage(ghost.getCoveredImage());
                 ghost.setCoveredImage(temp);
@@ -101,7 +102,7 @@ public class Movement {
                 break;
             case 3://Move Down.
                 if (pieces[x+1][y].isWall()){
-                    if (killWeapon(x+1,y,ghost)) {
+                    if (killWeapon(x+1,y,ghost,board)) {
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
@@ -110,7 +111,7 @@ public class Movement {
                         return;
                     }
                 }
-                temp = tempCreator(x+1,y);
+                temp = tempCreator(x+1,y,board);
                 pieces[x+1][y].setImage(ghost.getImage());
                 pieces[x][y].setImage(ghost.getCoveredImage());
                 ghost.setCoveredImage(temp);
@@ -118,7 +119,7 @@ public class Movement {
                 break;
             case 4://Move Left.
                 if (pieces[x][y-1].isWall()){
-                    if (killWeapon(x,y-1,ghost)){
+                    if (killWeapon(x,y-1,ghost,board)){
                         pieces[x][y].setImage(ghost.getCoveredImage());
                         ghost.getTimer().stop();
                         if (board.getGhosts()[3]==ghost)
@@ -127,18 +128,18 @@ public class Movement {
                         return;
                     }
                 }
-                temp = tempCreator(x,y-1);
+                temp = tempCreator(x,y-1,board);
                 pieces[x][y-1].setImage(ghost.getImage());
                 pieces[x][y].setImage(ghost.getCoveredImage());
                 ghost.setCoveredImage(temp);
                 ghost.getLocation()[1] -= 1;
                 break;
         }
-        board.repaint();
+        gameFrame.repaint();
     }
 
 
-    private static BufferedImage tempCreator(int x, int y){
+    private static BufferedImage tempCreator(int x, int y, Board board){
         BufferedImage temp = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
         Ghost[] ghosts= board.getGhosts();
         for (int i=0;i<5;i++){
@@ -152,15 +153,8 @@ public class Movement {
         return temp;
     }
 
-    private static boolean killWeapon(int x, int y, Ghost ghost){
-        if (x==1|y==5|x==22|y==27){
-            return true;
-        }
-        if (board.getGhosts()[4]!=null){
-            if (board.getGhosts()[4]==ghost)
-                return false;
-        }
-        return true;
+    private static boolean killWeapon(int x, int y, Ghost ghost, Board board) {
+        return x == 1 | y == 5 | x == 22 | y == 27 || board.getGhosts()[4] == null || board.getGhosts()[4] != ghost;
     }
 
 
