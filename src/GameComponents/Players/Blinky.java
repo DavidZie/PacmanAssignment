@@ -23,7 +23,7 @@ public class Blinky extends Ghost implements Visitor  {
     private void setupTimer(){
         repeats = 0;
         timer = new Timer(1000, e -> {
-            if (repeats<=15){
+            if (repeats<=13){
                 repeats++;
                 return;
             }

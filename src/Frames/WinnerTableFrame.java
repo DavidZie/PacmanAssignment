@@ -7,37 +7,45 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import static Logic.Globals.gameFrame;
 import static Logic.Globals.imagesPath;
 
-public class WinnerTableFrame {
+public class WinnerTableFrame extends JFrame{
 
-    JFrame winnerTableFrame;
     private JPanel containerPanel;//Frame's Background Panel.
     ActionListener backListener;
 
     public WinnerTableFrame(){
+        super("Winner Table");
+        consHelper();
+    }//Constructor
+
+    public WinnerTableFrame(int[] score){
+        super("Winner Table");
+        consHelper();
+
+    }//Constructor with new Score.
+
+    private void consHelper(){
         backListener = e -> {
-            winnerTableFrame.setVisible(false);
+            setVisible(false);
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         addLabel();
         createTable();//Create and Add Image Options Panel.
         addButton();
-    }//Constructor
+    }
 
     private void createFrame(){
-        winnerTableFrame=new JFrame("Winner Table");
-        winnerTableFrame.setSize(686,458);//Set Frame dimensions.
-        winnerTableFrame.setResizable(true);//Lock Frame Size.
-        winnerTableFrame.setVisible(true);//Make Frame Visible.
-        winnerTableFrame.setLocationRelativeTo(null);//Center the frame on the screen.
+        setSize(686,458);//Set Frame dimensions.
+        setResizable(true);//Lock Frame Size.
+        setVisible(true);//Make Frame Visible.
+        setLocationRelativeTo(null);//Center the frame on the screen.
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\misgeret2.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        winnerTableFrame.add(containerPanel, BorderLayout.CENTER);//Add Container Panel to Frame.
+        add(containerPanel, BorderLayout.CENTER);//Add Container Panel to Frame.
     }
 
     private void addLabel(){

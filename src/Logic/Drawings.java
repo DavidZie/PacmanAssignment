@@ -9,7 +9,6 @@ import GameComponents.Players.Pacman;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.concurrent.TimeUnit;
 
 import static Logic.Globals.*;
 
@@ -57,12 +56,12 @@ public class Drawings {
     public static void drawScoreLabel(Board board) {
         Piece scorePiece = board.replaceLabels(22, 7, 3, 2);
         scorePiece.drawData("1");
-        board.setCurrentScore(0);
+        board.setCurrentScore(board.getCurrentScore());
         Graphics g = scorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("SCORE:", 0, scorePiece.getHeight()/2);
-        reDrawScoreLabel(scorePiece, board.getCurrentScore(), board.getCurrentHighScore(), board.getPieces());
+        reDrawScoreLabel(scorePiece, board.getCurrentScore()[0], board.getCurrentHighScore(), board.getPieces());
     }
 
     public static void drawHighScoreLabel(Board board) {
@@ -72,7 +71,10 @@ public class Drawings {
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("HIGH SCORE:", 0, highScorePiece.getHeight()/2);
-        reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0]));
+        if (highScoresArray[0]>=board.getCurrentScore()[0])
+            reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0]));
+        else reDrawHighScoreLabel(highScorePiece,String.valueOf(board.getCurrentScore()));
+
     }
 
     public static void drawPauseButton(Board board) {

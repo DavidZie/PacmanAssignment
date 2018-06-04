@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
-import static Logic.Globals.optionsFrame;
 
 public class MainFrame extends JFrame {
 
@@ -19,6 +18,7 @@ public class MainFrame extends JFrame {
     public MainFrame(){
         super("Pac-Man");//Create Frame
         setSize(883,590);//Set Frame dimensions to 400 width and 400 height
+        setVisible(true);
         setResizable(false);
         setLocationRelativeTo(null);//Center the frame on the screen.
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
@@ -29,7 +29,7 @@ public class MainFrame extends JFrame {
 
             ActionListener startGameListener = e -> {
                 setVisible(false);
-                optionsFrame.setVisible(true);
+                new OptionsFrame();
             };
             ActionListener winTableListener = e -> {
                 new WinnerTableFrame();

@@ -25,20 +25,20 @@ public class Ginky extends Ghost {
     private void setupTimer(){
         repeats = 0;
         timer = new Timer(333, e -> {
-            if (repeats<=3|dead){
+            if (repeats<=21|dead){
                 repeats++;
                 return;
             }
 
             if (disappear) {
-                if (repeats==4){
+                if (repeats==22){
                     BufferedImage newImage = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
                     Graphics g = newImage.getGraphics();
                     g.setColor(Color.BLACK);
                     g.fillRect(0,0,pieceSize,pieceSize);
                     image.getGraphics().drawImage(newImage, 0, 0, pieceSize, pieceSize, null);
                 }
-                else if (repeats==15)
+                else if (repeats==37)
                     disappear=false;
                 else image.getGraphics().drawImage(getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
             } else image.getGraphics().drawImage(gameImagesArray[4][0], 0, 0, pieceSize, pieceSize, null);
@@ -66,7 +66,7 @@ public class Ginky extends Ghost {
                     } else board.cleanBoard();
                     break;
                 case 2:
-                    repeats=4;
+                    repeats=22;
                     disappear = true;
                     image.getGraphics().drawImage(getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
                     setChasing(false);

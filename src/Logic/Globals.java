@@ -1,8 +1,6 @@
 package Logic;
 
 import Frames.GameFrame;
-import Frames.MainFrame;
-import Frames.OptionsFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,9 +19,7 @@ public class Globals {
     public static final BufferedImage[][] gameImagesArray = loadImages();
     public static final Object[]gameBoards = gameBoardsArrayCreator();
     public static int[] highScoresArray = {1000, 0, 0,0,0};
-    public static final MainFrame mainFrame = new MainFrame();
     public static final GameFrame gameFrame = new GameFrame();
-    public static final OptionsFrame optionsFrame = new OptionsFrame();
 
 
 

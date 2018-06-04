@@ -22,10 +22,12 @@ public class OptionsFrame extends JFrame {
 
     public OptionsFrame(){
         super("Select Maze");
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
         startGameListener = e -> {
 
             setVisible(false);
-            gameFrame.startGame(Integer.parseInt(e.getActionCommand())-1,3,1,0);
+            gameFrame.startGame(Integer.parseInt(e.getActionCommand())-1,3,1,new int[6]);
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         createImageOptionsPanel();//Create and Add Image Options Panel.

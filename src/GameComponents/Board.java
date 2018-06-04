@@ -21,7 +21,7 @@ public class Board extends JPanel {
     private boolean pauseStatus;
     private boolean speedActivated;
     private int speedDivisor;
-    private int currentScore;
+    private int currentScore[];
     private int currentHighScore;
     private int pills;
     private Fruit[] fruits;
@@ -32,7 +32,7 @@ public class Board extends JPanel {
     private int id;
 
 
-    public Board(int id, int level, int currentHighScore, int lives, int currentScore) {
+    public Board(int id, int level, int currentHighScore, int lives, int[] currentScore) {
         super(new GridBagLayout());
         this.id=id;
         this.level=level;
@@ -108,7 +108,7 @@ public class Board extends JPanel {
         return pacman;
     }
 
-    public void setCurrentScore(int currentScore) {
+    public void setCurrentScore(int[] currentScore) {
         this.currentScore = currentScore;
     }
 
@@ -129,7 +129,7 @@ public class Board extends JPanel {
     }
 
 
-    public int getCurrentScore() {
+    public int[] getCurrentScore() {
         return currentScore;
     }
 
@@ -185,7 +185,6 @@ public class Board extends JPanel {
             checkImpact();
             timerRepeats++;
 
-
             checkCompletion();
 
         });
@@ -200,8 +199,40 @@ public class Board extends JPanel {
     }
 
     public void updateScore(Piece piece){
+
+
         if (!piece.isEaten()){
-            currentScore+=piece.getWorth();
+            switch (piece.getWorth()){
+                case 10:
+                    currentScore[1]++;
+                    break;
+                case 50:
+                    currentScore[2]++;
+                    break;
+                case 100:
+                    currentScore[3]++;
+                    break;
+                case 110:
+                    currentScore[1]++;
+                    currentScore[3]++;
+                    break;
+                case 200:
+                    currentScore[4]++;
+                    break;
+                case 210:
+                    currentScore[1]++;
+                    currentScore[4]++;
+                    break;
+                case 300:
+                    currentScore[5]++;
+                    break;
+                case 310:
+                    currentScore[1]++;
+                    currentScore[5]++;
+                    break;
+            }
+
+            currentScore[0]+=piece.getWorth();
             if (piece.getFruit()==null)
                 pills--;
             else {
@@ -210,7 +241,7 @@ public class Board extends JPanel {
             }
 
             piece.setEaten(true);
-            Drawings.reDrawScoreLabel(pieces[22][7],currentScore,currentHighScore,pieces);
+            Drawings.reDrawScoreLabel(pieces[22][7],currentScore[0],currentHighScore,pieces);
         }
     }
 
@@ -257,7 +288,7 @@ public class Board extends JPanel {
             x = (int)(Math.random() * 19 + 2);
             y = (int)(Math.random() * 22 + 6);
             piece = pieces[x][y];
-            if (!piece.isWall()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])&&checkCell(x,y)){
+            if (!piece.isWall()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])&&checkCell(x,y)&&piece.getWorth()!=50){
                 index = (int)(Math.random()*fruits.length);
                 if (fruits[index].isOut()){
                     index = 0;
@@ -344,7 +375,7 @@ public class Board extends JPanel {
     private boolean checkCell(int x,int y){
         if (pieces[x][y].getFruit()!=null)
             return false;
-        for (int i=0;i<3;i++) {
+        for (int i=0;i<5;i++) {
             if (ghosts[i] != null) {
                 if (ghosts[i].getLocation()[0] == x && ghosts[i].getLocation()[1] == y)
                     return false;
