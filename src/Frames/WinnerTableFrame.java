@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import static Logic.Globals.gameFrame;
 import static Logic.Globals.imagesPath;
+import static Logic.Globals.mainFrame;
 
 public class WinnerTableFrame {
 
@@ -21,6 +22,7 @@ public class WinnerTableFrame {
     public WinnerTableFrame(){
         backListener = e -> {
             winnerTableFrame.setVisible(false);
+            if (mainFrame.isVisible()==false) mainFrame.setVisible(true);
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         addLabel();
@@ -31,6 +33,7 @@ public class WinnerTableFrame {
     public WinnerTableFrame(String name, int[] points){
         backListener = e -> {
             winnerTableFrame.setVisible(false);
+            if (mainFrame.isVisible()==false) mainFrame.setVisible(true);
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         addLabel();
@@ -76,17 +79,6 @@ public class WinnerTableFrame {
     }
 
     private void addRowToTable(String name, int[] points){
-        //Object[] curr=new Object[7];
-        //curr[0] = name;
-        //for (int i = 1; i < curr.length; i++)
-        //    curr[i] = points[i-1];
-        //for (int i=0;i<curr.length;i++)
-         //   data[4][i]=curr[i];
-        //int index=4;
-        //while (index>=0) {
-        //    index--;
-        //    swapRows(index,data,name,curr);
-        //}
         for (int i=0;i<data[4].length-1;i++)
             data[4][i+1]=points[i];
         data[4][0]=name;
