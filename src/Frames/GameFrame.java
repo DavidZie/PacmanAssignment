@@ -4,20 +4,31 @@ import GameComponents.Board;
 import Logic.Keyboard;
 
 import javax.swing.*;
-import java.util.Stack;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
-import static Logic.Globals.gameBoards;
+import static Logic.Globals.gameFrame;
 import static Logic.Globals.highScoresArray;
+import static Logic.Globals.mainFrame;
 
 
 public class GameFrame extends JFrame {
 
-    JPanel container;
-    Board board;
+    private JPanel container;
+    private Board board;
+    private int boardIndex;
+    private JPanel glass;
+    private int level = 1;
 
     public GameFrame() {
         super();
-        frameOptions();
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        glass = new JPanel();
+        setGlassPane(glass);
+    }
+
+    public JPanel getGlass() {
+        return glass;
     }
 
     public Board getBoard() {
@@ -26,33 +37,59 @@ public class GameFrame extends JFrame {
 
     public void setBoard(Board board) { this.board = board; }
 
-    private void frameOptions() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    public void startGame(int boardIndex, int lives,int level, int currentScore){
         container = new JPanel();
         add(container);
-    }
-
-    public void startGame(int boardIndex,int level, int lives,int currentScore){
+        this.boardIndex=boardIndex;
         setVisible(true);
         if (board!=null)
             remove(board);
-        board = new Board((Stack[][]) gameBoards[boardIndex - 1], level, highScoresArray[boardIndex-1][0],lives,currentScore);
+        board = new Board(boardIndex, level, highScoresArray[0],lives,currentScore);
         Keyboard.bindKeyboard((JPanel) getContentPane(), board);
+        putGlass();
         container.add(board);
         pack();
+
+
 
     }
 
     public void endGame(){
+        if (board.getCurrentScore()>highScoresArray[4])
+            new GameOverFrame();
+        else mainFrame.setVisible(true);
+        remove(board);
         remove(container);
         setVisible(false);
-        MainFrame mainFrame=new MainFrame();
-        GameOverFrame game=new GameOverFrame();
         repaint();
     }
 
-    public void finishBoard(){
+    public void finishBoard(int boardIndex,int lives,int level,int currentScore){
 
+        if (level==3)
+            endGame();
+        else {
+            remove(container);
+            repaint();
+            gameFrame.startGame((boardIndex+1)%3,lives,level+1,currentScore);
+        }
     }
 
+    private void putGlass(){
+        JPanel glass = (JPanel) getGlassPane();
+        JLabel l = new JLabel();
+        BufferedImage image = new BufferedImage(800,800,BufferedImage.TYPE_INT_ARGB);
+        Graphics g= image.getGraphics();
+        g.setColor(Color.BLUE);
+        g.fillRect(250,200,325,200);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        g.setColor(Color.YELLOW);
+        g.drawString("GET READY", 325, 275);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.drawString("Press Space To Start", 325, 325);
+        l.setIcon(new ImageIcon(image));
+        glass.add(l);
+        glass.setOpaque(false);
+        getGlassPane().setVisible(true);
+    }
 }

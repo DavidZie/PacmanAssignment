@@ -7,11 +7,8 @@ import GameComponents.Piece;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Stack;
 
-import static Logic.Globals.boardSize;
-import static Logic.Globals.highScoresArray;
-import static Logic.Globals.pieceSize;
+import static Logic.Globals.*;
 
 public class Drawings {
 
@@ -51,16 +48,12 @@ public class Drawings {
         Graphics g = timePiece.getImage().getGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, timePiece.getWidth(), timePiece.getHeight());
-        Stack data = new Stack();
-        data.push(3);
-        timePiece.drawData(data);
+        timePiece.drawData("3");
     }
 
     public static void drawScoreLabel(Board board) {
         Piece scorePiece = board.replaceLabels(22, 7, 3, 2);
-        Stack data = new Stack();
-        data.push(1);
-        scorePiece.drawData(data);
+        scorePiece.drawData("1");
         board.setCurrentScore(0);
         Graphics g = scorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
@@ -71,21 +64,17 @@ public class Drawings {
 
     public static void drawHighScoreLabel(Board board) {
         Piece highScorePiece = board.replaceLabels(22, 22, 5, 2);
-        Stack data = new Stack();
-        data.push(1);
-        highScorePiece.drawData(data);
+        highScorePiece.drawData("1");
         Graphics g = highScorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("HIGH SCORE:", 0, highScorePiece.getHeight()/2);
-        reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0][0]));
+        reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0]));
     }
 
     public static void drawPauseButton(Board board) {
         Piece pausePiece = board.replaceLabels(1, 23, 3, 1);
-        Stack data = new Stack();
-        data.push(3);
-        pausePiece.drawData(data);
+        pausePiece.drawData("3");
         reDrawPausePiece(pausePiece, board.isPauseStatus());
 
         pausePiece.addMouseListener(new MouseAdapter() {
@@ -103,9 +92,7 @@ public class Drawings {
 
     public static void drawSpeedLabel(Board board) {
         Piece speedPiece = board.replaceLabels(22, 15, 3, 2);
-        Stack data = new Stack();
-        data.push(1);
-        speedPiece.drawData(data);
+        speedPiece.drawData("1");
         reDrawSpeedPiece(speedPiece, board.isSpeedActivated());
         speedPiece.addMouseListener(new MouseAdapter() {
             @Override
@@ -144,9 +131,7 @@ public class Drawings {
 
     public static void drawFruitsLabel(Board board){
         Piece fruitsPiece = board.replaceLabels(9,27,1,12);
-        Stack data = new Stack();
-        data.push(4);
-        fruitsPiece.drawData(data);
+        fruitsPiece.drawData("4");
 
     }
     //---------------------First Draw Methods END-----------------------//
@@ -155,9 +140,10 @@ public class Drawings {
 
     public static void reDrawScoreLabel(Piece scorePiece, int currentScore, int currentHighScore, Piece[][] pieces){
         Graphics g = scorePiece.getImage().getGraphics();
-        String currentScoreString = String.valueOf(currentScore);
-        while (currentScoreString.length()<7)
-            currentScoreString = "0"+currentScoreString;
+        StringBuilder currentScoreStringBuilder = new StringBuilder(String.valueOf(currentScore));
+        while (currentScoreStringBuilder.length()<7)
+            currentScoreStringBuilder.insert(0, "0");
+        String currentScoreString = currentScoreStringBuilder.toString();
         if (currentScore>currentHighScore)
             reDrawHighScoreLabel(pieces[22][22],currentScoreString);
         g.setColor(Color.BLACK);
@@ -168,12 +154,14 @@ public class Drawings {
         scorePiece.repaint();
     }
 
-    public static void reDrawHighScoreLabel(Piece highScorePiece, String highScore){
+    private static void reDrawHighScoreLabel(Piece highScorePiece, String highScore){
         Graphics g = highScorePiece.getImage().getGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0,highScorePiece.getHeight()/2,highScorePiece.getWidth(),highScorePiece.getHeight());
-        while (highScore.length()<7)
-            highScore = "0"+highScore;
+        StringBuilder highScoreBuilder = new StringBuilder(highScore);
+        while (highScoreBuilder.length()<7)
+            highScoreBuilder.insert(0, "0");
+        highScore = highScoreBuilder.toString();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("     " + highScore, 0, highScorePiece.getHeight());
@@ -182,7 +170,7 @@ public class Drawings {
 
 
 
-    public static void reDrawPausePiece(Piece pausePiece, boolean pauseStatus) {
+    static void reDrawPausePiece(Piece pausePiece, boolean pauseStatus) {
         Graphics g = pausePiece.getImage().getGraphics();
         if (pauseStatus) {
             g.setColor(Color.RED);
@@ -202,7 +190,7 @@ public class Drawings {
         pausePiece.repaint();
     }
 
-    public static void reDrawSpeedPiece(Piece speedPiece, boolean speedActivated) {
+    private static void reDrawSpeedPiece(Piece speedPiece, boolean speedActivated) {
         Graphics g = speedPiece.getImage().getGraphics();
         if (speedActivated) {
             g.setColor(Color.RED);

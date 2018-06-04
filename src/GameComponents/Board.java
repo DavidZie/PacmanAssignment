@@ -16,7 +16,7 @@ public class Board extends JPanel {
     private Piece[][] pieces;
     private Pacman pacman;
     private Timer timer;
-    private Stack eatenFruits;
+    private Stack<Fruit> eatenFruits;
     private int timerRepeats;
     private boolean pauseStatus;
     private boolean speedActivated;
@@ -29,26 +29,34 @@ public class Board extends JPanel {
     private Ghost[] ghosts;
     private int lives;
     private int[] gate;
+    private int id;
 
 
-    public Board(Stack[][] board, int level, int currentHighScore, int lives, int currentScore) {
+    public Board(int id, int level, int currentHighScore, int lives, int currentScore) {
         super(new GridBagLayout());
+        this.id=id;
         this.level=level;
+        if (level!=1) {
+            //pacman=null;
+            ghosts=null;
+        }
         this.currentHighScore=currentHighScore;
         this.currentScore = currentScore;
         this.lives = lives;
+        pauseStatus=true;
         pills=0;
-        eatenFruits=new Stack();
-        createBoard(board);
+        eatenFruits=new Stack<>();
+        createBoard((String[][]) gameBoards[id]);
         drawInfo();
         prepareFruits();
         prepareGhosts();//TO BE WRITTEN.
         timerSetup();
-        //replaceLabels(10,15,1,1);
+        stop();
+        //System.out.println(level);
 
     }//Constructor
     //----------------Board Initiation----------------------//
-    private void createBoard(Stack[][] board) {
+    private void createBoard(String[][] board) {
         pacman = new Pacman();
         setBorder(new LineBorder(Color.GREEN));
         pieces = new Piece[boardSize][boardSize];
@@ -57,16 +65,16 @@ public class Board extends JPanel {
             constraints.gridy = i;
             for (int j = 0; j < boardSize; j++) {
                 constraints.gridx = j;
-                if ((int) board[i][j].peek() == 0||(int) board[i][j].peek() == 6)
+                if ( board[i][j].equals("0")||board[i][j].equals("6"))
                     pills++;
-                if ((int) board[i][j].peek() == 7 && pacman.getLocation() == null) {
+                if (board[i][j].equals("7")&& pacman.getLocation() == null) {
                     int[] playerLocation = {i-1,j};
                     pacman.setLocation(playerLocation);
                     gate = new int[2];
                     gate[0]=i;
                     gate[1]=j;
                 }
-                pieces[i][j] = new Piece(i, j, board[i][j]);
+                pieces[i][j] = new Piece(board[i][j]);
                 add(pieces[i][j], constraints);
             }
         }
@@ -81,10 +89,6 @@ public class Board extends JPanel {
 
     public Ghost[] getGhosts() {
         return ghosts;
-    }
-
-    public void setGhosts(Ghost[] ghosts) {
-        this.ghosts = ghosts;
     }
 
     public Piece[][] getPieces() {
@@ -115,13 +119,6 @@ public class Board extends JPanel {
         this.speedActivated = speedActivated;
     }
 
-    public int getTimerRepeats() {
-        return timerRepeats;
-    }
-
-    public void setTimerRepeats(int timerRepeats) {
-        this.timerRepeats = timerRepeats;
-    }
 
     public int getCurrentScore() {
         return currentScore;
@@ -131,14 +128,10 @@ public class Board extends JPanel {
         return currentHighScore;
     }
 
-    public int getLives() { return lives; }
-
-    public void setLives(int lives) { this.lives = lives; }
-
     //--------------------------Methods--------------------------//
 
     public Piece replaceLabels(int x, int y, int width, int height) {
-        Piece newPiece = new Piece(x, y, null);
+        Piece newPiece = new Piece(null);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = y;
         constraints.gridy = x;
@@ -159,7 +152,6 @@ public class Board extends JPanel {
     private void timerSetup() {
         timerRepeats=0;
         timer = new Timer(250, e -> {
-            timerRepeats++;
             if (!speedActivated)
                 speedDivisor = 4;
             else speedDivisor = 8;
@@ -170,34 +162,24 @@ public class Board extends JPanel {
                 }
             }
 
-            if (((timerRepeats / speedDivisor)>=7)) {
-                ghosts[0].getTimer().start();
-            }
-
-            if (((timerRepeats / speedDivisor)>=9)){
-                ghosts[1].getTimer().start();
-            }
-
-            if (((timerRepeats / speedDivisor)>=11)){
-                ghosts[2].getTimer().start();
-            }
-
-            if (((timerRepeats / speedDivisor)==15)){
+            if (((timerRepeats / speedDivisor)==20)){
                 pieces[gate[0]][gate[1]].setWall(true);
             }
 
 
-            if (ghosts[1].isLoaded())
+            if (level>1&&ghosts[1].isLoaded())
                 fire(ghosts[1]);
 
-            if (ghosts[2].isLoaded())
+            if (level>2&&ghosts[2].isLoaded())
                 fire(ghosts[2]);
 
             checkKill();
+            timerRepeats++;
 
-
+            if (timerRepeats==4)
+                pills=50;
+            checkCompletion();
         });
-        timer.start();
     }
 
     public void drawBlack(Piece piece) {
@@ -279,6 +261,8 @@ public class Board extends JPanel {
 
                 fruit = fruits[index];
                 piece.addFruit(fruit);
+                fruit.setX(x);
+                fruit.setY(y);
                 piece.setEaten(false);
                 fruit.setOut(true);
                 piece.repaint();
@@ -342,6 +326,11 @@ public class Board extends JPanel {
         ghosts[0].insert(pieces[12][16]);
         ghosts[1].insert(pieces[12][17]);
         ghosts[2].insert(pieces[12][15]);
+        if (level==1){
+            ghosts[1]=null;
+            ghosts[2]=null;
+        }else if (level==2)
+            ghosts[2]=null;
     }
 
     //-----------------------------Movement----------------------//
@@ -351,9 +340,11 @@ public class Board extends JPanel {
     private boolean checkCell(int x,int y){
         if (pieces[x][y].getFruit()!=null)
             return false;
-        for (int i=0;i<3;i++){
-            if (ghosts[i].getLocation()[0]==x&&ghosts[i].getLocation()[1]==y)
-                return false;
+        for (int i=0;i<3;i++) {
+            if (ghosts[i] != null) {
+                if (ghosts[i].getLocation()[0] == x && ghosts[i].getLocation()[1] == y)
+                    return false;
+            }
         }
         return true;
     }
@@ -406,27 +397,53 @@ public class Board extends JPanel {
         drawLife(pieces,lives);
         repaint();
         prepareGhosts();
+        pauseStatus=true;
+        Drawings.drawPauseButton(this);
+        gameFrame.getGlass().setVisible(true);
+        stop();
         timerRepeats = 0;
+        drawTime(0,pieces);
+
     }
 
     public void start(){
-        for (int i=0;i<3;i++){
-            ghosts[i].getTimer().start();
+        for (int i=0;i<5;i++){
+            try{ghosts[i].getTimer().start();}
+            catch (NullPointerException ignored){}
         }
-        timer.stop();
+        timer.start();
+        for (Fruit fruit : fruits) {
+            try {
+                if (fruit.isOut()) {
+                    fruit.getTimer().start();
+                    pieces[fruit.getX()][fruit.getY()].getFruitTimer().start();
+                }
+            } catch (NullPointerException ignored) {
+            }
+        }
     }
 
     public void stop(){
 
-        for (int i=0;i<3;i++){
-            ghosts[i].getTimer().stop();
+        for (int i=0;i<5;i++){
+            try{ghosts[i].getTimer().stop();}
+            catch (NullPointerException ignored){}
         }
         timer.stop();
+        for (Fruit fruit : fruits) {
+            try {
+                fruit.getTimer().stop();
+                pieces[fruit.getX()][fruit.getY()].getFruitTimer().stop();
+            } catch (NullPointerException ignored) {
+            }
+        }
     }
     public void speedUp(){
-        for (int i=0;i<3;i++){
-            ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()/2);
-            ghosts[i].setRepeats(ghosts[i].getRepeats()*2);
+        for (int i=0;i<5;i++){
+            try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()/2);
+            ghosts[i].setRepeats(ghosts[i].getRepeats()*2);}
+            catch (NullPointerException ignored){}
+
         }
         timer.setDelay(timer.getDelay()/2);
         timerRepeats = timerRepeats*2;
@@ -436,8 +453,9 @@ public class Board extends JPanel {
 
     public void speedDown(){
         for (int i=0;i<3;i++){
-            ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()*2);
-            ghosts[i].setRepeats(ghosts[i].getRepeats()/2);
+            try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()*2);
+            ghosts[i].setRepeats(ghosts[i].getRepeats()/2);}
+            catch (NullPointerException ignored){}
         }
         timer.setDelay(timer.getDelay()*2);
         timerRepeats = timerRepeats/2;
@@ -449,10 +467,14 @@ public class Board extends JPanel {
         reDrawFruitsLabel(this,eatenFruits.size(), fruit);
     }
 
-    public void checkCompletion(){
-        if (pills==0){
-            gameFrame.finishBoard();
+    private void checkCompletion(){
+        if (pills<=0){
+            stop();
+            getGraphics().dispose();
+            gameFrame.finishBoard(id,lives,level,currentScore);
+
         }
     }
+
 
 }
