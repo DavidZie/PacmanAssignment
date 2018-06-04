@@ -3,8 +3,6 @@ package Logic;
 import GameComponents.Board;
 import GameComponents.Fruit;
 import GameComponents.Piece;
-import GameComponents.Players.Ghost;
-import GameComponents.Players.Pacman;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -73,7 +71,7 @@ public class Drawings {
         g.drawString("HIGH SCORE:", 0, highScorePiece.getHeight()/2);
         if (highScoresArray[0]>=board.getCurrentScore()[0])
             reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0]));
-        else reDrawHighScoreLabel(highScorePiece,String.valueOf(board.getCurrentScore()));
+        else reDrawHighScoreLabel(highScorePiece,String.valueOf(board.getCurrentScore()[0]));
 
     }
 
@@ -137,6 +135,43 @@ public class Drawings {
     public static void drawFruitsLabel(Board board){
         Piece fruitsPiece = board.replaceLabels(9,27,1,12);
         fruitsPiece.drawData("4");
+
+    }
+
+    public static void drawGhostsAddLabel(Board board){
+        Piece ghostsPiece1 = board.replaceLabels(4,2,3,3);
+        ghostsPiece1.drawData("1234");
+        Graphics g1 = ghostsPiece1.getImage().getGraphics();
+        g1.setColor(Color.WHITE);
+        g1.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g1.drawString("ADD", 22, 30);
+        g1.drawString("GHOST", 5, 60);
+
+        ghostsPiece1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                reDrawGhostLabel(ghostsPiece1,true);
+                board.addExtraGhost(5);
+            }
+        });
+
+        Piece ghostsPiece2 = board.replaceLabels(4,28,3,3);
+        ghostsPiece2.drawData("1234");
+        Graphics g2 = ghostsPiece2.getImage().getGraphics();
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g2.drawString("ADD", 22, 30);
+        g2.drawString("GHOST", 5, 60);
+
+        ghostsPiece2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                reDrawGhostLabel(ghostsPiece2,true);
+                board.addExtraGhost(6);
+            }
+        });
 
     }
     //---------------------First Draw Methods END-----------------------//
@@ -224,34 +259,29 @@ public class Drawings {
         fruitPiece.repaint();
     }
 
+    private static void reDrawGhostLabel(Piece piece,boolean pressed){
+        Graphics g = piece.getImage().getGraphics();
+        if (pressed) {
+            g.setColor(Color.RED);
+            g.fillRect(2, 2, piece.getWidth() - 3, piece.getHeight() - 3);
+            g.setColor(Color.BLACK);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+            g.drawString("ADD", 22, 30);
+            g.drawString("GHOST", 5, 60);
+        } else {
+            g.setColor(Color.BLACK);
+            g.fillRect(2, 2, piece.getWidth() - 3, piece.getHeight() - 3);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+            g.drawString("ADD", 22, 30);
+            g.drawString("GHOST", 5, 60);
+        }
+        piece.repaint();
+    }
+
 
 
     //--------------------- re-draw Methods END-----------------------//
-
-    public static void drawDeath(Pacman pacman, Ghost ghost, Board board){
-
-
-
-        /*for (int i=0;i<pieceSize;i++){
-            for (int j=0;j<pieceSize;j++){
-                g.fillRect(i,j,1,1);
-                try {
-                    TimeUnit.MILLISECONDS.sleep(3);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                board.repaint();
-            }
-        }*/
-
-
-
-
-
-
-
-
-    }
 
 
 }

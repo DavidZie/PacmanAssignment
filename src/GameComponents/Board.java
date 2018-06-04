@@ -37,7 +37,7 @@ public class Board extends JPanel {
         this.id=id;
         this.level=level;
         if (level!=1) {
-            //pacman=null;
+
             ghosts=null;
         }
         this.currentHighScore=currentHighScore;
@@ -49,10 +49,9 @@ public class Board extends JPanel {
         createBoard((String[][]) gameBoards[id]);
         drawInfo();
         prepareFruits();
-        prepareGhosts();//TO BE WRITTEN.
+        prepareGhosts();
         timerSetup();
         stop();
-        //System.out.println(level);
 
     }//Constructor
     //----------------Board Initiation----------------------//
@@ -83,6 +82,10 @@ public class Board extends JPanel {
 
     //-----------------------Getters and Setters----------------//
 
+
+    public int getTimerRepeats() {
+        return timerRepeats;
+    }
 
     public int getLives() {
         return lives;
@@ -258,6 +261,7 @@ public class Board extends JPanel {
         drawSpeedLabel(this);
         drawTime(0,pieces);
         drawFruitsLabel(this);
+        drawGhostsAddLabel(this);
     }
 
     private void swapIn() {
@@ -355,7 +359,7 @@ public class Board extends JPanel {
     //-------------------------Ghosts-----------------------------//
 
     private void prepareGhosts(){
-        ghosts = new Ghost[5];
+        ghosts = new Ghost[7];
         ghosts[0] = new Ginky();
         ghosts[1] = new Inky();
         ghosts[2] = new Blinky();
@@ -391,7 +395,7 @@ public class Board extends JPanel {
 
     private void checkImpact(){
         int myX,myY;
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             if (ghosts[i]!=null){
                 myX = ghosts[i].getLocation()[0];
                 myY = ghosts[i].getLocation()[1];
@@ -414,7 +418,7 @@ public class Board extends JPanel {
             }
         }
 
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             if (ghosts[i]!=null){
                 ghosts[i].getTimer().stop();
                 pieces[ghosts[i].getLocation()[0]][ghosts[i].getLocation()[1]].setImage(ghosts[i].getCoveredImage());
@@ -424,6 +428,9 @@ public class Board extends JPanel {
         ghosts=null;
 
         drawBlack(pieces[pacman.getLocation()[0]][pacman.getLocation()[1]]);
+        speedActivated=false;
+        drawGhostsAddLabel(this);
+        drawSpeedLabel(this);
         pieces[gate[0]][gate[1]].setWall(false);
         int[] reset = {10,16};
         pacman.setLocation(reset);
@@ -440,7 +447,7 @@ public class Board extends JPanel {
     }
 
     public void start(){
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().start();}
             catch (NullPointerException ignored){}
         }
@@ -458,7 +465,7 @@ public class Board extends JPanel {
 
     public void stop(){
 
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().stop();}
             catch (NullPointerException ignored){}
         }
@@ -472,7 +479,7 @@ public class Board extends JPanel {
         }
     }
     public void speedUp(){
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()/2);
             ghosts[i].setRepeats(ghosts[i].getRepeats()*2);}
             catch (NullPointerException ignored){}
@@ -485,7 +492,7 @@ public class Board extends JPanel {
 
 
     public void speedDown(){
-        for (int i=0;i<3;i++){
+        for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()*2);
             ghosts[i].setRepeats(ghosts[i].getRepeats()/2);}
             catch (NullPointerException ignored){}
@@ -507,6 +514,19 @@ public class Board extends JPanel {
             gameFrame.finishBoard(id,lives,level,currentScore);
 
         }
+    }
+
+    public void addExtraGhost(int id){
+        ghosts[id] = new ExtraGhost(id,pieces[12][16].getImage());
+        ghosts[id].setLocation(12,16);
+        ghosts[id].insert(pieces[12][16]);
+        Graphics g =pieces[12][16].getImage().getGraphics();
+        g.setColor(Color.BLUE);
+        g.fillRect(0, getHeight() - 1, getWidth(), 2);
+        pieces[12][16].repaint();
+
+
+
     }
 
 
