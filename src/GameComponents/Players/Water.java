@@ -1,13 +1,12 @@
 package GameComponents.Players;
 
-import GameComponents.Board;
 import Logic.Movement;
 
 import javax.swing.*;
 
 import static Logic.Globals.gameFrame;
 
-public class Water extends Ghost {
+public class Water extends Ghost implements Visited {
 
     Water(int id){
         super(id,false);
@@ -24,12 +23,7 @@ public class Water extends Ghost {
     }
 
     @Override
-    public void visit(Pacman pacman, Board board) {
-
-    }
-
-    @Override
-    public void visit(Ghost ghost,Board board) {
-
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
     }
 }

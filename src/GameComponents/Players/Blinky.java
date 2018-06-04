@@ -1,16 +1,13 @@
 package GameComponents.Players;
 
-import GameComponents.Board;
 import Logic.AStar;
 import Logic.Movement;
 
 import javax.swing.*;
 
-import static Logic.Globals.gameFrame;
-import static Logic.Globals.gameImagesArray;
-import static Logic.Globals.pieceSize;
+import static Logic.Globals.*;
 
-public class Blinky extends Ghost implements Visitor  {
+public class Blinky extends Ghost implements Visited  {
 
     private boolean charging;
 
@@ -67,17 +64,7 @@ public class Blinky extends Ghost implements Visitor  {
     }
 
     @Override
-    public void visit(Pacman pacman, Board board) {
-        board.setLives(board.getLives()-1);
-        if (board.getLives()==0){
-            gameFrame.endGame();
-        } else board.cleanBoard();
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
     }
-
-    @Override
-    public void visit(Ghost ghost, Board board) {
-
-    }
-
-
 }

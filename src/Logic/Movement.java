@@ -5,6 +5,7 @@ import GameComponents.Piece;
 import GameComponents.Players.Ghost;
 import GameComponents.Players.Pacman;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 import static Logic.Globals.gameFrame;
@@ -27,16 +28,28 @@ public class Movement {
                     break;
                 pacman.rotate(1);
                 pieces[x - 1][y].setImage(pacman.getImage());
-                board.drawBlack(pieces[x][y]);
                 board.updateScore(pieces[x-1][y]);
                 pacmanLocation[0] -= 1;
+                if (pacman.getCollisionImage()!=null) {
+                    BufferedImage image = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+                    Graphics g = image.getGraphics();
+                    g.drawImage(pacman.getCollisionImage(),0,0,null);
+                    pieces[x][y].setImage(image);
+                    pacman.setCollisionImage(null);
+                }else board.drawBlack(pieces[x][y]);
                 break;
             case 2://Move Right.
                 if (pieces[x][y + 1].isWall()||pieces[x][y + 1].isGhostHouse())
                     break;
                 pacman.rotate(2);
                 pieces[x][y + 1].setImage(pacman.getImage());
-                board.drawBlack(pieces[x][y]);
+                if (pacman.getCollisionImage()!=null) {
+                    BufferedImage image = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+                    Graphics g = image.getGraphics();
+                    g.drawImage(pacman.getCollisionImage(),0,0,null);
+                    pieces[x][y].setImage(image);
+                    pacman.setCollisionImage(null);
+                }else board.drawBlack(pieces[x][y]);
                 board.updateScore(pieces[x][y+1]);
                 pacmanLocation[1] += 1;
                 break;
@@ -45,7 +58,13 @@ public class Movement {
                     break;
                 pacman.rotate(3);
                 pieces[x + 1][y].setImage(pacman.getImage());
-                board.drawBlack(pieces[x][y]);
+                if (pacman.getCollisionImage()!=null) {
+                    BufferedImage image = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+                    Graphics g = image.getGraphics();
+                    g.drawImage(pacman.getCollisionImage(),0,0,null);
+                    pieces[x][y].setImage(image);
+                    pacman.setCollisionImage(null);
+                }else board.drawBlack(pieces[x][y]);
                 board.updateScore(pieces[x+1][y]);
                 pacmanLocation[0] += 1;
                 break;
@@ -54,7 +73,13 @@ public class Movement {
                     break;
                 pacman.rotate(4);
                 pieces[x][y - 1].setImage(pacman.getImage());
-                board.drawBlack(pieces[x][y]);
+                if (pacman.getCollisionImage()!=null) {
+                    BufferedImage image = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+                    Graphics g = image.getGraphics();
+                    g.drawImage(pacman.getCollisionImage(),0,0,null);
+                    pieces[x][y].setImage(image);
+                    pacman.setCollisionImage(null);
+                }else board.drawBlack(pieces[x][y]);
                 board.updateScore(pieces[x][y-1]);
                 pacmanLocation[1] -= 1;
                 break;

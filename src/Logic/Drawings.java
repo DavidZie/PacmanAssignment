@@ -151,7 +151,7 @@ public class Drawings {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                reDrawGhostLabel(ghostsPiece1,true);
+                reDrawGhostLabel(ghostsPiece1);
                 board.addExtraGhost(5);
             }
         });
@@ -168,7 +168,7 @@ public class Drawings {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                reDrawGhostLabel(ghostsPiece2,true);
+                reDrawGhostLabel(ghostsPiece2);
                 board.addExtraGhost(6);
             }
         });
@@ -259,23 +259,14 @@ public class Drawings {
         fruitPiece.repaint();
     }
 
-    private static void reDrawGhostLabel(Piece piece,boolean pressed){
+    private static void reDrawGhostLabel(Piece piece){
         Graphics g = piece.getImage().getGraphics();
-        if (pressed) {
-            g.setColor(Color.RED);
-            g.fillRect(2, 2, piece.getWidth() - 3, piece.getHeight() - 3);
-            g.setColor(Color.BLACK);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-            g.drawString("ADD", 22, 30);
-            g.drawString("GHOST", 5, 60);
-        } else {
-            g.setColor(Color.BLACK);
-            g.fillRect(2, 2, piece.getWidth() - 3, piece.getHeight() - 3);
-            g.setColor(Color.WHITE);
-            g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
-            g.drawString("ADD", 22, 30);
-            g.drawString("GHOST", 5, 60);
-        }
+        g.setColor(Color.RED);
+        g.fillRect(2, 2, piece.getWidth() - 3, piece.getHeight() - 3);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("ADD", 22, 30);
+        g.drawString("GHOST", 5, 60);
         piece.repaint();
     }
 

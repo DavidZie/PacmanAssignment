@@ -83,9 +83,6 @@ public class Board extends JPanel {
     //-----------------------Getters and Setters----------------//
 
 
-    public int getTimerRepeats() {
-        return timerRepeats;
-    }
 
     public int getLives() {
         return lives;
@@ -187,7 +184,6 @@ public class Board extends JPanel {
 
             checkImpact();
             timerRepeats++;
-
             checkCompletion();
 
         });
@@ -379,7 +375,7 @@ public class Board extends JPanel {
     private boolean checkCell(int x,int y){
         if (pieces[x][y].getFruit()!=null)
             return false;
-        for (int i=0;i<5;i++) {
+        for (int i=0;i<7;i++) {
             if (ghosts[i] != null) {
                 if (ghosts[i].getLocation()[0] == x && ghosts[i].getLocation()[1] == y)
                     return false;
@@ -401,7 +397,7 @@ public class Board extends JPanel {
                 myY = ghosts[i].getLocation()[1];
                 if (pacman.getLocation()[0] == myX && pacman.getLocation()[1] == myY){
 
-                    ghosts[i].visit(getPacman(),this);
+                    pacman.attack(ghosts[i]);
 
                 }
             }

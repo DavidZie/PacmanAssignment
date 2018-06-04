@@ -1,18 +1,15 @@
 package GameComponents.Players;
 
 
-import GameComponents.Board;
 import Logic.AStar;
 import Logic.Movement;
 
 import javax.swing.*;
 
-import static Logic.Globals.gameFrame;
-import static Logic.Globals.gameImagesArray;
-import static Logic.Globals.pieceSize;
+import static Logic.Globals.*;
 
 
-public class Inky extends Ghost {
+public class Inky extends Ghost implements Visited {
 
     private boolean charging;
 
@@ -70,36 +67,14 @@ public class Inky extends Ghost {
         }
     }
 
-
-
-
-
-
-
-    @Override
-    public void visit(Pacman pacman, Board board) {
-        switch (pacman.getLevel()){
-            case 1:
-                board.setLives(board.getLives()-1);
-                if (board.getLives()==0){
-                    gameFrame.endGame();
-                } else board.cleanBoard();
-                break;
-            case 2:
-                pacman.freeze();
-                setChasing(false);
-                break;
-            case 3:
-                //Freeze
-                repeats=7;
-                setChasing(false);
-                break;
-        }
-        board.repaint();
+    public void freeze(){
+        setRepeats(7);
+        setChasing(false);
     }
 
     @Override
-    public void visit(Ghost ghost, Board board) {
-
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
     }
+
 }

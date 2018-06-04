@@ -1,7 +1,6 @@
 package GameComponents.Players;
 
 
-import GameComponents.Board;
 import Logic.AStar;
 import Logic.Movement;
 
@@ -11,7 +10,7 @@ import java.awt.image.BufferedImage;
 
 import static Logic.Globals.*;
 
-public class Ginky extends Ghost {
+public class Ginky extends Ghost implements Visited {
 
     private boolean disappear;
     private boolean dead;
@@ -21,6 +20,13 @@ public class Ginky extends Ghost {
         setupTimer();
     }
 
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public void setDisappear(boolean disappear) {
+        this.disappear = disappear;
+    }
 
     private void setupTimer(){
         repeats = 0;
@@ -54,8 +60,13 @@ public class Ginky extends Ghost {
         });
     }
 
-
     @Override
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
+    }
+
+
+    /*@Override
     public void visit(Pacman pacman, Board board) {
 
         switch (pacman.getLevel()){
@@ -79,17 +90,7 @@ public class Ginky extends Ghost {
                     image.getGraphics().drawImage(getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
                     break;
             }
-            board.repaint();
+            board.repaint();*/
 
-
-
-
-
-    }
-
-    @Override
-    public void visit(Ghost ghost,Board board) {
-
-    }
 
 }

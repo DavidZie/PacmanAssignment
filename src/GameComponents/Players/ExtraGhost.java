@@ -1,16 +1,14 @@
 package GameComponents.Players;
 
-import GameComponents.Board;
 import Logic.AStar;
 import Logic.Movement;
 
 import javax.swing.*;
-
 import java.awt.image.BufferedImage;
 
 import static Logic.Globals.gameFrame;
 
-public class ExtraGhost extends Ghost implements Visitor {
+public class ExtraGhost extends Ghost implements Visited {
     public ExtraGhost(int id, BufferedImage coveredImage) {
         super(id+1,true);
         setCoveredImage(coveredImage);
@@ -32,15 +30,7 @@ public class ExtraGhost extends Ghost implements Visitor {
     }
 
     @Override
-    public void visit(Pacman pacman, Board board) {
-        board.setLives(board.getLives()-1);
-        if (board.getLives()==0){
-            gameFrame.endGame();
-        } else board.cleanBoard();
-    }
-
-    @Override
-    public void visit(Ghost ghost, Board board) {
-
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
     }
 }

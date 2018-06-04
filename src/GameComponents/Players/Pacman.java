@@ -1,13 +1,16 @@
 package GameComponents.Players;
 
+import GameComponents.Board;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static Logic.Globals.gameFrame;
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
-public class Pacman implements Visited {
+public class Pacman implements Visited,Visitor {
 
     private BufferedImage image;//Should be Array of Different Animations.
     private int[] location;
@@ -15,6 +18,7 @@ public class Pacman implements Visited {
     private int level;
     private boolean frozen;
     private int repeats;
+    private BufferedImage collisionImage;
 
     public Pacman(int level) {
         repeats=0;
@@ -34,11 +38,19 @@ public class Pacman implements Visited {
         timer.start();
     }
 
+    public void setCollisionImage(BufferedImage collisionImage) {
+        this.collisionImage = collisionImage;
+    }
+
+    public BufferedImage getCollisionImage() {
+        return collisionImage;
+    }
+
     public boolean isFrozen() {
         return frozen;
     }
 
-    public void freeze() {
+    private void freeze() {
         frozen=true;
         repeats=0;
     }
@@ -121,21 +133,120 @@ public class Pacman implements Visited {
         image = newImage;
     }
 
-
-    public void visit(Pacman pacman){
-        Graphics g = pacman.getImage().getGraphics();
+    private void blackImage(BufferedImage image){
+        Graphics g = image.getGraphics();
         g.setColor(Color.BLACK);
-        for (int i=0;i<pieceSize;i++){
-            for (int j=0;j<pieceSize;j++){
-                g.fillRect(j,i,1,1);
-            }
-        }
+        g.fillRect(0,0,pieceSize,pieceSize);
+    }
+
+    public void attack(Ghost ghost){
+        ghost.impact(this);
     }
 
 
 
     @Override
     public void impact(Visitor visitor) {
+        visitor.visit(this,gameFrame.getBoard());
+    }
+
+    @Override
+    public void visit(Pacman pacman, Board board) {
 
     }
+
+    @Override
+    public void visit(Ghost ghost, Board board) {
+    }
+
+    @Override
+    public void visit(Ginky ginky, Board board) {
+        switch (level){
+            case 1:
+                board.setLives(board.getLives()-1);
+                if (board.getLives()==0){
+                    gameFrame.endGame();
+                } else board.cleanBoard();
+                break;
+            case 2:
+                ginky.setRepeats(22);
+                ginky.setDisappear(true);
+                image.getGraphics().drawImage(ginky.getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
+                ginky.setChasing(false);
+                break;
+            case 3:
+                ginky.setDead(true);
+                ginky.getTimer().stop();
+                image.getGraphics().drawImage(ginky.getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
+                break;
+        }
+    }
+
+    @Override
+    public void visit(Inky inky, Board board) {
+        switch (level){
+            case 1:
+                board.setLives(board.getLives()-1);
+                if (board.getLives()==0){
+                    gameFrame.endGame();
+                } else board.cleanBoard();
+                break;
+            case 2:
+                freeze();
+                inky.setChasing(false);
+                board.getCurrentScore()[0]=board.getCurrentScore()[0]-10;
+                break;
+            case 3:
+                inky.freeze();
+                setCollisionImage(inky.getImage());
+                blackImage(inky.getCoveredImage());
+                break;
+        }
+    }
+
+    @Override
+    public void visit(Blinky blinky, Board board) {
+        board.setLives(board.getLives()-1);
+        if (board.getLives()==0){
+            gameFrame.endGame();
+        } else board.cleanBoard();
+    }
+
+    @Override
+    public void visit(Water water, Board board) {
+        switch (level){
+            case 1:
+                board.setLives(board.getLives()-1);
+                if (board.getLives()==0){
+                    gameFrame.endGame();
+                } else board.cleanBoard();
+                break;
+            case 2:
+                freeze();
+                board.getCurrentScore()[0]=board.getCurrentScore()[0]-10;
+                break;
+            case 3:
+                board.getGhosts()[1].setRepeats(7);
+                board.getGhosts()[1].setChasing(false);
+                break;
+        }
+    }
+
+    @Override
+    public void visit(Fireball fireball, Board board) {
+        board.setLives(board.getLives()-1);
+        if (board.getLives()==0){
+            gameFrame.endGame();
+        } else board.cleanBoard();
+    }
+
+    @Override
+    public void visit(ExtraGhost extraGhost, Board board) {
+        board.setLives(board.getLives()-1);
+        if (board.getLives()==0){
+            gameFrame.endGame();
+        } else board.cleanBoard();
+    }
+
+
 }

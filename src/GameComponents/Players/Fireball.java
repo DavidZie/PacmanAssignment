@@ -1,13 +1,12 @@
 package GameComponents.Players;
 
-import GameComponents.Board;
 import Logic.Movement;
 
 import javax.swing.*;
 
 import static Logic.Globals.gameFrame;
 
-public class Fireball extends Ghost {
+public class Fireball extends Ghost implements Visited {
 
     Fireball(int id){
         super(id,false);
@@ -21,14 +20,8 @@ public class Fireball extends Ghost {
         });
     }
 
-
     @Override
-    public void visit(Pacman pacman, Board board) {
-
-    }
-
-    @Override
-    public void visit(Ghost ghost,Board board) {
-
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
     }
 }
