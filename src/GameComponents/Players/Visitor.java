@@ -1,11 +1,10 @@
 package GameComponents.Players;
 
 
-import GameComponents.Players.Ghost;
-import GameComponents.Players.Pacman;
+import GameComponents.Board;
 
 public interface Visitor {
 
-    void visit(Pacman pacman);
-    void visit(Ghost ghost);
+    void visit(Pacman pacman, Board board);
+    void visit(Ghost ghost, Board board);
 }

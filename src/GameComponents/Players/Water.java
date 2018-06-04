@@ -1,5 +1,6 @@
 package GameComponents.Players;
 
+import GameComponents.Board;
 import Logic.Movement;
 
 import javax.swing.*;
@@ -23,12 +24,12 @@ public class Water extends Ghost {
     }
 
     @Override
-    public void visit(Pacman pacman) {
+    public void visit(Pacman pacman, Board board) {
 
     }
 
     @Override
-    public void visit(Ghost ghost) {
+    public void visit(Ghost ghost,Board board) {
 
     }
 }

@@ -15,6 +15,8 @@ public class Movement {
 
 
     public static void movePacman(int direction, Board board) {
+        if (board.getPacman().isFrozen())
+            return;
         int[] pacmanLocation = board.getPacman().getLocation();
         Piece[][] pieces = board.getPieces();
         Pacman pacman = board.getPacman();
