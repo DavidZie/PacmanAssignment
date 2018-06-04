@@ -93,9 +93,9 @@ public class MainFrame extends JFrame {
 
             containerPanel.setBorder(new EmptyBorder(455,0,0,0));
             containerPanel.setLayout(new BorderLayout());
-            startGameButton.setPreferredSize(new Dimension(305,130));
-            winTableButton.setPreferredSize(new Dimension(452,130));
-            exitGameButton.setPreferredSize(new Dimension(129,130));
+            startGameButton.setPreferredSize(new Dimension(310,100));
+            winTableButton.setPreferredSize(new Dimension(520,100));
+            exitGameButton.setPreferredSize(new Dimension(100,100));
             containerPanel.add(startGameButton,BorderLayout.WEST);//Add Button.
             containerPanel.add(winTableButton ,BorderLayout.CENTER);
             containerPanel.add(exitGameButton ,BorderLayout.EAST);
