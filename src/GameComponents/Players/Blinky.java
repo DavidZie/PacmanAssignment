@@ -5,12 +5,13 @@ import Logic.Movement;
 
 import javax.swing.*;
 
+import static Logic.Globals.gameFrame;
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
 public class Blinky extends Ghost implements Visitor  {
 
-    boolean charging;
+    private boolean charging;
 
     public Blinky() {
         super(2,true);
@@ -27,9 +28,9 @@ public class Blinky extends Ghost implements Visitor  {
             }
             if (!charging)
                 image.getGraphics().drawImage(gameImagesArray[4][2], 0, 0, pieceSize, pieceSize, null);
-            setRoute(AStar.search(this));
+            setRoute(AStar.search(this,gameFrame.getBoard()));
             if (!getRoute().empty())
-                Movement.moveGhost((int)getRoute().pop(), this);
+                Movement.moveGhost((int)getRoute().pop(), this,gameFrame.getBoard());
 
             if (repeats==15)
                 setChasing();

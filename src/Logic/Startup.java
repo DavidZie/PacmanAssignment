@@ -8,7 +8,7 @@ import static Logic.Globals.mainFrame;
 
 public class Startup {
 
-    public static final String songPath = System.getProperty("user.dir");
+    private static final String songPath = System.getProperty("user.dir");
 
     public static void main(String[] args) {
 

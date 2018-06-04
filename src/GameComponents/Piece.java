@@ -9,7 +9,6 @@ import static Logic.Globals.*;
 public class Piece extends JLabel {
 
 
-    int x, y;
     private BufferedImage image;
     private boolean eaten = false;
     private boolean wall = true;
@@ -20,10 +19,8 @@ public class Piece extends JLabel {
     private int repeats;
     private  Fruit fruit;
 
-    Piece(int x, int y, String data) {
+    Piece(String data) {
         super();
-        this.x = x;
-        this.y = y;
         setSize(pieceSize, pieceSize);
         image = new BufferedImage(pieceSize, pieceSize, BufferedImage.TYPE_INT_ARGB);
         drawData(data);
@@ -67,10 +64,6 @@ public class Piece extends JLabel {
 
     public boolean isGhostHouse() {
         return ghostHouse;
-    }
-
-    public void setGhostHouse(boolean ghostHouse) {
-        this.ghostHouse = ghostHouse;
     }
 
     public BufferedImage getImage() {
@@ -217,7 +210,6 @@ public class Piece extends JLabel {
                 fruitTimer.stop();
                 killFruit();
             }
-
 
         });
         fruitTimer.start();

@@ -4,6 +4,8 @@ import Logic.Movement;
 
 import javax.swing.*;
 
+import static Logic.Globals.gameFrame;
+
 public class Water extends Ghost {
 
     Water(int id){
@@ -14,10 +16,9 @@ public class Water extends Ghost {
     private void setupTimer(){
         repeats = 0;
         timer = new Timer(250,e -> {
-            try {Movement.moveGhost(facing,this);}
+            try {Movement.moveGhost(facing,this,gameFrame.getBoard());}
             catch (Exception ignored){}
             repeats++;
-
         });
     }
 

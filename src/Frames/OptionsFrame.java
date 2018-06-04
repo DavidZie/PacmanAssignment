@@ -18,14 +18,14 @@ public class OptionsFrame extends JFrame {
 
     private JPanel containerPanel;//Frame's Background Panel.
 
-    ActionListener startGameListener;
+    private ActionListener startGameListener;
 
     public OptionsFrame(){
         super("Select Maze");
         startGameListener = e -> {
 
             setVisible(false);
-            gameFrame.startGame(Integer.parseInt(e.getActionCommand()),1,0);
+            gameFrame.startGame(Integer.parseInt(e.getActionCommand())-1,3,1,0);
         };//Call new GameFrame and hide this Frame.
         createFrame();//Create Frame.
         createImageOptionsPanel();//Create and Add Image Options Panel.

@@ -6,6 +6,7 @@ import Logic.Movement;
 
 import javax.swing.*;
 
+import static Logic.Globals.gameFrame;
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
@@ -29,9 +30,9 @@ public class Inky extends Ghost {
             }
             if (!charging)
                 image.getGraphics().drawImage(gameImagesArray[4][1], 0, 0, pieceSize, pieceSize, null);
-            setRoute(AStar.search(this));
+            setRoute(AStar.search(this,gameFrame.getBoard()));
             if (!getRoute().empty())
-                Movement.moveGhost((int)getRoute().pop(), this);
+                Movement.moveGhost((int)getRoute().pop(), this,gameFrame.getBoard());
 
             if (repeats==18)
                 setChasing();
@@ -42,7 +43,7 @@ public class Inky extends Ghost {
             if (charging)
                 changeImage(repeats%2);
 
-            if (repeats==20)
+            if (repeats==29)
                 loaded=true;
 
             repeats++;

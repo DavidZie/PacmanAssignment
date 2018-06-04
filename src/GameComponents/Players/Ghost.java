@@ -105,10 +105,6 @@ public abstract class Ghost implements Visitor {
         this.chasing = true;
     }
 
-    public int getFacing() {
-        return facing;
-    }
-
     public void setFacing(int facing) {
         this.facing = facing;
     }

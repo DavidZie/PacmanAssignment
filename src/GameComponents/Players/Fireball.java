@@ -4,6 +4,8 @@ import Logic.Movement;
 
 import javax.swing.*;
 
+import static Logic.Globals.gameFrame;
+
 public class Fireball extends Ghost {
 
     Fireball(int id){
@@ -13,10 +15,8 @@ public class Fireball extends Ghost {
     private void setupTimer(){
         repeats = 0;
         timer = new Timer(200, e -> {
-
-            Movement.moveGhost(facing,this);
+            Movement.moveGhost(facing,this,gameFrame.getBoard());
             repeats++;
-
         });
     }
 

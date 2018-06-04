@@ -64,11 +64,8 @@ public class Globals {
             if (line.equals("#"))
                 return;
             String[] strings = line.split(",");
-            for (int i = 0; i < 32; i++) {
-                cellsInfo[lineNumber][i] = strings[i];
-            }
+            System.arraycopy(strings, 0, cellsInfo[lineNumber], 0, 32);
         }
-        return;
     }
 
     private static boolean checkLine(String line) {

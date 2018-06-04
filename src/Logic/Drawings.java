@@ -140,9 +140,10 @@ public class Drawings {
 
     public static void reDrawScoreLabel(Piece scorePiece, int currentScore, int currentHighScore, Piece[][] pieces){
         Graphics g = scorePiece.getImage().getGraphics();
-        String currentScoreString = String.valueOf(currentScore);
-        while (currentScoreString.length()<7)
-            currentScoreString = "0"+currentScoreString;
+        StringBuilder currentScoreStringBuilder = new StringBuilder(String.valueOf(currentScore));
+        while (currentScoreStringBuilder.length()<7)
+            currentScoreStringBuilder.insert(0, "0");
+        String currentScoreString = currentScoreStringBuilder.toString();
         if (currentScore>currentHighScore)
             reDrawHighScoreLabel(pieces[22][22],currentScoreString);
         g.setColor(Color.BLACK);
@@ -153,12 +154,14 @@ public class Drawings {
         scorePiece.repaint();
     }
 
-    public static void reDrawHighScoreLabel(Piece highScorePiece, String highScore){
+    private static void reDrawHighScoreLabel(Piece highScorePiece, String highScore){
         Graphics g = highScorePiece.getImage().getGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0,highScorePiece.getHeight()/2,highScorePiece.getWidth(),highScorePiece.getHeight());
-        while (highScore.length()<7)
-            highScore = "0"+highScore;
+        StringBuilder highScoreBuilder = new StringBuilder(highScore);
+        while (highScoreBuilder.length()<7)
+            highScoreBuilder.insert(0, "0");
+        highScore = highScoreBuilder.toString();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("     " + highScore, 0, highScorePiece.getHeight());
@@ -167,7 +170,7 @@ public class Drawings {
 
 
 
-    public static void reDrawPausePiece(Piece pausePiece, boolean pauseStatus) {
+    static void reDrawPausePiece(Piece pausePiece, boolean pauseStatus) {
         Graphics g = pausePiece.getImage().getGraphics();
         if (pauseStatus) {
             g.setColor(Color.RED);
@@ -187,7 +190,7 @@ public class Drawings {
         pausePiece.repaint();
     }
 
-    public static void reDrawSpeedPiece(Piece speedPiece, boolean speedActivated) {
+    private static void reDrawSpeedPiece(Piece speedPiece, boolean speedActivated) {
         Graphics g = speedPiece.getImage().getGraphics();
         if (speedActivated) {
             g.setColor(Color.RED);

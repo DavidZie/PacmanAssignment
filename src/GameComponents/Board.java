@@ -16,7 +16,7 @@ public class Board extends JPanel {
     private Piece[][] pieces;
     private Pacman pacman;
     private Timer timer;
-    private Stack eatenFruits;
+    private Stack<Fruit> eatenFruits;
     private int timerRepeats;
     private boolean pauseStatus;
     private boolean speedActivated;
@@ -29,19 +29,24 @@ public class Board extends JPanel {
     private Ghost[] ghosts;
     private int lives;
     private int[] gate;
+    private int id;
 
 
-    public Board(String[][] board, int level, int currentHighScore, int lives, int currentScore) {
+    public Board(int id, int level, int currentHighScore, int lives, int currentScore) {
         super(new GridBagLayout());
-
+        this.id=id;
         this.level=level;
+        if (level!=1) {
+            //pacman=null;
+            ghosts=null;
+        }
         this.currentHighScore=currentHighScore;
         this.currentScore = currentScore;
         this.lives = lives;
         pauseStatus=true;
         pills=0;
-        eatenFruits=new Stack();
-        createBoard(board);
+        eatenFruits=new Stack<>();
+        createBoard((String[][]) gameBoards[id]);
         drawInfo();
         prepareFruits();
         prepareGhosts();//TO BE WRITTEN.
@@ -69,7 +74,7 @@ public class Board extends JPanel {
                     gate[0]=i;
                     gate[1]=j;
                 }
-                pieces[i][j] = new Piece(i, j, board[i][j]);
+                pieces[i][j] = new Piece(board[i][j]);
                 add(pieces[i][j], constraints);
             }
         }
@@ -84,10 +89,6 @@ public class Board extends JPanel {
 
     public Ghost[] getGhosts() {
         return ghosts;
-    }
-
-    public void setGhosts(Ghost[] ghosts) {
-        this.ghosts = ghosts;
     }
 
     public Piece[][] getPieces() {
@@ -118,13 +119,6 @@ public class Board extends JPanel {
         this.speedActivated = speedActivated;
     }
 
-    public int getTimerRepeats() {
-        return timerRepeats;
-    }
-
-    public void setTimerRepeats(int timerRepeats) {
-        this.timerRepeats = timerRepeats;
-    }
 
     public int getCurrentScore() {
         return currentScore;
@@ -134,14 +128,10 @@ public class Board extends JPanel {
         return currentHighScore;
     }
 
-    public int getLives() { return lives; }
-
-    public void setLives(int lives) { this.lives = lives; }
-
     //--------------------------Methods--------------------------//
 
     public Piece replaceLabels(int x, int y, int width, int height) {
-        Piece newPiece = new Piece(x, y, null);
+        Piece newPiece = new Piece(null);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.gridx = y;
         constraints.gridy = x;
@@ -185,8 +175,10 @@ public class Board extends JPanel {
 
             checkKill();
             timerRepeats++;
-            if (timerRepeats==8)
-                pills=1;
+
+            if (timerRepeats==4)
+                pills=50;
+            checkCompletion();
         });
     }
 
@@ -420,14 +412,14 @@ public class Board extends JPanel {
             catch (NullPointerException ignored){}
         }
         timer.start();
-        for (int i=0;i<fruits.length;i++) {
+        for (Fruit fruit : fruits) {
             try {
-                if (fruits[i].isOut()){
-                fruits[i].getTimer().start();
-                pieces[fruits[i].getX()][fruits[i].getY()].getFruitTimer().start();
+                if (fruit.isOut()) {
+                    fruit.getTimer().start();
+                    pieces[fruit.getX()][fruit.getY()].getFruitTimer().start();
                 }
+            } catch (NullPointerException ignored) {
             }
-            catch (NullPointerException ignored) { }
         }
     }
 
@@ -438,16 +430,20 @@ public class Board extends JPanel {
             catch (NullPointerException ignored){}
         }
         timer.stop();
-        for (int i=0;i<fruits.length;i++){
-            try{fruits[i].getTimer().stop();
-                pieces[fruits[i].getX()][fruits[i].getY()].getFruitTimer().stop();}
-            catch (NullPointerException ignored){}
+        for (Fruit fruit : fruits) {
+            try {
+                fruit.getTimer().stop();
+                pieces[fruit.getX()][fruit.getY()].getFruitTimer().stop();
+            } catch (NullPointerException ignored) {
+            }
         }
     }
     public void speedUp(){
-        for (int i=0;i<3;i++){
-            ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()/2);
-            ghosts[i].setRepeats(ghosts[i].getRepeats()*2);
+        for (int i=0;i<5;i++){
+            try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()/2);
+            ghosts[i].setRepeats(ghosts[i].getRepeats()*2);}
+            catch (NullPointerException ignored){}
+
         }
         timer.setDelay(timer.getDelay()/2);
         timerRepeats = timerRepeats*2;
@@ -457,8 +453,9 @@ public class Board extends JPanel {
 
     public void speedDown(){
         for (int i=0;i<3;i++){
-            ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()*2);
-            ghosts[i].setRepeats(ghosts[i].getRepeats()/2);
+            try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()*2);
+            ghosts[i].setRepeats(ghosts[i].getRepeats()/2);}
+            catch (NullPointerException ignored){}
         }
         timer.setDelay(timer.getDelay()*2);
         timerRepeats = timerRepeats/2;
@@ -470,10 +467,11 @@ public class Board extends JPanel {
         reDrawFruitsLabel(this,eatenFruits.size(), fruit);
     }
 
-    public void checkCompletion(){
-        if (pills==0){
+    private void checkCompletion(){
+        if (pills<=0){
             stop();
-            gameFrame.finishBoard(lives,currentScore);
+            getGraphics().dispose();
+            gameFrame.finishBoard(id,lives,level,currentScore);
 
         }
     }

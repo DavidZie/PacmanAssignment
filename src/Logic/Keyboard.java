@@ -27,9 +27,8 @@ public class Keyboard {
                 try {
                     if (board.isPauseStatus())
                         return;
-                    Movement.movePacman(1);
-                } catch (NullPointerException e1) {
-                }
+                    Movement.movePacman(1,board);
+                } catch (NullPointerException ignored) { }
             }
         });
         actionMap.put("Right", new AbstractAction() {
@@ -38,9 +37,8 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    Movement.movePacman(2);
-                } catch (NullPointerException e1) {
-                }
+                    Movement.movePacman(2,board);
+                } catch (NullPointerException ignored) { }
             }
         });
         actionMap.put("Down", new AbstractAction() {
@@ -49,9 +47,8 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    Movement.movePacman(3);
-                } catch (NullPointerException e1) {
-                }
+                    Movement.movePacman(3,board);
+                } catch (NullPointerException ignored) { }
             }
         });
         actionMap.put("Left", new AbstractAction() {
@@ -60,9 +57,8 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    Movement.movePacman(4);
-                } catch (NullPointerException e1) {
-                }
+                    Movement.movePacman(4,board);
+                } catch (NullPointerException ignored) {}
             }
         });
         actionMap.put("Space", new AbstractAction() {

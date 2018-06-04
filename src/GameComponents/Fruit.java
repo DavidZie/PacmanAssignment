@@ -53,10 +53,6 @@ public class Fruit extends Label {
         this.out = out;
     }
 
-    public int getRepeats() {
-        return repeats;
-    }
-
     public void setRepeats(int repeats) {
         this.repeats = repeats;
     }
