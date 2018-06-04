@@ -27,7 +27,7 @@ public class AboutFrame {
         label.setFont(new Font("David",Font.BOLD,65));
         containerPanel.add(label);
 
-        JTextArea textArea=new JTextArea(35,30);
+        JTextArea textArea=new JTextArea(29,30);
         JScrollPane scrollPane=new JScrollPane(textArea);
         String content="Pac-Man , stylized as PAC-MAN, is an arcade game developed by Namco and first released in Japan as Puck Man in May 1980. It was created by Japanese video game designer Toru Iwatani. It was licensed for distribution in the United States by Midway Games and released in October 1980. Immensely popular from its original release to the present day, Pac-Man is considered one of the classics of the medium, and an icon of 1980s popular culture. Upon its release, the game—and, subsequently, Pac-Man derivatives—became a social phenomenon that yielded high sales of merchandise and inspired a legacy in other media, such as the Pac-Man animated television series and the top-ten Buckner and Garcia hit single \"Pac-Man Fever\". Pac-Man was popular in the 1980s and 1990s and is still played in the 2010s.\n" +
                 "When Pac-Man was released, the most popular arcade video games were space shooters—in particular, Space Invaders and Asteroids. The most visible minority were sports games that were mostly derivatives of Pong. Pac-Man succeeded by creating a new genre. \n" +
@@ -59,7 +59,7 @@ public class AboutFrame {
         about.setLocationRelativeTo(null);//Center the frame on the screen.
 
         try {
-            containerPanel=new JPanelWithBackground(imagesPath+"\\about.png");
+            containerPanel=new JPanelWithBackground(imagesPath+"\\about2.png");
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -22,7 +22,7 @@ public class InstructionsFrame {
     }
 
     private void createFrame() {
-        frame=new JFrame("About");
+        frame=new JFrame("Introdactions");
         frame.setSize(618,525);//Set Frame dimensions.
         frame.setResizable(false);//Lock Frame Size.
         frame.setVisible(true);//Make Frame Visible.
