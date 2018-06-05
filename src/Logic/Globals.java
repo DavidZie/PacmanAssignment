@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -18,7 +19,7 @@ public class Globals {
     public static final String imagesPath = System.getProperty("user.dir")+"\\images";
     public static final BufferedImage[][] gameImagesArray = loadImages();
     public static final Object[]gameBoards = gameBoardsArrayCreator();
-    public static int[] highScoresArray = {1000, 0, 0,0,0};
+    public static String[][] highScoresArray = loadScores();
     public static final GameFrame gameFrame = new GameFrame();
 
 
@@ -73,6 +74,27 @@ public class Globals {
             }
         }
         return counter == boardSize - 1;
+    }
+
+    private static String[][] loadScores(){
+        String[][] scores = new String[5][];
+        int rowIndex=0;
+        File file = new File("scores.csv");
+        Scanner scanner;
+        try {
+            scanner = new Scanner(file);
+            while (scanner.hasNext()){
+                scores[rowIndex] = scanner.nextLine().split(",");
+                rowIndex++;
+            }
+        } catch (FileNotFoundException exception){
+            for (int i=0;i<5;i++){
+                scores[i] = new String[7];
+                for (int j=0;j<7;j++)
+                    scores[i][j]="0";
+            }
+        }
+        return scores;
     }
 
     private static BufferedImage[][] loadImages(){

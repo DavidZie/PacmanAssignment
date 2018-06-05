@@ -62,15 +62,15 @@ public class Drawings {
         reDrawScoreLabel(scorePiece, board.getCurrentScore()[0], board.getCurrentHighScore(), board.getPieces());
     }
 
-    public static void drawHighScoreLabel(Board board) {
+    public static void drawHighScoreLabel(Board board ) {
         Piece highScorePiece = board.replaceLabels(22, 22, 5, 2);
         highScorePiece.drawData("1");
         Graphics g = highScorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("HIGH SCORE:", 0, highScorePiece.getHeight()/2);
-        if (highScoresArray[0]>=board.getCurrentScore()[0])
-            reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0]));
+        if (Integer.valueOf(highScoresArray[0][1])>=board.getCurrentScore()[0])
+            reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0][1]));
         else reDrawHighScoreLabel(highScorePiece,String.valueOf(board.getCurrentScore()[0]));
 
     }
@@ -151,6 +151,8 @@ public class Drawings {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                if (board.isPauseStatus())
+                    return;
                 reDrawGhostLabel(ghostsPiece1);
                 board.addExtraGhost(5);
             }
@@ -168,6 +170,8 @@ public class Drawings {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                if (board.isPauseStatus())
+                    return;
                 reDrawGhostLabel(ghostsPiece2);
                 board.addExtraGhost(6);
             }

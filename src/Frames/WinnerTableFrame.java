@@ -5,8 +5,12 @@ import GameComponents.JPanelWithBackground;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
+import static Logic.Globals.highScoresArray;
 import static Logic.Globals.imagesPath;
 
 public class WinnerTableFrame extends JFrame {
@@ -19,7 +23,7 @@ public class WinnerTableFrame extends JFrame {
     private JPanel containerPanel;//Frame's Background Panel.
     private ActionListener backListener;
     private String[] columNames={"Name","Score","Regular Pill","Energy Pill","Pineapple","Apple","Strawberry"};
-    private String[][] scores;
+    //private String[][] scores = highScoresArray;
     private JTable table;
 
     private WinnerTableFrame() {
@@ -56,8 +60,7 @@ public class WinnerTableFrame extends JFrame {
     }
 
     private void createTable(){
-        scores = new String[][]{{"","","","","","",""},{"","","","","","",""},{"","","","","","",""},{"","","","","","",""},{"","","","","","",""}};
-        table=new JTable(scores,columNames);
+        table=new JTable(highScoresArray,columNames);
         table.setPreferredScrollableViewportSize((new Dimension(475,200)));
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane=new JScrollPane(table);
@@ -67,48 +70,31 @@ public class WinnerTableFrame extends JFrame {
     public void addRowToTable(String name, int[] points){
         int index = 4;
         int scoreString;
-        if (scores[index][1].equals(""))
+        if (highScoresArray[index-1][1].equals(""))
             scoreString=0;
-        else scoreString = Integer.valueOf(scores[index][1]);
+        else scoreString = Integer.valueOf(highScoresArray[index-1][1]);
         while (scoreString<points[0]){
             index--;
             if (index==0)
                 break;
-            if (scores[index][1].equals(""))
+            if (highScoresArray[index-1][1].equals(""))
                 scoreString=0;
-            else scoreString = Integer.parseInt(scores[index][1]);
+            else scoreString = Integer.parseInt(highScoresArray[index-1][1]);
         }
-        String[][] newScores = new String[5][7];
-        for (int i=0;i<index;i++){
-            for (int j=0;j<7;j++)
-                newScores[i][j]=scores[i][j];
+        for (int i=4;i>index;i--){
+            highScoresArray[i]=highScoresArray[i-1];
         }
-        for (int i=index+1;i<5;i++){
-            for (int j=0;j<7;j++)
-                newScores[i][j]=scores[i-1][j];
-        }
-        scores[index][0]= name;
-        for (int i=0;i<points.length;i++){
-            scores[index][i+1]=String.valueOf(points[i]);
-        }
-        remove(table);
-        table = new JTable(newScores,columNames);
-        scores=newScores;
+        insertScore(name,points,index);
+        reWriteCsv();
         repaint();
     }
 
     private void insertScore(String name, int[] points,int index){
-        scores[index][0]= name;
+        highScoresArray[index]= new String[7];
+        highScoresArray[index][0]= name;
         for (int i=0;i<points.length;i++){
-            scores[index][i+1]=String.valueOf(points[i]);
+            highScoresArray[index][i+1]=String.valueOf(points[i]);
         }
-    }
-
-    private void moveScorerDown(int index){
-        for (int i=0;i<scores[0].length;i++){
-            scores[index+1][i]= scores[index][i];
-        }
-
     }
 
     private void addButton() {
@@ -116,5 +102,28 @@ public class WinnerTableFrame extends JFrame {
         backBtn.setFont(new Font("Algerian",Font.PLAIN,30));
         backBtn.addActionListener(backListener);
         containerPanel.add(backBtn);
+    }
+
+    private void reWriteCsv(){
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 7; j++){
+                builder.append(highScoresArray[i][j]+"");//append to the output string
+                if(j < 7)//if this is not the last row element
+                    builder.append(",");//then add comma
+            }
+            builder.append("\n");//append new line at the end of the row
+        }
+        BufferedWriter writer;
+        File file = new File("scores.csv");
+        if (!file.exists()){
+            try {file.createNewFile();} catch (IOException ignored){};
+        }
+        try {
+            FileWriter fileWriter = new FileWriter("scores.csv");
+            writer = new BufferedWriter(fileWriter);
+            writer.write(builder.toString());//save the string representation of the board
+            writer.close();}
+        catch (Exception ignored){}
     }
 }

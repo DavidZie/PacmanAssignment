@@ -38,7 +38,8 @@ public class GameFrame extends JFrame {
         setVisible(true);
         if (board != null)
             remove(board);
-        board = new Board(boardIndex, level, highScoresArray[0], lives, currentScore);
+        int highScore = Integer.valueOf(highScoresArray[0][1]);
+        board = new Board(boardIndex, level, highScore, lives, currentScore);
         Keyboard.bindKeyboard((JPanel) getContentPane(), board);
         putGlass();
         container.add(board);
@@ -49,7 +50,7 @@ public class GameFrame extends JFrame {
 
 
     public void endGame(int[] points) {
-        if (board.getCurrentScore()[0] > highScoresArray[4])
+        if (board.getCurrentScore()[0] > Integer.valueOf(highScoresArray[4][1]))
             new GameOverFrame(points);
         else
             MainFrame.getInstance().setVisible(true);

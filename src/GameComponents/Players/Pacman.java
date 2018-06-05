@@ -160,7 +160,7 @@ public class Pacman implements Visited,Visitor {
             gGhost.fillRect(repeats % 32, repeats / 32, 3, 3);
             gPacman.fillRect(repeats % 32, repeats / 32, 3, 3);
             repeats += 3;
-            if (repeats > 1024){
+            if (repeats > 8){
                 deathTimer.stop();
                 if (board.getLives()==0){
                     gameFrame.endGame(board.getCurrentScore());
