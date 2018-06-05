@@ -17,9 +17,6 @@ public class MainFrame extends JFrame {
         return ourInstance;
     }
 
-    JMenuBar menuBar;
-    JPanel container;
-
     private MainFrame() {
         super("Pac-Man");//Create Frame
         setSize(883,590);//Set Frame dimensions to 400 width and 400 height
@@ -28,7 +25,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
         pack();
         try {
-            container=new JPanelWithBackground(imagesPath+"\\background.jpg");
+            JPanel container = new JPanelWithBackground(imagesPath + "\\background.jpg");
             ActionListener startGameListener = e -> {
                 setVisible(false);
                 OptionsFrame.getInstance().setVisible(true);
@@ -37,20 +34,14 @@ public class MainFrame extends JFrame {
                 setVisible(false);
                 WinnerTableFrame.getInstance().setVisible(true);
             };
-            ActionListener finishListener = e -> {
-                System.exit(0);
-            };
+            ActionListener finishListener = e -> System.exit(0);
 
-            ActionListener introdactionsListener = e -> {
-                InstructionsFrame instructions = new InstructionsFrame();
-            };
+            ActionListener introdactionsListener = e -> new InstructionsFrame();
 
-            ActionListener aboutListener = e -> {
-                AboutFrame aboutFrame = new AboutFrame();
-            };
+            ActionListener aboutListener = e -> new AboutFrame();
 
 
-            menuBar=new JMenuBar();
+            JMenuBar menuBar = new JMenuBar();
             setJMenuBar(menuBar);
 
             JMenu game=new JMenu("Game");

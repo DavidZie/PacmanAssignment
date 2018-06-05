@@ -178,6 +178,8 @@ public class Board extends JPanel {
             checkImpact();
             timerRepeats++;
             checkCompletion();
+            if (level!=3)
+                pills=0;
 
         });
     }

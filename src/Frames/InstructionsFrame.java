@@ -7,15 +7,15 @@ import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
 
-public class InstructionsFrame {
+class InstructionsFrame {
 
-    JFrame frame;
-    JPanel panel1;
-    JPanel panel2;
-    JPanel panel3;
-    JPanel panel4;
+    private JFrame frame;
+    private JPanel panel1;
+    private JPanel panel2;
+    private JPanel panel3;
+    private JPanel panel4;//Each Panel is a Tab on the Frame.
 
-    public InstructionsFrame(){
+    InstructionsFrame(){
         createFrame();
         createTab();
     }

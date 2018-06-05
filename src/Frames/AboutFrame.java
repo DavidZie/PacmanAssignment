@@ -4,22 +4,15 @@ import GameComponents.JPanelWithBackground;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Scanner;
 
 import static Logic.Globals.imagesPath;
 
-public class AboutFrame {
+class AboutFrame {
 
-    JFrame about;
-    JPanel containerPanel;
+    private JPanel containerPanel;
 
-    public AboutFrame() {
+    AboutFrame() {
 
         createFrame();
 
@@ -52,7 +45,7 @@ public class AboutFrame {
     }
 
     private void createFrame() {
-        about=new JFrame("About");
+        JFrame about = new JFrame("About");
         about.setSize(509,735);//Set Frame dimensions.
         about.setResizable(false);//Lock Frame Size.
         about.setVisible(true);//Make Frame Visible.

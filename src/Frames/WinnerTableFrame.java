@@ -15,6 +15,11 @@ import static Logic.Globals.imagesPath;
 
 public class WinnerTableFrame extends JFrame {
 
+    /**
+     *
+     * LeaderBoards Frame. Scorers are loaded from CSV file.
+     */
+
     private static WinnerTableFrame ourInstance = new WinnerTableFrame();
     public static WinnerTableFrame getInstance() {
         return ourInstance;
@@ -23,8 +28,6 @@ public class WinnerTableFrame extends JFrame {
     private JPanel containerPanel;//Frame's Background Panel.
     private ActionListener backListener;
     private String[] columNames={"Name","Score","Regular Pill","Energy Pill","Pineapple","Apple","Strawberry"};
-    //private String[][] scores = highScoresArray;
-    private JTable table;
 
     private WinnerTableFrame() {
         super("Winner Table");
@@ -36,7 +39,7 @@ public class WinnerTableFrame extends JFrame {
         addLabel();
         createTable();//Create and Add Image Options Panel.
         addButton();
-    }//Constructor
+    }//Constructor.
 
 
     private void createFrame(){
@@ -60,7 +63,7 @@ public class WinnerTableFrame extends JFrame {
     }
 
     private void createTable(){
-        table=new JTable(highScoresArray,columNames);
+        JTable table = new JTable(highScoresArray, columNames);
         table.setPreferredScrollableViewportSize((new Dimension(475,200)));
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane=new JScrollPane(table);
@@ -81,9 +84,7 @@ public class WinnerTableFrame extends JFrame {
                 scoreString=0;
             else scoreString = Integer.parseInt(highScoresArray[index-1][1]);
         }
-        for (int i=4;i>index;i--){
-            highScoresArray[i]=highScoresArray[i-1];
-        }
+        System.arraycopy(highScoresArray, index, highScoresArray, index + 1, 4 - index);
         insertScore(name,points,index);
         reWriteCsv();
         repaint();
@@ -108,16 +109,15 @@ public class WinnerTableFrame extends JFrame {
         StringBuilder builder = new StringBuilder();
         for(int i = 0; i < 5; i++){
             for(int j = 0; j < 7; j++){
-                builder.append(highScoresArray[i][j]+"");//append to the output string
-                if(j < 7)//if this is not the last row element
-                    builder.append(",");//then add comma
+                builder.append(highScoresArray[i][j]);//append to the output string
+                builder.append(",");//then add comma
             }
             builder.append("\n");//append new line at the end of the row
         }
         BufferedWriter writer;
         File file = new File("scores.csv");
         if (!file.exists()){
-            try {file.createNewFile();} catch (IOException ignored){};
+            try {file.createNewFile();} catch (IOException ignored){}
         }
         try {
             FileWriter fileWriter = new FileWriter("scores.csv");

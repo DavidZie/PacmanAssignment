@@ -21,7 +21,7 @@ class GameOverFrame extends JFrame{
             MainFrame.getInstance().setVisible(true);
         };
 
-        createFrame();//Create Frame.
+        createFrame();//Create Frame for user who got a new highscore.
 
         JLabel label1=new JLabel("Game Over!");
         label1.setFont(new Font("Matura MT Script Capitals",Font.PLAIN,60));

@@ -15,6 +15,13 @@ import static Logic.Globals.gameFrame;
 import static Logic.Globals.imagesPath;
 
 public class OptionsFrame extends JFrame {
+
+    /**
+     *
+     * Create Frame With 3 Buttons. Each Button Represent A board the user can start with.
+     *
+     */
+
     private static OptionsFrame ourInstance = new OptionsFrame();
 
     public static OptionsFrame getInstance() {
@@ -22,7 +29,7 @@ public class OptionsFrame extends JFrame {
     }
 
     private ActionListener startGameListener;
-    JPanel container;
+    private JPanel container;
 
     private OptionsFrame() {
         super("Select Maze");
@@ -68,13 +75,13 @@ public class OptionsFrame extends JFrame {
     private void createImagePanel(){
         JPanel imagePanel = new JPanel();//Create image Panel
         imagePanel.setBorder(new LineBorder(Color.MAGENTA));//Set Panel Border Color.
-        updateImageLabel(3,imagePanel);//Attach Default Picture to label.
+        updateImageLabel(imagePanel);//Attach Default Picture to label.
         container.add(imagePanel);//Add Image Panel to Container Panel.
     }
 
-    private void updateImageLabel(int selectedImageNumber, JPanel panel){
+    private void updateImageLabel(JPanel panel){
         try {
-            for (int i=1;i<=selectedImageNumber;i++) {
+            for (int i=1;i<=3;i++) {
                 JButton btn = new JButton();//Create Label for image to be attached.
                 BufferedImage image = ImageIO.read(new File(imagesPath + "\\board"+i+".png"));
                 btn.setIcon(new ImageIcon(image));

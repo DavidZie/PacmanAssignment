@@ -22,7 +22,7 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         glass = new JPanel();
         setGlassPane(glass);
-    }
+    }//Set Frame options and set Glass Pane to appear above Board.
 
     public JPanel getGlass() {
         return glass;
@@ -44,9 +44,7 @@ public class GameFrame extends JFrame {
         putGlass();
         container.add(board);
         pack();
-
-
-    }
+    }//Create Board, put Glass on top.
 
 
     public void endGame(int[] points) {
@@ -58,7 +56,7 @@ public class GameFrame extends JFrame {
         remove(container);
         setVisible(false);
         repaint();
-    }
+    }//Game Over. Return to Main menu or Give option to save score if user scored enough points.
 
 
     public void finishBoard(int boardIndex, int lives, int level, int[] currentScore) {
@@ -69,7 +67,7 @@ public class GameFrame extends JFrame {
             repaint();
             gameFrame.startGame((boardIndex + 1) % 3, lives, level + 1, currentScore);
         }
-    }
+    }//Kill Current board and finish game if user has no more lives/Finished last level.
 
     private void putGlass() {
         JPanel glass = (JPanel) getGlassPane();
@@ -87,6 +85,6 @@ public class GameFrame extends JFrame {
         glass.add(l);
         glass.setOpaque(false);
         getGlassPane().setVisible(true);
-    }
+    }//Prepare Glass and put it on.
 }
 

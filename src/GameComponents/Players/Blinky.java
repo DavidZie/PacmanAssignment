@@ -58,7 +58,7 @@ public class Blinky extends Ghost implements Visited  {
                 image.getGraphics().drawImage(gameImagesArray[4][2],0,0,null);
                 break;
             case 1:
-                image.getGraphics().drawImage(gameImagesArray[4][5],0,0,null);
+                image.getGraphics().drawImage(gameImagesArray[4][3],0,0,null);
                 break;
         }
     }

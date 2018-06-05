@@ -128,7 +128,7 @@ public class Globals {
         catch (IOException e) { e.printStackTrace(); }
         try { images[4][2] = ImageIO.read(new File(imagesPath+"\\blinky1.png")); }
         catch (IOException e) { e.printStackTrace(); }
-        try { images[4][3] = ImageIO.read(new File(imagesPath+"\\ginky2.png")); }
+        try { images[4][3] = ImageIO.read(new File(imagesPath+"\\blinky2.png")); }
         catch (IOException e) { e.printStackTrace(); }
         try { images[4][4] = ImageIO.read(new File(imagesPath+"\\inky2.png")); }
         catch (IOException e) { e.printStackTrace(); }
