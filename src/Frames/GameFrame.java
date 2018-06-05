@@ -32,55 +32,51 @@ public class GameFrame extends JFrame {
         return board;
     }
 
-    public void startGame(int boardIndex, int lives,int level, int[] currentScore){
+    public void startGame(int boardIndex, int lives, int level, int[] currentScore) {
         container = new JPanel();
         add(container);
         setVisible(true);
-        if (board!=null)
+        if (board != null)
             remove(board);
-        board = new Board(boardIndex, level, highScoresArray[0],lives,currentScore);
+        board = new Board(boardIndex, level, highScoresArray[0], lives, currentScore);
         Keyboard.bindKeyboard((JPanel) getContentPane(), board);
         putGlass();
         container.add(board);
         pack();
 
 
-
     }
 
-    public void endGame(){
-        if (board.getCurrentScore()[0]>highScoresArray[4])
-            new GameOverFrame();
-        else new MainFrame();
-    public void endGame(int[] points){
-        if (board.getCurrentScore()>highScoresArray[4])
-            new FinishGameFrame(points);
-        else
+
+    public void endGame(int[] points) {
+        if (board.getCurrentScore()[0] > highScoresArray[4])
             new GameOverFrame(points);
+        else
+            MainFrame.getInstance().setVisible(true);
         remove(board);
         remove(container);
         setVisible(false);
         repaint();
     }
 
-    public void finishBoard(int boardIndex,int lives,int level,int[] currentScore,int[] points)
-        {
-        if (level==3|lives==0)
-            endGame(points);
+
+    public void finishBoard(int boardIndex, int lives, int level, int[] currentScore) {
+        if (level == 3 | lives == 0)
+            endGame(currentScore);
         else {
             remove(container);
             repaint();
-            gameFrame.startGame((boardIndex+1)%3,lives,level+1,currentScore);
+            gameFrame.startGame((boardIndex + 1) % 3, lives, level + 1, currentScore);
         }
     }
 
-    private void putGlass(){
+    private void putGlass() {
         JPanel glass = (JPanel) getGlassPane();
         JLabel l = new JLabel();
-        BufferedImage image = new BufferedImage(800,800,BufferedImage.TYPE_INT_ARGB);
-        Graphics g= image.getGraphics();
+        BufferedImage image = new BufferedImage(800, 800, BufferedImage.TYPE_INT_ARGB);
+        Graphics g = image.getGraphics();
         g.setColor(Color.BLUE);
-        g.fillRect(250,200,325,200);
+        g.fillRect(250, 200, 325, 200);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         g.setColor(Color.YELLOW);
         g.drawString("GET READY", 325, 275);
@@ -92,3 +88,4 @@ public class GameFrame extends JFrame {
         getGlassPane().setVisible(true);
     }
 }
+

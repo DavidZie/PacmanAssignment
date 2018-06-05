@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
-import static Logic.Globals.mainFrame;
 
 public class FinishGameFrame {
 
@@ -22,7 +21,7 @@ public class FinishGameFrame {
 
             backToMainListener = e -> {
                 finishFrame.setVisible(false);
-                if(mainFrame.isVisible()==false) mainFrame.setVisible(true);
+
             };//Call new GameFrame and hide this Frame.
 
             createFrame();//Create Frame.
@@ -44,8 +43,8 @@ public class FinishGameFrame {
 
             saveGameListener = e -> {
                 finishFrame.setVisible(false);
-                if (mainFrame.isVisible()==false) mainFrame.setVisible(true);
-                new WinnerTableFrame(text.getText(),points);
+                WinnerTableFrame.getInstance().setVisible(true);
+                WinnerTableFrame.getInstance().addRowToTable(text.getText(),points);
             };//Call new GameFrame and hide this Frame.
 
             cont=new JPanel();
