@@ -116,6 +116,9 @@ public class Piece extends JLabel {
                     wall = false;
                     ghostHouse = true;
                     break;
+                case '8':
+                    wall=false;
+                    break;
             }
         }
     }

@@ -19,17 +19,25 @@ public class Pacman implements Visited,Visitor {
     private boolean frozen;
     private int repeats;
     private BufferedImage collisionImage;
+    private Timer timer;
+    private Timer deathTimer;
 
     public Pacman(int level) {
         repeats=0;
-        image = gameImagesArray[level/2][level/3];
+        image = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+        image.getGraphics().drawImage(gameImagesArray[level/2][level/3],0,0,null);
         this.level=level;
         currentImage =0 ;
-        Timer timer = new Timer(200, e -> {
+        timer = new Timer(200, e -> {
             if (level<2) {
                 currentImage = (currentImage + 1) % 3;
-                image = gameImagesArray[0][currentImage];
-            } else {image = gameImagesArray[1][level-2];}
+                BufferedImage newImage = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+                newImage.getGraphics().drawImage(gameImagesArray[0][currentImage],0,0,null);
+                image = newImage;
+            } else {
+                BufferedImage newImage = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+                newImage.getGraphics().drawImage(gameImagesArray[1][level-2],0,0,null);
+                image = newImage;}
             if (repeats==15)
                 frozen=false;
             repeats++;
@@ -139,6 +147,33 @@ public class Pacman implements Visited,Visitor {
         g.fillRect(0,0,pieceSize,pieceSize);
     }
 
+    private void deathAnimation(Ghost ghost, Board board){
+        repeats=0;
+        timer.stop();
+        Graphics gGhost = ghost.getImage().getGraphics();
+        Graphics gPacman = image.getGraphics();
+        gPacman.setColor(Color.BLACK);
+        gGhost.setColor(Color.BLACK);
+        frozen=true;
+        gameFrame.getBoard().stop();
+        deathTimer = new Timer(7,e -> {
+            gGhost.fillRect(repeats % 32, repeats / 32, 3, 3);
+            gPacman.fillRect(repeats % 32, repeats / 32, 3, 3);
+            repeats += 3;
+            if (repeats > 1024){
+                deathTimer.stop();
+                if (board.getLives()==0){
+                    gameFrame.endGame(board.getCurrentScore());
+                } else {board.cleanBoard();
+                return;
+                }
+            }
+            board.repaint();
+
+        });
+        deathTimer.start();
+    }
+
     public void attack(Ghost ghost){
         ghost.impact(this);
     }
@@ -156,17 +191,11 @@ public class Pacman implements Visited,Visitor {
     }
 
     @Override
-    public void visit(Ghost ghost, Board board) {
-    }
-
-    @Override
     public void visit(Ginky ginky, Board board) {
         switch (level){
             case 1:
                 board.setLives(board.getLives()-1);
-                if (board.getLives()==0){
-                    gameFrame.endGame(board.getCurrentScore());
-                } else board.cleanBoard();
+                deathAnimation(ginky,board);
                 break;
             case 2:
                 ginky.setRepeats(22);
@@ -175,9 +204,9 @@ public class Pacman implements Visited,Visitor {
                 ginky.setChasing(false);
                 break;
             case 3:
-                ginky.setDead(true);
                 ginky.getTimer().stop();
                 image.getGraphics().drawImage(ginky.getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
+                ginky.setDead(true);
                 break;
         }
     }
@@ -187,9 +216,7 @@ public class Pacman implements Visited,Visitor {
         switch (level){
             case 1:
                 board.setLives(board.getLives()-1);
-                if (board.getLives()==0){
-                    gameFrame.endGame(board.getCurrentScore());
-                } else board.cleanBoard();
+                deathAnimation(inky,board);
                 break;
             case 2:
                 freeze();
@@ -207,9 +234,7 @@ public class Pacman implements Visited,Visitor {
     @Override
     public void visit(Blinky blinky, Board board) {
         board.setLives(board.getLives()-1);
-        if (board.getLives()==0){
-            gameFrame.endGame(board.getCurrentScore());
-        } else board.cleanBoard();
+        deathAnimation(blinky,board);
     }
 
     @Override
@@ -217,9 +242,8 @@ public class Pacman implements Visited,Visitor {
         switch (level){
             case 1:
                 board.setLives(board.getLives()-1);
-                if (board.getLives()==0){
-                    gameFrame.endGame(board.getCurrentScore());
-                } else board.cleanBoard();
+                deathAnimation(water,board);
+                board.getGhosts()[1].killAnimation(board);
                 break;
             case 2:
                 freeze();
@@ -235,17 +259,14 @@ public class Pacman implements Visited,Visitor {
     @Override
     public void visit(Fireball fireball, Board board) {
         board.setLives(board.getLives()-1);
-        if (board.getLives()==0){
-            gameFrame.endGame(board.getCurrentScore());
-        } else board.cleanBoard();
+        deathAnimation(fireball,board);
+        board.getGhosts()[2].killAnimation(board);
     }
 
     @Override
     public void visit(ExtraGhost extraGhost, Board board) {
         board.setLives(board.getLives()-1);
-        if (board.getLives()==0){
-            gameFrame.endGame(board.getCurrentScore());
-        } else board.cleanBoard();
+        deathAnimation(extraGhost,board);
     }
 
 

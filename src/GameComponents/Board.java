@@ -28,7 +28,6 @@ public class Board extends JPanel {
     private int level;
     private Ghost[] ghosts;
     private int lives;
-    private int[] gate;
     private int id;
 
     public Board(int id, int level, int currentHighScore, int lives, int[] currentScore) {
@@ -36,7 +35,6 @@ public class Board extends JPanel {
         this.id=id;
         this.level=level;
         if (level!=1) {
-
             ghosts=null;
         }
         this.currentHighScore=currentHighScore;
@@ -68,12 +66,10 @@ public class Board extends JPanel {
                 constraints.gridx = j;
                 if ( board[i][j].equals("0")||board[i][j].equals("6"))
                     pills++;
-                if (board[i][j].equals("7")&& pacman.getLocation() == null) {
-                    int[] playerLocation = {i-1,j};
+                if (board[i][j].equals("8")) {
+                    int[] playerLocation = {i,j};
                     pacman.setLocation(playerLocation);
-                    gate = new int[2];
-                    gate[0]=i;
-                    gate[1]=j;
+
                 }
                 pieces[i][j] = new Piece(board[i][j]);
                 add(pieces[i][j], constraints);
@@ -173,17 +169,12 @@ public class Board extends JPanel {
                 }
             }
 
-            if (((timerRepeats / speedDivisor)==20)){
-                pieces[gate[0]][gate[1]].setWall(true);
-            }
-
 
             if (level>1&&ghosts[1].isLoaded())
                 fire(ghosts[1]);
 
             if (level>2&&ghosts[2].isLoaded())
                 fire(ghosts[2]);
-
             checkImpact();
             timerRepeats++;
             checkCompletion();
@@ -394,9 +385,8 @@ public class Board extends JPanel {
                 myX = ghosts[i].getLocation()[0];
                 myY = ghosts[i].getLocation()[1];
                 if (pacman.getLocation()[0] == myX && pacman.getLocation()[1] == myY){
-
                     pacman.attack(ghosts[i]);
-
+                    return;
                 }
             }
         }
@@ -425,19 +415,18 @@ public class Board extends JPanel {
         speedActivated=false;
         drawGhostsAddLabel(this);
         drawSpeedLabel(this);
-        pieces[gate[0]][gate[1]].setWall(false);
         int[] reset = {10,16};
+        pacman=new Pacman(level);
         pacman.setLocation(reset);
         swapIn();
         drawLife(pieces,lives);
         prepareGhosts();
-        pauseStatus=true;
         Drawings.drawPauseButton(this);
         gameFrame.getGlass().setVisible(true);
         stop();
         timerRepeats = 0;
         drawTime(0,pieces);
-
+        pauseStatus=true;
     }
 
     public void start(){
@@ -517,10 +506,8 @@ public class Board extends JPanel {
         g.setColor(Color.BLUE);
         g.fillRect(0, getHeight() - 1, getWidth(), 2);
         pieces[12][16].repaint();
-
-
-
     }
+
 
 
 }

@@ -78,7 +78,7 @@ public class Drawings {
     public static void drawPauseButton(Board board) {
         Piece pausePiece = board.replaceLabels(1, 23, 3, 1);
         pausePiece.drawData("3");
-        reDrawPausePiece(pausePiece, board.isPauseStatus());
+        reDrawPausePiece(pausePiece, true);
 
         pausePiece.addMouseListener(new MouseAdapter() {
             @Override
@@ -273,6 +273,7 @@ public class Drawings {
 
 
     //--------------------- re-draw Methods END-----------------------//
+
 
 
 }

@@ -1,5 +1,6 @@
 package GameComponents.Players;
 
+import GameComponents.Board;
 import GameComponents.Piece;
 
 import javax.swing.*;
@@ -7,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
 
+import static Logic.Globals.gameFrame;
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
@@ -17,6 +19,7 @@ public abstract class Ghost implements Visited {
     private BufferedImage coveredImage;
     private int[] location;
     protected Timer timer;
+    private Timer killTimer;
     int repeats;
     private Stack route;
     private boolean chasing;
@@ -154,6 +157,24 @@ public abstract class Ghost implements Visited {
 
 
     public void fired(){}
+
+    public void killAnimation(Board board){
+        repeats=0;
+        timer.stop();
+        Graphics gGhost = image.getGraphics();
+        gGhost.setColor(Color.BLACK);
+        gameFrame.getBoard().stop();
+        killTimer = new Timer(7,e -> {
+            gGhost.fillRect(repeats % 32, repeats / 32, 3, 3);
+            repeats += 3;
+            if (repeats > 1024){
+                killTimer.stop();
+            }
+            board.repaint();
+
+        });
+        killTimer.start();
+    }
 
 
 }

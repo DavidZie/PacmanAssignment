@@ -20,6 +20,7 @@ public class WinnerTableFrame extends JFrame {
     private ActionListener backListener;
     private String[] columNames={"Name","Score","Regular Pill","Energy Pill","Pineapple","Apple","Strawberry"};
     private String[][] scores;
+    private JTable table;
 
     private WinnerTableFrame() {
         super("Winner Table");
@@ -56,7 +57,7 @@ public class WinnerTableFrame extends JFrame {
 
     private void createTable(){
         scores = new String[][]{{"","","","","","",""},{"","","","","","",""},{"","","","","","",""},{"","","","","","",""},{"","","","","","",""}};
-        JTable table=new JTable(scores,columNames);
+        table=new JTable(scores,columNames);
         table.setPreferredScrollableViewportSize((new Dimension(475,200)));
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane=new JScrollPane(table);
@@ -70,16 +71,30 @@ public class WinnerTableFrame extends JFrame {
             scoreString=0;
         else scoreString = Integer.valueOf(scores[index][1]);
         while (scoreString<points[0]){
-            if (index!=4)
-                moveScorerDown(index);
+            index--;
             if (index==0)
                 break;
-            index--;
             if (scores[index][1].equals(""))
                 scoreString=0;
             else scoreString = Integer.parseInt(scores[index][1]);
         }
-        insertScore(name, points,index);
+        String[][] newScores = new String[5][7];
+        for (int i=0;i<index;i++){
+            for (int j=0;j<7;j++)
+                newScores[i][j]=scores[i][j];
+        }
+        for (int i=index+1;i<5;i++){
+            for (int j=0;j<7;j++)
+                newScores[i][j]=scores[i-1][j];
+        }
+        scores[index][0]= name;
+        for (int i=0;i<points.length;i++){
+            scores[index][i+1]=String.valueOf(points[i]);
+        }
+        remove(table);
+        table = new JTable(newScores,columNames);
+        scores=newScores;
+        repaint();
     }
 
     private void insertScore(String name, int[] points,int index){

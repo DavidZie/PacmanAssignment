@@ -13,8 +13,10 @@ import static Logic.Globals.gameFrame;
 
 public class Keyboard {
 
+
     public static void bindKeyboard(JPanel jPanel, Board board) {
         InputMap inputMap = jPanel.getInputMap();
+
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "Left");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "Right");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "Up");
@@ -25,10 +27,12 @@ public class Keyboard {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
                     if (board.isPauseStatus())
                         return;
-                    Movement.movePacman(1,board);
-                } catch (NullPointerException ignored) { }
+                    Movement.movePacman(1, board);
+                } catch (NullPointerException ignored) {
+                }
             }
         });
         actionMap.put("Right", new AbstractAction() {
@@ -37,8 +41,9 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    Movement.movePacman(2,board);
-                } catch (NullPointerException ignored) { }
+                    Movement.movePacman(2, board);
+                } catch (NullPointerException ignored) {
+                }
             }
         });
         actionMap.put("Down", new AbstractAction() {
@@ -47,8 +52,9 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    Movement.movePacman(3,board);
-                } catch (NullPointerException ignored) { }
+                    Movement.movePacman(3, board);
+                } catch (NullPointerException ignored) {
+                }
             }
         });
         actionMap.put("Left", new AbstractAction() {
@@ -57,8 +63,9 @@ public class Keyboard {
                 if (board.isPauseStatus())
                     return;
                 try {
-                    Movement.movePacman(4,board);
-                } catch (NullPointerException ignored) {}
+                    Movement.movePacman(4, board);
+                } catch (NullPointerException ignored) {
+                }
             }
         });
         actionMap.put("Space", new AbstractAction() {
@@ -73,6 +80,6 @@ public class Keyboard {
                 reDrawPausePiece(pausePiece, board.isPauseStatus());
             }
         });
-    }//Bind Key Buttons to Corresponding Actions. Arrows Move Piece of Possible and update Moves Counter.
-
+    }
 }
+

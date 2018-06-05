@@ -22,6 +22,12 @@ public class Ginky extends Ghost implements Visited {
 
     public void setDead(boolean dead) {
         this.dead = dead;
+        Graphics g = image.getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,pieceSize,pieceSize);
+        g = getCoveredImage().getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,pieceSize,pieceSize);
     }
 
     public void setDisappear(boolean disappear) {
@@ -64,33 +70,5 @@ public class Ginky extends Ghost implements Visited {
     public void impact(Visitor visitor) {
         visitor.visit(this, gameFrame.getBoard());
     }
-
-
-    /*@Override
-    public void visit(Pacman pacman, Board board) {
-
-        switch (pacman.getLevel()){
-                case 1:
-                    board.setLives(board.getLives()-1);
-                    if (board.getLives()==0){
-                        gameFrame.endGame();
-                    } else board.cleanBoard();
-                    break;
-                case 2:
-                    repeats=22;
-                    disappear = true;
-                    image.getGraphics().drawImage(getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
-                    setChasing(false);
-                    break;
-                case 3:
-                    //Die
-
-                    dead=true;
-                    timer.stop();
-                    image.getGraphics().drawImage(getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
-                    break;
-            }
-            board.repaint();*/
-
 
 }

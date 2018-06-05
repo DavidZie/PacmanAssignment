@@ -22,7 +22,8 @@ public class Fruit extends Label {
     Fruit(int id){
         this.id=id;
         worth=(id+1)*100;
-        myImage = gameImagesArray[3][id];
+        myImage = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
+        myImage.getGraphics().drawImage(gameImagesArray[3][id],0,0,null);
         out = false;
         timerSetup();
     }
@@ -86,7 +87,7 @@ public class Fruit extends Label {
 
             if (repeats%2==1){
                 myImage = blackImage();
-            } else {myImage = gameImagesArray[3][id];}
+            } else {myImage.getGraphics().drawImage(gameImagesArray[3][id],0,0,null);}
             if (repeats==6){
                 timer.stop();
                 repeats=0;
