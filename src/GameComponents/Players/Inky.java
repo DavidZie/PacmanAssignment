@@ -6,12 +6,10 @@ import Logic.Movement;
 
 import javax.swing.*;
 
-import static Logic.Globals.gameFrame;
-import static Logic.Globals.gameImagesArray;
-import static Logic.Globals.pieceSize;
+import static Logic.Globals.*;
 
 
-public class Inky extends Ghost {
+public class Inky extends Ghost implements Visited {
 
     private boolean charging;
 
@@ -35,7 +33,7 @@ public class Inky extends Ghost {
                 Movement.moveGhost((int)getRoute().pop(), this,gameFrame.getBoard());
 
             if (repeats==18)
-                setChasing();
+                setChasing(true);
 
             if (repeats==21)
                 charging=true;
@@ -69,19 +67,14 @@ public class Inky extends Ghost {
         }
     }
 
-
-
-
-
-
-
-    @Override
-    public void visit(Pacman pacman) {
-
+    public void freeze(){
+        setRepeats(7);
+        setChasing(false);
     }
 
     @Override
-    public void visit(Ghost ghost) {
-
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
     }
+
 }

@@ -10,7 +10,7 @@ import java.util.Stack;
 import static Logic.Globals.gameImagesArray;
 import static Logic.Globals.pieceSize;
 
-public abstract class Ghost implements Visitor {
+public abstract class Ghost implements Visited {
 
     private int id;
     protected BufferedImage image;
@@ -101,8 +101,8 @@ public abstract class Ghost implements Visitor {
         return chasing;
     }
 
-    void setChasing() {
-        this.chasing = true;
+    void setChasing(boolean chasing) {
+        this.chasing = chasing;
     }
 
     public void setFacing(int facing) {
@@ -147,9 +147,6 @@ public abstract class Ghost implements Visitor {
         return image;
     }
 
-    public void impact(Visitor visitor) {
-        visitor.visit(this);
-    }
 
     public boolean isLoaded() {
         return loaded;

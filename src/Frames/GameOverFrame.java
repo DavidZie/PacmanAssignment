@@ -8,20 +8,20 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
-import static Logic.Globals.mainFrame;
 
-public class GameOverFrame {
-    JFrame finishFrame;
+public class GameOverFrame extends JFrame{
     private JPanel containerPanel;//Frame's Background Panel.
-    JPanel cont;
-    ActionListener backToMainListener;
-    ActionListener saveGameListener;
+    private JPanel cont;
+    private ActionListener backToMainListener;
+    private ActionListener saveGameListener;
 
     public GameOverFrame(int[] points){
+        super("Game Over");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
 
         backToMainListener = e -> {
-            finishFrame.setVisible(false);
-            if (mainFrame.isVisible()==false) mainFrame.setVisible(true);
+            setVisible(false);
+            new MainFrame();
         };//Call new GameFrame and hide this Frame.
 
         createFrame();//Create Frame.
@@ -42,9 +42,8 @@ public class GameOverFrame {
         containerPanel.add(text, BorderLayout.CENTER);
 
         saveGameListener = e -> {
-            finishFrame.setVisible(false);
-            if (mainFrame.isVisible()==false) mainFrame.setVisible(true);
-            WinnerTableFrame winnerTableFrame=new WinnerTableFrame(text.getText(),points);
+            setVisible(false);
+            new WinnerTableFrame(gameFrame.getBoard().getCurrentScore());
         };//Call new GameFrame and hide this Frame.
 
         cont=new JPanel();
@@ -60,17 +59,16 @@ public class GameOverFrame {
     }//Constructor
 
     private void createFrame(){
-        finishFrame=new JFrame("Game Over");
-        finishFrame.setSize(596,573);//Set Frame dimensions.
-        finishFrame.setResizable(false);//Lock Frame Size.
-        finishFrame.setVisible(true);//Make Frame Visible.
-        finishFrame.setLocationRelativeTo(null);//Center the frame on the screen.
-        finishFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
+        setSize(596,573);//Set Frame dimensions.
+        setResizable(false);//Lock Frame Size.
+        setVisible(true);//Make Frame Visible.
+        setLocationRelativeTo(null);//Center the frame on the screen.
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
         try {
             containerPanel=new JPanelWithBackground(imagesPath+"\\gameover.jpg");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        finishFrame.add(containerPanel, BorderLayout.CENTER);//Add Container Panel to Frame.
+        add(containerPanel, BorderLayout.CENTER);//Add Container Panel to Frame.
     }
 }

@@ -54,12 +54,12 @@ public class Drawings {
     public static void drawScoreLabel(Board board) {
         Piece scorePiece = board.replaceLabels(22, 7, 3, 2);
         scorePiece.drawData("1");
-        board.setCurrentScore(0);
+        board.setCurrentScore(board.getCurrentScore());
         Graphics g = scorePiece.getImage().getGraphics();
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("SCORE:", 0, scorePiece.getHeight()/2);
-        reDrawScoreLabel(scorePiece, board.getCurrentScore(), board.getCurrentHighScore(), board.getPieces());
+        reDrawScoreLabel(scorePiece, board.getCurrentScore()[0], board.getCurrentHighScore(), board.getPieces());
     }
 
     public static void drawHighScoreLabel(Board board) {
@@ -69,7 +69,10 @@ public class Drawings {
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
         g.drawString("HIGH SCORE:", 0, highScorePiece.getHeight()/2);
-        reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0]));
+        if (highScoresArray[0]>=board.getCurrentScore()[0])
+            reDrawHighScoreLabel(highScorePiece,String.valueOf(highScoresArray[0]));
+        else reDrawHighScoreLabel(highScorePiece,String.valueOf(board.getCurrentScore()[0]));
+
     }
 
     public static void drawPauseButton(Board board) {
@@ -132,6 +135,43 @@ public class Drawings {
     public static void drawFruitsLabel(Board board){
         Piece fruitsPiece = board.replaceLabels(9,27,1,12);
         fruitsPiece.drawData("4");
+
+    }
+
+    public static void drawGhostsAddLabel(Board board){
+        Piece ghostsPiece1 = board.replaceLabels(4,2,3,3);
+        ghostsPiece1.drawData("1234");
+        Graphics g1 = ghostsPiece1.getImage().getGraphics();
+        g1.setColor(Color.WHITE);
+        g1.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g1.drawString("ADD", 22, 30);
+        g1.drawString("GHOST", 5, 60);
+
+        ghostsPiece1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                reDrawGhostLabel(ghostsPiece1);
+                board.addExtraGhost(5);
+            }
+        });
+
+        Piece ghostsPiece2 = board.replaceLabels(4,28,3,3);
+        ghostsPiece2.drawData("1234");
+        Graphics g2 = ghostsPiece2.getImage().getGraphics();
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g2.drawString("ADD", 22, 30);
+        g2.drawString("GHOST", 5, 60);
+
+        ghostsPiece2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                reDrawGhostLabel(ghostsPiece2);
+                board.addExtraGhost(6);
+            }
+        });
 
     }
     //---------------------First Draw Methods END-----------------------//
@@ -219,8 +259,20 @@ public class Drawings {
         fruitPiece.repaint();
     }
 
+    private static void reDrawGhostLabel(Piece piece){
+        Graphics g = piece.getImage().getGraphics();
+        g.setColor(Color.RED);
+        g.fillRect(2, 2, piece.getWidth() - 3, piece.getHeight() - 3);
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("ADD", 22, 30);
+        g.drawString("GHOST", 5, 60);
+        piece.repaint();
+    }
+
 
 
     //--------------------- re-draw Methods END-----------------------//
+
 
 }

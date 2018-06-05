@@ -3,7 +3,6 @@ package Frames;
 import GameComponents.JPanelWithBackground;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 
 import static Logic.Globals.imagesPath;
@@ -22,7 +21,7 @@ public class InstructionsFrame {
     }
 
     private void createFrame() {
-        frame=new JFrame("Introdactions");
+        frame=new JFrame("Introductions");
         frame.setSize(618,525);//Set Frame dimensions.
         frame.setResizable(false);//Lock Frame Size.
         frame.setVisible(true);//Make Frame Visible.

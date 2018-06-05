@@ -1,8 +1,6 @@
 package Logic;
 
 import Frames.GameFrame;
-import Frames.MainFrame;
-import Frames.OptionsFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -21,9 +19,7 @@ public class Globals {
     public static final BufferedImage[][] gameImagesArray = loadImages();
     public static final Object[]gameBoards = gameBoardsArrayCreator();
     public static int[] highScoresArray = {1000, 0, 0,0,0};
-    public static final MainFrame mainFrame = new MainFrame();
     public static final GameFrame gameFrame = new GameFrame();
-    public static final OptionsFrame optionsFrame = new OptionsFrame();
 
 
 
@@ -103,7 +99,7 @@ public class Globals {
         catch (IOException e) { e.printStackTrace(); }
         try { images[3][2] = ImageIO.read(new File(imagesPath+"\\strawberry.png")); }
         catch (IOException e) { e.printStackTrace(); }
-        images[4] = new BufferedImage[6];
+        images[4] = new BufferedImage[8];
         try { images[4][0] = ImageIO.read(new File(imagesPath+"\\ginky1.png")); }
         catch (IOException e) { e.printStackTrace(); }
         try { images[4][1] = ImageIO.read(new File(imagesPath+"\\inky1.png")); }
@@ -114,7 +110,9 @@ public class Globals {
         catch (IOException e) { e.printStackTrace(); }
         try { images[4][4] = ImageIO.read(new File(imagesPath+"\\inky2.png")); }
         catch (IOException e) { e.printStackTrace(); }
-        try { images[4][5] = ImageIO.read(new File(imagesPath+"\\blinky2.png")); }
+        try { images[4][6] = ImageIO.read(new File(imagesPath+"\\scaryGhost1.png")); }
+        catch (IOException e) { e.printStackTrace(); }
+        try { images[4][7] = ImageIO.read(new File(imagesPath+"\\scaryGhost2.png")); }
         catch (IOException e) { e.printStackTrace(); }
         images[5] = new BufferedImage[2];
         try { images[5][0] = ImageIO.read(new File(imagesPath+"\\water.png")); }

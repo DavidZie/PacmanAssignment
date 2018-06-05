@@ -5,11 +5,9 @@ import Logic.Movement;
 
 import javax.swing.*;
 
-import static Logic.Globals.gameFrame;
-import static Logic.Globals.gameImagesArray;
-import static Logic.Globals.pieceSize;
+import static Logic.Globals.*;
 
-public class Blinky extends Ghost implements Visitor  {
+public class Blinky extends Ghost implements Visited  {
 
     private boolean charging;
 
@@ -33,7 +31,7 @@ public class Blinky extends Ghost implements Visitor  {
                 Movement.moveGhost((int)getRoute().pop(), this,gameFrame.getBoard());
 
             if (repeats==15)
-                setChasing();
+                setChasing(true);
 
             if (repeats==17)
                 charging=true;
@@ -66,14 +64,7 @@ public class Blinky extends Ghost implements Visitor  {
     }
 
     @Override
-    public void visit(Pacman pacman) {
-
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
     }
-
-    @Override
-    public void visit(Ghost ghost) {
-
-    }
-
-
 }

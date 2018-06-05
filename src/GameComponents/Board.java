@@ -21,7 +21,7 @@ public class Board extends JPanel {
     private boolean pauseStatus;
     private boolean speedActivated;
     private int speedDivisor;
-    private int currentScore;
+    private int currentScore[];
     private int currentHighScore;
     private int pills;
     private Fruit[] fruits;
@@ -32,12 +32,12 @@ public class Board extends JPanel {
     private int id;
     private int[] points;
 
-    public Board(int id, int level, int currentHighScore, int lives, int currentScore) {
+    public Board(int id, int level, int currentHighScore, int lives, int[] currentScore) {
         super(new GridBagLayout());
         this.id=id;
         this.level=level;
         if (level!=1) {
-            //pacman=null;
+
             ghosts=null;
         }
         this.currentHighScore=currentHighScore;
@@ -49,20 +49,19 @@ public class Board extends JPanel {
         createBoard((String[][]) gameBoards[id]);
         drawInfo();
         prepareFruits();
-        prepareGhosts();//TO BE WRITTEN.
+        prepareGhosts();
         timerSetup();
         stop();
 
         points=new int[6];
-        for (int i=0;i<6;i++)
-            points[i]=0;
+
 
         //System.out.println(level);
 
     }//Constructor
     //----------------Board Initiation----------------------//
     private void createBoard(String[][] board) {
-        pacman = new Pacman();
+        pacman = new Pacman(level);
         setBorder(new LineBorder(Color.GREEN));
         pieces = new Piece[boardSize][boardSize];
         GridBagConstraints constraints = new GridBagConstraints();
@@ -88,6 +87,16 @@ public class Board extends JPanel {
 
     //-----------------------Getters and Setters----------------//
 
+
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
     public boolean isPauseStatus() {
         return pauseStatus;
     }
@@ -104,7 +113,7 @@ public class Board extends JPanel {
         return pacman;
     }
 
-    public void setCurrentScore(int currentScore) {
+    public void setCurrentScore(int[] currentScore) {
         this.currentScore = currentScore;
     }
 
@@ -125,7 +134,7 @@ public class Board extends JPanel {
     }
 
 
-    public int getCurrentScore() {
+    public int[] getCurrentScore() {
         return currentScore;
     }
 
@@ -180,12 +189,10 @@ public class Board extends JPanel {
             if (level>2&&ghosts[2].isLoaded())
                 fire(ghosts[2]);
 
-            checkKill();
+            checkImpact();
             timerRepeats++;
-
-            if (timerRepeats==4)
-                pills=50;
             checkCompletion();
+
         });
     }
 
@@ -198,9 +205,11 @@ public class Board extends JPanel {
     }
 
     public void updateScore(Piece piece){
+
+
         if (!piece.isEaten()){
-            currentScore+=piece.getWorth();
-            points[0]=currentScore;
+            currentScore[0]+=piece.getWorth();
+            points[0]=currentScore[0];
             if (piece.getFruit()==null) {
                 pills--;
                 points[1]=points[1]+1;
@@ -217,7 +226,7 @@ public class Board extends JPanel {
             }
 
             piece.setEaten(true);
-            Drawings.reDrawScoreLabel(pieces[22][7],currentScore,currentHighScore,pieces);
+            Drawings.reDrawScoreLabel(pieces[22][7],currentScore[0],currentHighScore,pieces);
         }
     }
 
@@ -234,6 +243,7 @@ public class Board extends JPanel {
         drawSpeedLabel(this);
         drawTime(0,pieces);
         drawFruitsLabel(this);
+        drawGhostsAddLabel(this);
     }
 
     private void swapIn() {
@@ -264,7 +274,7 @@ public class Board extends JPanel {
             x = (int)(Math.random() * 19 + 2);
             y = (int)(Math.random() * 22 + 6);
             piece = pieces[x][y];
-            if (!piece.isWall()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])&&checkCell(x,y)){
+            if (!piece.isWall()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])&&checkCell(x,y)&&piece.getWorth()!=50){
                 index = (int)(Math.random()*fruits.length);
                 if (fruits[index].isOut()){
                     index = 0;
@@ -331,7 +341,7 @@ public class Board extends JPanel {
     //-------------------------Ghosts-----------------------------//
 
     private void prepareGhosts(){
-        ghosts = new Ghost[5];
+        ghosts = new Ghost[7];
         ghosts[0] = new Ginky();
         ghosts[1] = new Inky();
         ghosts[2] = new Blinky();
@@ -342,11 +352,6 @@ public class Board extends JPanel {
         ghosts[0].insert(pieces[12][16]);
         ghosts[1].insert(pieces[12][17]);
         ghosts[2].insert(pieces[12][15]);
-        if (level==1){
-            ghosts[1]=null;
-            ghosts[2]=null;
-        }else if (level==2)
-            ghosts[2]=null;
     }
 
     //-----------------------------Movement----------------------//
@@ -356,7 +361,7 @@ public class Board extends JPanel {
     private boolean checkCell(int x,int y){
         if (pieces[x][y].getFruit()!=null)
             return false;
-        for (int i=0;i<3;i++) {
+        for (int i=0;i<7;i++) {
             if (ghosts[i] != null) {
                 if (ghosts[i].getLocation()[0] == x && ghosts[i].getLocation()[1] == y)
                     return false;
@@ -370,23 +375,22 @@ public class Board extends JPanel {
         ghost.fire(pieces);
     }
 
-    private void checkKill(){
+    private void checkImpact(){
         int myX,myY;
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             if (ghosts[i]!=null){
                 myX = ghosts[i].getLocation()[0];
                 myY = ghosts[i].getLocation()[1];
                 if (pacman.getLocation()[0] == myX && pacman.getLocation()[1] == myY){
-                    lives--;
-                    if (lives==0){
-                        gameFrame.endGame(points);
-                    } else cleanBoard();
+
+                    pacman.attack(ghosts[i]);
+
                 }
             }
         }
     }
 
-    private void cleanBoard(){
+    public void cleanBoard(){
 
         for (int i=0;i<boardSize;i++){
             for (int j=0;j<boardSize;j++){
@@ -396,7 +400,7 @@ public class Board extends JPanel {
             }
         }
 
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             if (ghosts[i]!=null){
                 ghosts[i].getTimer().stop();
                 pieces[ghosts[i].getLocation()[0]][ghosts[i].getLocation()[1]].setImage(ghosts[i].getCoveredImage());
@@ -406,12 +410,14 @@ public class Board extends JPanel {
         ghosts=null;
 
         drawBlack(pieces[pacman.getLocation()[0]][pacman.getLocation()[1]]);
+        speedActivated=false;
+        drawGhostsAddLabel(this);
+        drawSpeedLabel(this);
         pieces[gate[0]][gate[1]].setWall(false);
         int[] reset = {10,16};
         pacman.setLocation(reset);
         swapIn();
         drawLife(pieces,lives);
-        repaint();
         prepareGhosts();
         pauseStatus=true;
         Drawings.drawPauseButton(this);
@@ -423,7 +429,7 @@ public class Board extends JPanel {
     }
 
     public void start(){
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().start();}
             catch (NullPointerException ignored){}
         }
@@ -441,7 +447,7 @@ public class Board extends JPanel {
 
     public void stop(){
 
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().stop();}
             catch (NullPointerException ignored){}
         }
@@ -455,7 +461,7 @@ public class Board extends JPanel {
         }
     }
     public void speedUp(){
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()/2);
             ghosts[i].setRepeats(ghosts[i].getRepeats()*2);}
             catch (NullPointerException ignored){}
@@ -468,7 +474,7 @@ public class Board extends JPanel {
 
 
     public void speedDown(){
-        for (int i=0;i<3;i++){
+        for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()*2);
             ghosts[i].setRepeats(ghosts[i].getRepeats()/2);}
             catch (NullPointerException ignored){}
@@ -489,6 +495,19 @@ public class Board extends JPanel {
             getGraphics().dispose();
             gameFrame.finishBoard(id,lives,level,currentScore,points);
         }
+    }
+
+    public void addExtraGhost(int id){
+        ghosts[id] = new ExtraGhost(id,pieces[12][16].getImage());
+        ghosts[id].setLocation(12,16);
+        ghosts[id].insert(pieces[12][16]);
+        Graphics g =pieces[12][16].getImage().getGraphics();
+        g.setColor(Color.BLUE);
+        g.fillRect(0, getHeight() - 1, getWidth(), 2);
+        pieces[12][16].repaint();
+
+
+
     }
 
 

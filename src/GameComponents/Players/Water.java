@@ -6,7 +6,7 @@ import javax.swing.*;
 
 import static Logic.Globals.gameFrame;
 
-public class Water extends Ghost {
+public class Water extends Ghost implements Visited {
 
     Water(int id){
         super(id,false);
@@ -23,12 +23,7 @@ public class Water extends Ghost {
     }
 
     @Override
-    public void visit(Pacman pacman) {
-
-    }
-
-    @Override
-    public void visit(Ghost ghost) {
-
+    public void impact(Visitor visitor) {
+        visitor.visit(this, gameFrame.getBoard());
     }
 }
