@@ -53,7 +53,7 @@ public class WinnerTableFrame extends JFrame {
     }
 
     private void addLabel(){
-        JLabel label=new JLabel("Leaderboards");
+        JLabel label=new JLabel("Leader boards");
         label.setFont(new Font("Algerian",Font.PLAIN,70));
         label.setForeground(Color.WHITE);
         containerPanel.add(label);
@@ -64,7 +64,7 @@ public class WinnerTableFrame extends JFrame {
         table.setPreferredScrollableViewportSize((new Dimension(475,200)));
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane=new JScrollPane(table);
-        containerPanel.add(scrollPane);
+        containerPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
     public void addRowToTable(String name, int[] points){
@@ -98,7 +98,7 @@ public class WinnerTableFrame extends JFrame {
     }
 
     private void addButton() {
-        JButton backBtn=new JButton("Return");
+        JButton backBtn=new JButton("   Return   ");
         backBtn.setFont(new Font("Algerian",Font.PLAIN,30));
         backBtn.addActionListener(backListener);
         containerPanel.add(backBtn);
