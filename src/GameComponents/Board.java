@@ -30,7 +30,6 @@ public class Board extends JPanel {
     private int lives;
     private int[] gate;
     private int id;
-    private int[] points;
 
     public Board(int id, int level, int currentHighScore, int lives, int[] currentScore) {
         super(new GridBagLayout());
@@ -52,8 +51,6 @@ public class Board extends JPanel {
         prepareGhosts();
         timerSetup();
         stop();
-
-        points=new int[6];
 
 
         //System.out.println(level);
@@ -142,8 +139,6 @@ public class Board extends JPanel {
         return currentHighScore;
     }
 
-    public int[] getPoints() { return points; }
-
     //--------------------------Methods--------------------------//
 
     public Piece replaceLabels(int x, int y, int width, int height) {
@@ -209,20 +204,37 @@ public class Board extends JPanel {
 
         if (!piece.isEaten()){
             currentScore[0]+=piece.getWorth();
-            points[0]=currentScore[0];
-            if (piece.getFruit()==null) {
-                pills--;
-                points[1]=points[1]+1;
+            switch (piece.getWorth()){
+                case 10:
+                    currentScore[1]++;
+                    break;
+                case 50:
+                    currentScore[2]++;
+                    break;
+                case 100:
+                    currentScore[3]++;
+                    break;
+                case 110:
+                    currentScore[3]++;
+                    currentScore[1]++;
+                    break;
+                case 200:
+                    currentScore[4]++;
+                    break;
+                case 210:
+                    currentScore[4]++;
+                    currentScore[1]++;
+                    break;
+                case 300:
+                    currentScore[5]++;
+                    break;
+                case 310:
+                    currentScore[5]++;
+                    currentScore[1]++;
+                    break;
             }
-            else {
-                if (piece.getWorth()-piece.getFruit().getWorth()!=0)
-                    pills--;
-                if (piece.getFruit().getId()==0)
-                    points[3]=points[3]+1;
-                if (piece.getFruit().getId()==1)
-                    points[4]=points[4]+1;
-                if (piece.getFruit().getId()==2)
-                    points[5]=points[5]+1;
+            if (piece.getFruit()==null||piece.getWorth()-piece.getFruit().getWorth()!=0) {
+                pills--;
             }
 
             piece.setEaten(true);
@@ -493,7 +505,7 @@ public class Board extends JPanel {
         if (pills<=0){
             stop();
             getGraphics().dispose();
-            gameFrame.finishBoard(id,lives,level,currentScore,points);
+            gameFrame.finishBoard(id,lives,level,currentScore);
         }
     }
 

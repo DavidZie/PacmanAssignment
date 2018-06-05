@@ -165,7 +165,7 @@ public class Pacman implements Visited,Visitor {
             case 1:
                 board.setLives(board.getLives()-1);
                 if (board.getLives()==0){
-                    gameFrame.endGame();
+                    gameFrame.endGame(board.getCurrentScore());
                 } else board.cleanBoard();
                 break;
             case 2:
@@ -188,7 +188,7 @@ public class Pacman implements Visited,Visitor {
             case 1:
                 board.setLives(board.getLives()-1);
                 if (board.getLives()==0){
-                    gameFrame.endGame();
+                    gameFrame.endGame(board.getCurrentScore());
                 } else board.cleanBoard();
                 break;
             case 2:
@@ -208,7 +208,7 @@ public class Pacman implements Visited,Visitor {
     public void visit(Blinky blinky, Board board) {
         board.setLives(board.getLives()-1);
         if (board.getLives()==0){
-            gameFrame.endGame();
+            gameFrame.endGame(board.getCurrentScore());
         } else board.cleanBoard();
     }
 
@@ -218,7 +218,7 @@ public class Pacman implements Visited,Visitor {
             case 1:
                 board.setLives(board.getLives()-1);
                 if (board.getLives()==0){
-                    gameFrame.endGame();
+                    gameFrame.endGame(board.getCurrentScore());
                 } else board.cleanBoard();
                 break;
             case 2:
@@ -236,7 +236,7 @@ public class Pacman implements Visited,Visitor {
     public void visit(Fireball fireball, Board board) {
         board.setLives(board.getLives()-1);
         if (board.getLives()==0){
-            gameFrame.endGame();
+            gameFrame.endGame(board.getCurrentScore());
         } else board.cleanBoard();
     }
 
@@ -244,7 +244,7 @@ public class Pacman implements Visited,Visitor {
     public void visit(ExtraGhost extraGhost, Board board) {
         board.setLives(board.getLives()-1);
         if (board.getLives()==0){
-            gameFrame.endGame();
+            gameFrame.endGame(board.getCurrentScore());
         } else board.cleanBoard();
     }
 

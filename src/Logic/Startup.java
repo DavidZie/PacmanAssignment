@@ -12,7 +12,7 @@ public class Startup {
 
     public static void main(String[] args) {
 
-        new MainFrame();
+        MainFrame.getInstance().setVisible(true);
         //music();
 
     }
