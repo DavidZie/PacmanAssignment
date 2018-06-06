@@ -12,7 +12,7 @@ import static Logic.Globals.imagesPath;
 class GameOverFrame extends JFrame{
     private JPanel containerPanel;//Frame's Background Panel.
 
-    GameOverFrame(int[] points){
+    GameOverFrame(int[] points,boolean record){
         super("Game Over");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);//Make the program Abort When user closes the Frame.
 
@@ -28,27 +28,32 @@ class GameOverFrame extends JFrame{
         label1.setForeground(Color.WHITE);
         containerPanel.add(label1, BorderLayout.PAGE_START);
 
-        JLabel label2=new JLabel("New Score! Enter Your Name");
+        String newRecord="";
+        if (record)
+            newRecord = "New Score! Enter Your Name";
+        JLabel label2=new JLabel(newRecord);
         label2.setFont(new Font("Forte",Font.PLAIN,32));
         label2.setForeground(Color.RED);
         containerPanel.add(label2);
-
-        JTextField text=new JTextField(15);
-        text.setFont(new Font("David",Font.PLAIN,35));
-        text.setHorizontalAlignment(JTextField.CENTER);
-        containerPanel.add(text, BorderLayout.CENTER);
-
-        ActionListener saveGameListener = e -> {
-            setVisible(false);
-            WinnerTableFrame.getInstance().addRowToTable(text.getText(),points);
-            WinnerTableFrame.getInstance().setVisible(true);
-        };
-
         JPanel cont = new JPanel();
-        JButton backBtn1=new JButton("Save");
-        backBtn1.setFont(new Font("Matura MT Script Capitals",Font.PLAIN,30));
-        backBtn1.addActionListener(saveGameListener);
-        cont.add(backBtn1,BorderLayout.WEST);
+        if (record) {
+            JTextField text = new JTextField(15);
+            text.setFont(new Font("David", Font.PLAIN, 35));
+            text.setHorizontalAlignment(JTextField.CENTER);
+            containerPanel.add(text, BorderLayout.CENTER);
+
+            ActionListener saveGameListener = e -> {
+                setVisible(false);
+                WinnerTableFrame.getInstance().addRowToTable(text.getText(), points);
+                WinnerTableFrame.getInstance().setVisible(true);
+            };
+
+
+            JButton backBtn1 = new JButton("Save");
+            backBtn1.setFont(new Font("Matura MT Script Capitals", Font.PLAIN, 30));
+            backBtn1.addActionListener(saveGameListener);
+            cont.add(backBtn1, BorderLayout.WEST);
+        }
         JButton backBtn2=new JButton("Return");
         backBtn2.setFont(new Font("Matura MT Script Capitals",Font.PLAIN,30));
         backBtn2.addActionListener(backToMainListener);
