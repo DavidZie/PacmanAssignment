@@ -28,7 +28,7 @@ public class AStar {
                 if (!board.getPieces()[i][j].isWall()) {
                     diffX = i - destX;
                     diffY = j - destY;
-                    distance = Math.abs(diffX*diffY);//Cheapest Possible Path.
+                    distance = Math.abs(diffX)+ Math.abs(diffY);//Cheapest Possible Path.
                     nodes[i][j] = new Node(i, j, distance);
                 }
             }
