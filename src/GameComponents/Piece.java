@@ -9,15 +9,15 @@ import static Logic.Globals.*;
 public class Piece extends JLabel {
 
 
-    private BufferedImage image;
-    private boolean eaten = false;
-    private boolean wall = true;
-    private boolean ghostHouse;
+    private BufferedImage image;//piece's Image.
+    private boolean eaten;//Whether there's Food on the Piece.
+    private boolean wall = true;//Is the Piece a wall? true By Default.
+    private boolean ghostHouse;//Is this Piece Part of the  Ghost Cage.
     private int worth;
 
-    private Timer fruitTimer;
-    private int repeats;
-    private  Fruit fruit;
+    private Timer fruitTimer;//Timer For Fruit on Piece. Kick it out when Time Expires.
+    private int repeats;//Timer Ticks.
+    private Fruit fruit;//Piece's Fruit. Not Necessarily has value.
 
     Piece(String data) {
         super();
@@ -44,7 +44,7 @@ public class Piece extends JLabel {
                 gameFrame.getBoard().eatenFruit(fruit);
             }
         }
-    }
+    }//Set Eaten is Tricky Here Because it might mean the Fruit is gone.
 
     public Timer getFruitTimer() {
         return fruitTimer;
@@ -83,8 +83,6 @@ public class Piece extends JLabel {
         this.worth = worth;
     }
 
-    //-------------------Construction Time Methods------------------------//
-
     //-----------------------------Methods-------------------------------//
     public void drawData(String s) {
         if (s == null)
@@ -97,31 +95,38 @@ public class Piece extends JLabel {
                     break;
                 case '1':
                     drawNorthWall();
+                    eaten=true;
                     break;
                 case '2':
                     drawEastWall();
+                    eaten=true;
                     break;
                 case '3':
                     drawSouthWall();
+                    eaten=true;
                     break;
                 case '4':
                     drawWestWall();
+                    eaten=true;
                     break;
                 case '5':
+                    eaten=true;
                     break;
                 case '6':
                     drawEnergyPill();
                     break;
                 case '7':
+                    eaten=true;
                     wall = false;
                     ghostHouse = true;
                     break;
                 case '8':
+                    eaten=true;
                     wall=false;
                     break;
             }
         }
-    }
+    }//Draw Data According to CSV.
 
     //------------------------Drawings-----------------------//
 
@@ -175,13 +180,15 @@ public class Piece extends JLabel {
         worth = 50;
     }
 
+    //-----------------------Methods--------------------------//
+
     public void addFruit(Fruit fruit){
         repeats=0;
         this.fruit = fruit;
         worth = fruit.getWorth()+worth;
         fruitTimer = new Timer(500,e -> {
             repeats++;
-            if (repeats<=8) {
+            if (repeats<=6) {
                 if (repeats % 2 == 0) {
                     Graphics g = image.getGraphics();
                     g.drawImage(fruit.getMyImage(), 0, 0, null);
@@ -190,8 +197,8 @@ public class Piece extends JLabel {
                     drawBlackImage();
                     repaint();
                 }
-            }
-            else if (repeats>18&repeats<40) {
+            }//Flicker for 3 Seconds.
+            else if (repeats>16&repeats<38) {
                 BufferedImage blackImage = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
                 Graphics g1 = blackImage.getGraphics();
                 g1.setColor(Color.BLACK);
@@ -203,7 +210,7 @@ public class Piece extends JLabel {
                     } else if (worth-fruit.getWorth()==50){
                         g1.drawImage(gameImagesArray[2][0],0,0,null);
                     }
-                }
+                }//5 Seconds After Flickering Stops, Start Disappearing.
 
                 Graphics2D g = (Graphics2D) image.getGraphics();
                 g.setComposite(AlphaComposite.SrcOver.derive(0.15f));
@@ -212,11 +219,12 @@ public class Piece extends JLabel {
             } else if (repeats==40) {
                 fruitTimer.stop();
                 killFruit();
-            }
+            }//20 seconds After Inserting Fruit Kick it out.
 
         });
         fruitTimer.start();
-    }
+    }//Add Fruit And Start the Fruit Timer.
+
     public void killFruit(){
         String dataString = "";
         if (!eaten){
@@ -229,9 +237,6 @@ public class Piece extends JLabel {
             }
             drawData(dataString);
             fruit.setOut(false);
-            fruit.getTimer().stop();
-            fruit.setRepeats(0);
         }
-
-    }
+    }//Kill Fruit. If it was Eaten no need to do anything. If It disappeared reset the piece into the state it was before the Fruit Was Added.
 }

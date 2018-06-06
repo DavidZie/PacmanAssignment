@@ -12,10 +12,12 @@ import static Logic.Globals.*;
 public class Inky extends Ghost implements Visited {
 
     private boolean charging;
+    private int level;
 
-    public Inky() {
+    public Inky(int level) {
         super(1,true);
         weapon = new Water(1);
+        this.level=level;
         setupTimer();
     }
 
@@ -35,7 +37,7 @@ public class Inky extends Ghost implements Visited {
             if (repeats==18)
                 setChasing(true);
 
-            if (repeats==21)
+            if (repeats==21&level>1)
                 charging=true;
 
             if (charging)
@@ -65,16 +67,16 @@ public class Inky extends Ghost implements Visited {
                 image.getGraphics().drawImage(gameImagesArray[4][4],0,0,null);
                 break;
         }
-    }
+    }//Switch Images. Called when charging weapon.
 
     public void freeze(){
         setRepeats(7);
         setChasing(false);
-    }
+    }//Freeze Ghost.
 
     @Override
     public void impact(Visitor visitor) {
         visitor.visit(this, gameFrame.getBoard());
-    }
+    }//Visit Pacman.
 
 }

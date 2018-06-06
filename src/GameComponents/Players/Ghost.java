@@ -14,18 +14,24 @@ import static Logic.Globals.pieceSize;
 
 public abstract class Ghost implements Visited {
 
-    private int id;
-    protected BufferedImage image;
-    private BufferedImage coveredImage;
-    private int[] location;
-    protected Timer timer;
-    private Timer killTimer;
-    int repeats;
-    private Stack route;
-    private boolean chasing;
-    int facing;
-    Ghost weapon;
-    boolean loaded;
+    /**
+     * All Ghosts extend this class and use some of it's functionality.
+     * Could act Exactly the same or differently.
+     * IMPORTANT: subclasses that use fields that were already commented on here, will not be commented on again.
+     */
+
+    private int id;//For ghost Type Identification.
+    protected BufferedImage image;//Ghost Image.
+    private BufferedImage coveredImage;//Save the image upon which the ghost is standing on so it'll be put back when the Ghost move.
+    private int[] location;//Ghost location on board as an array with 2 cells {x,y}.
+    protected Timer timer;//Timer for Ghosts movement and actions.
+    private Timer killTimer;//Timer Used when the Ghost kill pacman for visuals.
+    int repeats;//Number of ticks the Timer already ran.
+    private Stack route;//Stack Contains moves to get to pacman in the shortest route.
+    private boolean chasing;//For whether the Ghost is chasing pacman.
+    int facing;//What Direction the Ghost is facing.
+    Ghost weapon;//Some Ghosts can shoot weapons which act similar to ghosts only "dumber".
+    boolean loaded;//For whether Ghost is ready to fire.
 
 
     Ghost(int id,boolean ghost){
@@ -40,7 +46,9 @@ public abstract class Ghost implements Visited {
             g.drawImage(gameImagesArray[5][id-1],0,0,pieceSize, pieceSize,null);
         }
         location=new int[2];
-    }
+    }//Constructor. Draw Ghost image and set its location.
+
+    //-----------------------Getters and Setters--------------------------//
 
     public int getId() {
         return id;
@@ -90,7 +98,7 @@ public abstract class Ghost implements Visited {
     public void setLocation(int x, int y) {
         location[0] = x;
         location[1] = y;
-    }
+    }//To make it easier to set location.
 
     Stack getRoute() {
         return route;
@@ -111,6 +119,11 @@ public abstract class Ghost implements Visited {
     public void setFacing(int facing) {
         this.facing = facing;
     }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
+    //---------------------------Methods---------------------------//
 
     public void fire(Piece[][] pieces){
         int myX=0,myY=0;
@@ -140,7 +153,7 @@ public abstract class Ghost implements Visited {
         weapon.getTimer().start();
         loaded=false;
         fired();
-    }
+    }//Get fired Ghost first cell and Fire. Also prevent ghost from shooting if it is facing a wall.
 
     private BufferedImage drawBlackImage(){
         BufferedImage image = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
@@ -148,15 +161,12 @@ public abstract class Ghost implements Visited {
         graphics.setColor(Color.BLACK);
         graphics.fillRect(0, 0, pieceSize, pieceSize);
         return image;
-    }
+    }//For Quick and easy use.
 
 
-    public boolean isLoaded() {
-        return loaded;
-    }
 
 
-    public void fired(){}
+    public void fired(){}//Reset necessary fields after Weapon Fire.
 
     public void killAnimation(Board board){
         repeats=0;
@@ -174,7 +184,7 @@ public abstract class Ghost implements Visited {
 
         });
         killTimer.start();
-    }
+    }//Start the kill Timer and visual the killing.
 
 
 }

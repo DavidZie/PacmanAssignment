@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -115,10 +114,6 @@ public class WinnerTableFrame extends JFrame {
             builder.append("\n");//append new line at the end of the row
         }
         BufferedWriter writer;
-        File file = new File("scores.csv");
-        if (!file.exists()){
-            try {file.createNewFile();} catch (IOException ignored){}
-        }
         try {
             FileWriter fileWriter = new FileWriter("scores.csv");
             writer = new BufferedWriter(fileWriter);

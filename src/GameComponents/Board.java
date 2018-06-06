@@ -13,22 +13,21 @@ import static Logic.Drawings.*;
 import static Logic.Globals.*;
 
 public class Board extends JPanel {
-    private Piece[][] pieces;
-    private Pacman pacman;
-    private Timer timer;
-    private Stack<Fruit> eatenFruits;
-    private int timerRepeats;
-    private boolean pauseStatus;
-    private boolean speedActivated;
-    private int speedDivisor;
-    private int currentScore[];
-    private int currentHighScore;
-    private int pills;
-    private Fruit[] fruits;
-    private int level;
-    private Ghost[] ghosts;
-    private int lives;
-    private int id;
+    private Piece[][] pieces;//Board Piece.
+    private Pacman pacman;//Pacman.
+    private Timer timer;//Timer for executing actions.
+    private Stack<Fruit> eatenFruits;//Stack of eaten fruits. Used to draw Eaten fruits on board.
+    private int timerRepeats;//Timer ticker.
+    private boolean pauseStatus;//Is game Paused?
+    private boolean speedActivated;//is Speed Activated?
+    private int speedDivisor;//Used to make time calculations when delay time changes (speed up).
+    private int currentScore[];//Save Current Score and info about eaten pills/Fruits.
+    private int currentHighScore;//Current Highest scoring user.
+    private Fruit[] fruits;//All the Fruits avalable on Current Board.
+    private int level;//Current level.
+    private Ghost[] ghosts;//All the Game Ghosts.
+    private int lives;//Lives left.
+    private int id;//Board id.
 
     public Board(int id, int level, int currentHighScore, int lives, int[] currentScore) {
         super(new GridBagLayout());
@@ -36,25 +35,21 @@ public class Board extends JPanel {
         this.level=level;
         if (level!=1) {
             ghosts=null;
-        }
+        }//If level isn't 1. make sure Ghosts were nullified as testing proved there might be a problem with it.
         this.currentHighScore=currentHighScore;
         this.currentScore = currentScore;
         this.lives = lives;
         pauseStatus=true;
-        pills=0;
         eatenFruits=new Stack<>();
-        createBoard((String[][]) gameBoards[id]);
-        drawInfo();
-        prepareFruits();
-        prepareGhosts();
-        timerSetup();
-        stop();
-
-
-        //System.out.println(level);
-
+        createBoard((String[][]) gameBoards[id]);//Create Game Board According to board id.
+        drawInfo();//Draw Labels.
+        prepareFruits();//Prepare Fruits for this level.
+        prepareGhosts();//Prepare Ghosts for this level.
+        timerSetup();//Setup Board Timer.
+        stop();//Make sure to Stop All running Timers to be safe.
     }//Constructor
     //----------------Board Initiation----------------------//
+    //Very important therefore appearing before getters and setters.
     private void createBoard(String[][] board) {
         pacman = new Pacman(level);
         setBorder(new LineBorder(Color.GREEN));
@@ -64,8 +59,6 @@ public class Board extends JPanel {
             constraints.gridy = i;
             for (int j = 0; j < boardSize; j++) {
                 constraints.gridx = j;
-                if ( board[i][j].equals("0")||board[i][j].equals("6"))
-                    pills++;
                 if (board[i][j].equals("8")) {
                     int[] playerLocation = {i,j};
                     pacman.setLocation(playerLocation);
@@ -75,7 +68,7 @@ public class Board extends JPanel {
                 add(pieces[i][j], constraints);
             }
         }
-    }
+    }//Create Level Pieces and Assign each Piece it's role in the game according to the CSV file.
     //------------------------Board Initiation END--------------------------------------//
 
     //-----------------------Getters and Setters----------------//
@@ -114,10 +107,6 @@ public class Board extends JPanel {
         this.pauseStatus = pauseStatus;
     }
 
-    public Timer getTimer() {
-        return timer;
-    }
-
     public boolean isSpeedActivated() {
         return speedActivated;
     }
@@ -137,6 +126,32 @@ public class Board extends JPanel {
 
     //--------------------------Methods--------------------------//
 
+    private void timerSetup() {
+        timerRepeats=0;
+        timer = new Timer(250, e -> {
+            if (!speedActivated)//Speed Activated Changes Divisor value as it affects the game clock.
+                speedDivisor = 4;
+            else speedDivisor = 8;
+            if (timerRepeats % speedDivisor == 0) {
+                Drawings.drawTime(timerRepeats / speedDivisor,pieces);
+                if ((timerRepeats / speedDivisor)%10==0) {
+                    insertFruits();//Try to Insert Fruit every 10 seconds.
+                }
+            }
+
+            if (level>1&&ghosts[1].isLoaded())//Inky Can Fire only on levels 2 or 3.
+                fire(ghosts[1]);
+
+            if (level>2&&ghosts[2].isLoaded())//Blinky can fire only on level 3.
+                fire(ghosts[2]);
+
+            checkImpact();//Check if 2 players are on the same Piece.
+            timerRepeats++;//Ticks.
+            checkCompletion();//Check if Board is Completed.
+
+        });
+    }
+
     public Piece replaceLabels(int x, int y, int width, int height) {
         Piece newPiece = new Piece(null);
         GridBagConstraints constraints = new GridBagConstraints();
@@ -154,35 +169,9 @@ public class Board extends JPanel {
         newPiece.setImage(new BufferedImage(width * pieceSize, height * pieceSize, BufferedImage.TYPE_INT_ARGB));
         add(newPiece, constraints);
         return newPiece;
-    }
-
-    private void timerSetup() {
-        timerRepeats=0;
-        timer = new Timer(250, e -> {
-            if (!speedActivated)
-                speedDivisor = 4;
-            else speedDivisor = 8;
-            if (timerRepeats % speedDivisor == 0) {
-                Drawings.drawTime(timerRepeats / speedDivisor,pieces);
-                if ((timerRepeats / speedDivisor)%10==0) {
-                    insertFruits();
-                }
-            }
+    }//Replace labels starting at given x,y and right and down with one label. used for adding game info around the board easily.
 
 
-            if (level>1&&ghosts[1].isLoaded())
-                fire(ghosts[1]);
-
-            if (level>2&&ghosts[2].isLoaded())
-                fire(ghosts[2]);
-            checkImpact();
-            timerRepeats++;
-            checkCompletion();
-            if (level!=3)
-                pills=0;
-
-        });
-    }
 
     public void drawBlack(Piece piece) {
         BufferedImage blackImage = new BufferedImage(piece.getWidth(), piece.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -190,11 +179,9 @@ public class Board extends JPanel {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, piece.getWidth(), piece.getHeight());
         piece.setImage(blackImage);
-    }
+    }//Take a piece and draw it black.
 
     public void updateScore(Piece piece){
-
-
         if (!piece.isEaten()){
             currentScore[0]+=piece.getWorth();
             switch (piece.getWorth()){
@@ -226,49 +213,34 @@ public class Board extends JPanel {
                     currentScore[1]++;
                     break;
             }
-            if (piece.getFruit()==null||piece.getWorth()-piece.getFruit().getWorth()!=0) {
-                pills--;
-            }
-
             piece.setEaten(true);
             Drawings.reDrawScoreLabel(pieces[22][7],currentScore[0],currentHighScore,pieces);
         }
-    }
+    }//Update Score if a piece is eaten according to what was eaten.
 
     //-----------------------First Draw Methods------------------//
 
     private void drawInfo() {
-        swapIn();
-        drawGate(pieces[pacman.getLocation()[0] + 1][pacman.getLocation()[1]]);
-        drawLife(pieces,lives);
-        drawTimeLabel(this);
-        drawScoreLabel(this);
-        drawHighScoreLabel(this);
-        drawPauseButton(this);
-        drawSpeedLabel(this);
-        drawTime(0,pieces);
-        drawFruitsLabel(this);
-        drawGhostsAddLabel(this);
-    }
+        swapIn();//Swap the pacman into the Board.
+        drawGate(pieces[pacman.getLocation()[0] + 1][pacman.getLocation()[1]]);//Draw Ghost cage Gate.
+        drawLife(pieces,lives);//Draw number of lives left.
+        drawTimeLabel(this);//Draw Time Label.
+        drawScoreLabel(this);//Draw Score Label.
+        drawHighScoreLabel(this);//Draw High Score Label.
+        drawPauseButton(this);//Draw Pause Label.
+        drawSpeedLabel(this);//Draw Speed Label.
+        drawTime(0,pieces);//Update Time Label with current Time.
+        drawFruitsLabel(this);//Draw Eaten Fruits Label.
+        drawGhostsAddLabel(this);//Draw Ghosts add label (BONUS).
+    }//Draw Info Surrounding the board.
 
     private void swapIn() {
         pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].setWorth(0);
         pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].getImage().getGraphics().drawImage(pacman.getImage(),0,0,null);//setImage(pacman.getImage());
-    }
-
-
+    }//Swap Pacman into location as recognized on CSV by board Construction.
 
     //---------------------First Draw Methods END-----------------------//
-    //--------------------- re-draw Methods-----------------------//
-
-    //--------------------- re-draw Methods END-----------------------//
-    //------------------------Level Initiation--------------------------------//
-
-
-
-    //-----------------------Level Initiation END---------------------------//
     //------------------------Fruits-----------------------------//
-
     private void insertFruits(){
         Piece piece;
         Fruit fruit;
@@ -279,7 +251,7 @@ public class Board extends JPanel {
             x = (int)(Math.random() * 19 + 2);
             y = (int)(Math.random() * 22 + 6);
             piece = pieces[x][y];
-            if (!piece.isWall()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])&&checkCell(x,y)&&piece.getWorth()!=50){
+            if (!piece.isWall()&&!piece.isGhostHouse()&&!(x==pacman.getLocation()[0]&&y==pacman.getLocation()[1])&&checkCell(x,y)&&piece.getWorth()!=50){
                 index = (int)(Math.random()*fruits.length);
                 if (fruits[index].isOut()){
                     index = 0;
@@ -299,8 +271,7 @@ public class Board extends JPanel {
                 piece.repaint();
                 num--;
             }
-        }
-
+        }//Randomly insert Fruit on Board only if there's no wall on piece, not inside Ghosts cage, not on occupied Piece (Will Cause Images Errors).
 
     }
 
@@ -341,15 +312,15 @@ public class Board extends JPanel {
                 fruits[11] = new Fruit(2);
                 break;
         }
-    }
+    }//Initiate the needed fruit for the level.
 
     //-------------------------Ghosts-----------------------------//
 
     private void prepareGhosts(){
         ghosts = new Ghost[7];
         ghosts[0] = new Ginky();
-        ghosts[1] = new Inky();
-        ghosts[2] = new Blinky();
+        ghosts[1] = new Inky(level);
+        ghosts[2] = new Blinky(level);
         ghosts[0].setLocation(12,16);
         ghosts[1].setLocation(12,17);
         ghosts[2].setLocation(12,15);
@@ -357,11 +328,7 @@ public class Board extends JPanel {
         ghosts[0].insert(pieces[12][16]);
         ghosts[1].insert(pieces[12][17]);
         ghosts[2].insert(pieces[12][15]);
-    }
-
-    //-----------------------------Movement----------------------//
-
-
+    }//Initiate the Basic Ghosts and insert them into Ghost Cage.
 
     private boolean checkCell(int x,int y){
         if (pieces[x][y].getFruit()!=null)
@@ -373,12 +340,12 @@ public class Board extends JPanel {
             }
         }
         return true;
-    }
+    }//Check if a cell at x,y is occupied.
 
     private void fire(Ghost ghost){
         ghosts[ghost.getId()+2] = ghost.getWeapon();
         ghost.fire(pieces);
-    }
+    }//Fire ghost's Weapon.
 
     private void checkImpact(){
         int myX,myY;
@@ -392,7 +359,7 @@ public class Board extends JPanel {
                 }
             }
         }
-    }
+    }//Check if 2 players are on the same tile and start Visitor Pattern if necessary.
 
     public void cleanBoard(){
 
@@ -429,7 +396,7 @@ public class Board extends JPanel {
         timerRepeats = 0;
         drawTime(0,pieces);
         pauseStatus=true;
-    }
+    }//After a round is over Stop Timers and Clean the Board for next use.
 
     public void start(){
         for (int i=0;i<7;i++){
@@ -440,13 +407,12 @@ public class Board extends JPanel {
         for (Fruit fruit : fruits) {
             try {
                 if (fruit.isOut()) {
-                    fruit.getTimer().start();
                     pieces[fruit.getX()][fruit.getY()].getFruitTimer().start();
                 }
             } catch (NullPointerException ignored) {
             }
         }
-    }
+    }//Start all Timers (Except Kill/Death Timers).
 
     public void stop(){
 
@@ -457,12 +423,12 @@ public class Board extends JPanel {
         timer.stop();
         for (Fruit fruit : fruits) {
             try {
-                fruit.getTimer().stop();
                 pieces[fruit.getX()][fruit.getY()].getFruitTimer().stop();
             } catch (NullPointerException ignored) {
             }
         }
-    }
+    }//Stop all Timers (Except Kill/Death Timers).
+
     public void speedUp(){
         for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()/2);
@@ -473,7 +439,7 @@ public class Board extends JPanel {
         timer.setDelay(timer.getDelay()/2);
         timerRepeats = timerRepeats*2;
         speedActivated=true;
-    }
+    }//Speed up all Timers (Except Kill/Death Timers).
 
 
     public void speedDown(){
@@ -485,20 +451,24 @@ public class Board extends JPanel {
         timer.setDelay(timer.getDelay()*2);
         timerRepeats = timerRepeats/2;
         speedActivated=false;
-    }
+    }//Slow down all Timers (Except Kill/Death Timers).
 
     public void eatenFruit(Fruit fruit){
         eatenFruits.push(fruit);
         reDrawFruitsLabel(this,eatenFruits.size(), fruit);
-    }
+    }//Update Board when a fruit has been eaten.
 
     private void checkCompletion(){
-        if (pills<=0){
-            stop();
-            getGraphics().dispose();
-            gameFrame.finishBoard(id,lives,level,currentScore);
+        for (int i=0;i<32;i++){
+            for (int j=0;j<32; j++){
+                if (!pieces[i][j].isEaten()&&pieces[i][j].getFruit()==null)
+                    return;
+            }
         }
-    }
+        stop();
+        getGraphics().dispose();
+        gameFrame.finishBoard(id, lives, level, currentScore);
+    }//Check if All pills were Eaten.
 
     public void addExtraGhost(int id){
         ghosts[id] = new ExtraGhost(id,pieces[12][16].getImage());
@@ -508,7 +478,7 @@ public class Board extends JPanel {
         g.setColor(Color.BLUE);
         g.fillRect(0, getHeight() - 1, getWidth(), 2);
         pieces[12][16].repaint();
-    }
+    }//Add Extra Ghost (BONUS).
 
 
 

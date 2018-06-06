@@ -12,6 +12,15 @@ import static Logic.Globals.*;
 
 public class Drawings {
 
+    /**
+     * Instead of Filling the Board Class, We Put all the large Drawing functions here to make it easier
+     * to Locate Code in Project.
+     *
+     * We Split the Methods into 2 Groups:
+     *      1. First Draw Methods - Are Called on Board Initiation and Draws needed Labels on it for the First time.
+     *      2. Re-Draw Methods = Methods that Re-draw Existing Labels.
+     */
+
 
 
     //---------------------First Draw Methods-----------------------//

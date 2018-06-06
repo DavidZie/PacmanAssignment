@@ -13,11 +13,13 @@ import static Logic.Globals.pieceSize;
 
 public class Movement {
 
-
+    /**
+     * Class Contains Function that move the Players Around the Board.
+     */
 
     public static void movePacman(int direction, Board board) {
         if (board.getPacman().isFrozen())
-            return;
+            return;//if Pacman is Frozen it Cannot Move.
         int[] pacmanLocation = board.getPacman().getLocation();
         Piece[][] pieces = board.getPieces();
         Pacman pacman = board.getPacman();
@@ -84,8 +86,9 @@ public class Movement {
                 pacmanLocation[1] -= 1;
                 break;
         }
+        board.getPacman().setFacing(direction);
         gameFrame.repaint();
-    }
+    }//move the Pacman and leave a black Tile Behind it.
 
     public static void moveGhost(int direction, Ghost ghost, Board board) {
         ghost.setFacing(direction);
@@ -163,13 +166,13 @@ public class Movement {
                 break;
         }
         gameFrame.repaint();
-    }
+    }//Move Ghost by setting the destination tile image to be the ghost's image, put back on the Ghost's previous tile it's original image.
 
 
     private static BufferedImage tempCreator(int x, int y, Board board){
         BufferedImage temp = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
         Ghost[] ghosts= board.getGhosts();
-        for (int i=0;i<5;i++){
+        for (int i=0;i<7;i++){
             if (ghosts[i]!=null) {
                 if (ghosts[i].getLocation()[0] == x && ghosts[i].getLocation()[1] == y) {
                     return ghosts[i].getCoveredImage();
@@ -178,11 +181,11 @@ public class Movement {
         }
         temp.getGraphics().drawImage(board.getPieces()[x][y].getImage(),0,0,null);
         return temp;
-    }
+    }//Create special image in case A Ghost Tries to Move into a tile already Occupied by a Different Ghost.
 
     private static boolean killWeapon(int x, int y, Ghost ghost, Board board) {
-        return x == 1 | y == 5 | x == 22 | y == 27 || board.getGhosts()[4] == null || board.getGhosts()[4] != ghost;
-    }
+        return x == 1 | y == 5 | x == 22 | y == 27 || board.getGhosts()[4] != ghost;
+    }//Return Whether this Weapon should be Destroyed.
 
 
 }

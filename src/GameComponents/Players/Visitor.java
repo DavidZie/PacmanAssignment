@@ -12,4 +12,5 @@ public interface Visitor {
     void visit(Water water, Board board);
     void visit(Fireball fireball, Board board);
     void visit(ExtraGhost extraGhost, Board board);
+    //All objects that can visit.
 }

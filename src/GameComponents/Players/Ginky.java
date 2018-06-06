@@ -6,7 +6,6 @@ import Logic.Movement;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 import static Logic.Globals.*;
 
@@ -18,8 +17,10 @@ public class Ginky extends Ghost implements Visited {
     public Ginky() {
         super(0,true);
         setupTimer();
-    }
+    }//Constructor
 
+
+    //-----------------------Getters and Setters--------------------------//
     public void setDead(boolean dead) {
         this.dead = dead;
         Graphics g = image.getGraphics();
@@ -28,11 +29,13 @@ public class Ginky extends Ghost implements Visited {
         g = getCoveredImage().getGraphics();
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
-    }
+    }//If ghost is Killed, Draw Images Black to avoid chance of reusing them.
 
     public void setDisappear(boolean disappear) {
         this.disappear = disappear;
     }
+
+    //-----------------------Timer--------------------------//
 
     private void setupTimer(){
         repeats = 0;
@@ -40,17 +43,10 @@ public class Ginky extends Ghost implements Visited {
             if (repeats<=21|dead){
                 repeats++;
                 return;
-            }
+            }//Do nothing first 7 seconds.
 
-            if (disappear) {
-                if (repeats==22){
-                    BufferedImage newImage = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
-                    Graphics g = newImage.getGraphics();
-                    g.setColor(Color.BLACK);
-                    g.fillRect(0,0,pieceSize,pieceSize);
-                    image.getGraphics().drawImage(newImage, 0, 0, pieceSize, pieceSize, null);
-                }
-                else if (repeats==37)
+            if (disappear) {//If disappeared, reappear after 5 seconds.
+                if (repeats==37)
                     disappear=false;
                 else image.getGraphics().drawImage(getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
             } else image.getGraphics().drawImage(gameImagesArray[4][0], 0, 0, pieceSize, pieceSize, null);
@@ -59,7 +55,7 @@ public class Ginky extends Ghost implements Visited {
                 Movement.moveGhost((int)getRoute().pop(), this,gameFrame.getBoard());
 
             if (repeats==27)
-                setChasing(true);
+                setChasing(true);//Start Chasing 2 seconds after exiting cage.
 
             repeats++;
 
@@ -69,6 +65,6 @@ public class Ginky extends Ghost implements Visited {
     @Override
     public void impact(Visitor visitor) {
         visitor.visit(this, gameFrame.getBoard());
-    }
+    }//Visit pacman.
 
 }

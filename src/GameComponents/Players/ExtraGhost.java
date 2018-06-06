@@ -8,12 +8,17 @@ import java.awt.image.BufferedImage;
 
 import static Logic.Globals.gameFrame;
 
+/**
+ * BONUS: User can add these ghosts for bigger challenge.
+ * These ghosts always kill pacman but cannot shoot anything.
+ */
+
 public class ExtraGhost extends Ghost implements Visited {
     public ExtraGhost(int id, BufferedImage coveredImage) {
         super(id+1,true);
         setCoveredImage(coveredImage);
         setupTimer();
-    }
+    }//Constructor.
 
 
     private void setupTimer(){

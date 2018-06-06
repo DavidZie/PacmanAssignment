@@ -12,6 +12,11 @@ import java.util.Scanner;
 
 public class Globals {
 
+    /**
+     * Static Class that Load and Save Data from External Sources (CSV, Images).
+     * Class Also Save Final Constants.
+     */
+
     //------------Global Variables--------------------//
 
     public static final int boardSize = 32;

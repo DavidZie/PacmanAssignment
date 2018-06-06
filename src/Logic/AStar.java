@@ -8,12 +8,29 @@ public class AStar {
 
     public static Stack search(Ghost ghost, Board board){
 
-        //Initialize non-Walled Cells as nodes.
+        int destX,destY,myX,myY;
+        if (ghost.isChasing()){
+            destX = board.getPacman().getLocation()[0];
+            destY = board.getPacman().getLocation()[1];
+        } else {
+            destX = 2;
+            destY = 6;
+        }
+        myX = ghost.getLocation()[0];
+        myY = ghost.getLocation()[1];
+        //Gather Info Regarding What to Chase and current locations.
+
+        //Initialize non-Walled Cell as a node.
         Node[][] nodes = new Node[32][32];
+        int diffX,diffY,distance;
         for (int i=0;i<32;i++){
             for (int j=0;j<32;j++){
-                if (!board.getPieces()[i][j].isWall())
-                    nodes[i][j]=new Node(i,j,1);
+                if (!board.getPieces()[i][j].isWall()) {
+                    diffX = i - destX;
+                    diffY = j - destY;
+                    distance = Math.abs(diffX*diffY);//Cheapest Possible Path.
+                    nodes[i][j] = new Node(i, j, distance);
+                }
             }
         }
 
@@ -27,10 +44,11 @@ public class AStar {
             for (int j=0;j<32;j++){
                 if (nodes[i][j]!=null){
                     boolean up = !board.getPieces()[i-1][j].isWall(), right = !board.getPieces()[i][j+1].isWall(), down = !board.getPieces()[i+1][j].isWall(),left = !board.getPieces()[i][j-1].isWall();
+                    //The line Above Checks for walls to make the Edge checking easy.
                     if (up) {
-                        edge1 = new Edge(nodes[i - 1][j], 1);
-                        edges.push(edge1);
-                    }
+                        edge1 = new Edge(nodes[i - 1][j], 1);           //For Every Node, First Save it's Edges into a Stack.
+                        edges.push(edge1);                                     //Second, Count The Edges we saved.
+                    }                                                          //Third, Put the Edges into an Array in the needed size For later use.
                     if (right) {
                         edge2 = new Edge(nodes[i][j + 1], 1);
                         edges.push(edge2);
@@ -43,25 +61,15 @@ public class AStar {
                         edge4 = new Edge(nodes[i][j - 1], 1);
                         edges.push(edge4);
                     }
-                    nodes[i][j].adjacencies = new Edge[edges.size()];
-                    for (int l=0;l<nodes[i][j].adjacencies.length;l++){
-                        nodes[i][j].adjacencies[l]=edges.pop();
+                    nodes[i][j].neighbors = new Edge[edges.size()];
+                    for (int l=0;l<nodes[i][j].neighbors.length;l++){
+                        nodes[i][j].neighbors[l]=edges.pop();
                     }
                 }
             }
         }
-        int destX,destY,myX,myY;
-        if (ghost.isChasing()){
-            destX = board.getPacman().getLocation()[0];
-            destY = board.getPacman().getLocation()[1];
-        } else {
-            destX = 2;
-            destY = 6;
-        }
-        myX = ghost.getLocation()[0];
-        myY = ghost.getLocation()[1];
 
-        AstarSearch(nodes[myX][myY],nodes[destX][destY]);
+        AstarSearch(nodes[myX][myY],nodes[destX][destY]);//Search for Shortest Path From nodes[myX][myY] to node [destX][destY].
 
         return route(nodes[destX][destY]);
     }
@@ -84,48 +92,47 @@ public class AStar {
                 path.push(node);
             }
         }
-        //Collections.reverse(path);
         return moves;
     }
 
     private static void AstarSearch(Node source, Node goal){
 
-        Set<Node> explored = new HashSet<>();
+        Set<Node> explored = new HashSet<>();//Set of Explored Nodes.
 
-        //override compare method
+
         PriorityQueue<Node> queue = new PriorityQueue<>(20,
                 Comparator.comparingDouble(i -> i.f_scores)
-        );
+        );//Create Comparator for Priority Queue.
 
-        //cost from start
-        source.g_scores = 0;
 
-        queue.add(source);
+        source.g_scores = 0;//Cost from start.
+
+        queue.add(source);//Add the node representing the Tile THe Ghost on to the Queue.
 
         boolean found = false;
 
-        while((!queue.isEmpty())&&(!found)){
+        while((!queue.isEmpty())&&(!found)){ //Keep Searching until A Path Was Found or the Priority Queue is Empty.
 
-            //the node in having the lowest f_score value
-            Node current = queue.poll();
 
-            explored.add(current);
+            Node current = queue.poll();//The node that has the lowest f_score value
 
-            //goal found
+            explored.add(current);//Add Current Node to Explored Set.
+
+
             if(current.x==goal.x&&current.y==goal.y){
                 found = true;
-            }
+            }//Check If Current Node is our destination.
 
-            //check every child of current node
-            for(Edge e : current.adjacencies){
-                Node child = e.target;
-                double cost = e.cost;
-                double temp_g_scores = current.g_scores + cost;
-                double temp_f_scores = temp_g_scores + child.h_scores;
+
+            for(Edge e : current.neighbors){//check every neighbor of current node.
+                Node child = e.target;//Neighbor Node.
+                double cost = e.cost;//Travel Cost (Always 1 in our case).
+                double temp_g_scores = current.g_scores + cost;//Temporarily Save the Travel Cost if Traveling to this node.
+                double temp_f_scores = temp_g_scores + child.h_scores;//Temporarily Save the Estimated final Travel Cost if Traveling to this node.
 
 
                                 /*If child node has been evaluated and
-                                the newer f_score is NOT higher, skip. If child node is not in queue or
+                                the newer f_score is higher, skip. If child node is not in queue or
                                 newer f_score is lower, Execute.*/
 
                 if(((!queue.contains(child))||(temp_f_scores < child.f_scores))&&!((explored.contains(child))&&(temp_f_scores >= child.f_scores))){
@@ -137,10 +144,8 @@ public class AStar {
                     if(queue.contains(child)){
                         queue.remove(child);
                     }
-
                     queue.add(child);
-
-                }
+                }//Add child to Queue with Updated Travel Values.
             }
         }
     }
@@ -148,12 +153,12 @@ public class AStar {
 
 class Node{
 
-    public final int x,y;
-    public double g_scores;
-    public final double h_scores;
-    public double f_scores = 0;
-    public Edge[] adjacencies;
-    public Node parent;
+    public final int x,y;//Node location on Graph.
+    public double g_scores;//Travel Cost so Far.
+    public final double h_scores;//Heuristic value, Minimal Estimated distance to Destination from This node.
+    public double f_scores = 0;//Total Travel Score.
+    public Edge[] neighbors;//Node's Neighbors.
+    public Node parent;//Node Parent on Path.
 
     Node(int x, int y, double hVal){
         this.x = x;
@@ -164,8 +169,8 @@ class Node{
 }
 
 class Edge{
-    public final double cost;
-    public final Node target;
+    public final double cost;//Travel Cost on this Edge.
+    public final Node target;//Destination Node.
 
     Edge(Node targetNode, double costVal){
         target = targetNode;

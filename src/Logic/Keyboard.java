@@ -10,13 +10,15 @@ import java.awt.event.KeyEvent;
 import static Logic.Drawings.reDrawPausePiece;
 import static Logic.Globals.gameFrame;
 
+/**
+ * This Class Binds the KeyBoard Keys to Actions.
+ * Arrows for Movement and Space to Pause.
+ */
 
 public class Keyboard {
 
-
     public static void bindKeyboard(JPanel jPanel, Board board) {
         InputMap inputMap = jPanel.getInputMap();
-
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0), "Left");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0), "Right");
         inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0), "Up");

@@ -1,6 +1,5 @@
 package GameComponents;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -9,15 +8,13 @@ import static Logic.Globals.pieceSize;
 
 public class Fruit extends Label {
 
-    private int id;
-    private int worth;
+    private int id;//Fruit ID.
+    private int worth;//Fruit Points worth.
 
-    private boolean out;
+    private boolean out;//Is Fruit out on Board?
 
-    private BufferedImage myImage;
-    private int repeats;
-    private Timer timer;
-    private int x,y;
+    private BufferedImage myImage;//Fruit Image.
+    private int x,y;//Fruit Location.
 
     Fruit(int id){
         this.id=id;
@@ -25,9 +22,9 @@ public class Fruit extends Label {
         myImage = new BufferedImage(pieceSize,pieceSize,BufferedImage.TYPE_INT_ARGB);
         myImage.getGraphics().drawImage(gameImagesArray[3][id],0,0,null);
         out = false;
-        timerSetup();
-    }
-
+        //timerSetup();
+    }//Constructor
+    //-----------------------Getters and Setters--------------------------//
     public void setX(int x) {
         this.x = x;
     }
@@ -54,20 +51,12 @@ public class Fruit extends Label {
         this.out = out;
     }
 
-    public void setRepeats(int repeats) {
-        this.repeats = repeats;
-    }
-
     public int getWorth() {
         return worth;
     }
 
     public BufferedImage getMyImage() {
         return myImage;
-    }
-
-    public Timer getTimer() {
-        return timer;
     }
 
     public int getId() { return id; }
@@ -79,22 +68,5 @@ public class Fruit extends Label {
         g.setColor(Color.BLACK);
         g.fillRect(0,0,pieceSize,pieceSize);
         return image;
-    }
-
-    private void timerSetup(){
-        repeats=0;
-        timer = new Timer(500,e -> {
-
-            if (repeats%2==1){
-                myImage = blackImage();
-            } else {myImage.getGraphics().drawImage(gameImagesArray[3][id],0,0,null);}
-            if (repeats==6){
-                timer.stop();
-                repeats=0;
-            }
-
-            repeats++;
-        });
-    }
-
+    }//Draw Black Image for Quick and easy use.
 }

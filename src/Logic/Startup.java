@@ -12,8 +12,8 @@ public class Startup {
 
     public static void main(String[] args) {
 
-        MainFrame.getInstance().setVisible(true);
-        //music();
+        MainFrame.getInstance().setVisible(true);//Show The Main Frame.
+        music();
 
     }
 
