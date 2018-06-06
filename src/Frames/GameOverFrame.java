@@ -37,7 +37,7 @@ class GameOverFrame extends JFrame{
         containerPanel.add(label2);
         JPanel cont = new JPanel();
         if (record) {
-            JTextField text = new JTextField(15);
+            JTextField text = new JTextField(10);
             text.setFont(new Font("David", Font.PLAIN, 35));
             text.setHorizontalAlignment(JTextField.CENTER);
             containerPanel.add(text, BorderLayout.CENTER);
@@ -47,7 +47,6 @@ class GameOverFrame extends JFrame{
                 WinnerTableFrame.getInstance().addRowToTable(text.getText(), points);
                 WinnerTableFrame.getInstance().setVisible(true);
             };
-
 
             JButton backBtn1 = new JButton("Save");
             backBtn1.setFont(new Font("Matura MT Script Capitals", Font.PLAIN, 30));
@@ -59,21 +58,28 @@ class GameOverFrame extends JFrame{
         backBtn2.addActionListener(backToMainListener);
         cont.add(backBtn2,BorderLayout.EAST);
 
+        JPanel panel=new JPanel();
+        if (record)
+            panel.setPreferredSize(new Dimension(400,180));
+        else
+            panel.setPreferredSize(new Dimension(400,240));
         JLabel label= new JLabel();
         label.setText("<html> Total Score: "+points[0] + "<br>Regular Pills: "+points[1]+ "<br>Energy Pills: "+points[2]+"<br>Pineapples : "+points[3]+"<br>Apples: "+points[4]+"<br>Strawberries: "+points[5]+"<br></html>");
-        label.setFont(new Font("David",Font.BOLD,20));
+        if (record)
+            label.setFont(new Font("David",Font.BOLD,35));
+        else
+            label.setFont(new Font("David",Font.BOLD,22));
         label.setForeground(Color.white);
         label.setBackground(Color.black);
-        JPanel cont2 =new JPanel();
-        cont2.setBackground(Color.BLACK);
-        cont2.add(label);
-        containerPanel.add(label);
+        panel.setBackground(Color.BLACK);
+        panel.add(label);
+        containerPanel.add(panel);
 
-        containerPanel.add(cont,BorderLayout.PAGE_END);
+        containerPanel.add(cont);
     }//Constructor
 
     private void createFrame(){
-        setSize(596,678);//Set Frame dimensions.
+        setSize(480,678);//Set Frame dimensions.
         setResizable(false);//Lock Frame Size.
         setVisible(true);//Make Frame Visible.
         setLocationRelativeTo(null);//Center the frame on the screen.
