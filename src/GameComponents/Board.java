@@ -47,6 +47,8 @@ public class Board extends JPanel {
         prepareGhosts();//Prepare Ghosts for this level.
         timerSetup();//Setup Board Timer.
         stop();//Make sure to Stop All running Timers to be safe.
+
+
     }//Constructor
     //----------------Board Initiation----------------------//
     //Very important therefore appearing before getters and setters.
@@ -74,6 +76,9 @@ public class Board extends JPanel {
     //-----------------------Getters and Setters----------------//
 
 
+    public int getLevel() {
+        return level;
+    }
 
     public int getLives() {
         return lives;
@@ -124,7 +129,7 @@ public class Board extends JPanel {
         return currentHighScore;
     }
 
-    //--------------------------Methods--------------------------//
+    //--------------------------Timer--------------------------//
 
     private void timerSetup() {
         timerRepeats=0;
@@ -145,13 +150,36 @@ public class Board extends JPanel {
             if (level>2&&ghosts[2].isLoaded())//Blinky can fire only on level 3.
                 fire(ghosts[2]);
 
-            checkImpact();//Check if 2 players are on the same Piece.
             timerRepeats++;//Ticks.
             checkCompletion();//Check if Board is Completed.
 
         });
     }
+//-----------------------First Draw Methods------------------//
 
+    private void drawInfo() {
+        swapIn();//Swap the pacman into the Board.
+        drawGate(pieces[pacman.getLocation()[0] + 1][pacman.getLocation()[1]]);//Draw Ghost cage Gate.
+        drawLife(pieces,lives);//Draw number of lives left.
+        drawTimeLabel(this);//Draw Time Label.
+        drawScoreLabel(this);//Draw Score Label.
+        drawHighScoreLabel(this);//Draw High Score Label.
+        drawPauseButton(this);//Draw Pause Label.
+        drawSpeedLabel(this);//Draw Speed Label.
+        drawTime(0,pieces);//Update Time Label with current Time.
+        drawFruitsLabel(this);//Draw Eaten Fruits Label.
+        drawGhostsAddLabel(this);//Draw Ghosts add label (BONUS).
+        mainMenuLabel(this);//Draw Return to Main Menu Label.
+        fruitCounterPiece(this);
+        drawLevelPiece(this);
+    }//Draw Info Surrounding the board.
+
+    private void swapIn() {
+        pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].setWorth(0);
+        pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].getImage().getGraphics().drawImage(pacman.getImage(),0,0,null);//setImage(pacman.getImage());
+    }//Swap Pacman into location as recognized on CSV by board Construction.
+
+    //---------------------First Draw Methods END-----------------------//
     public Piece replaceLabels(int x, int y, int width, int height) {
         Piece newPiece = new Piece(null);
         GridBagConstraints constraints = new GridBagConstraints();
@@ -217,29 +245,6 @@ public class Board extends JPanel {
             Drawings.reDrawScoreLabel(pieces[22][7],currentScore[0],currentHighScore,pieces);
         }
     }//Update Score if a piece is eaten according to what was eaten.
-
-    //-----------------------First Draw Methods------------------//
-
-    private void drawInfo() {
-        swapIn();//Swap the pacman into the Board.
-        drawGate(pieces[pacman.getLocation()[0] + 1][pacman.getLocation()[1]]);//Draw Ghost cage Gate.
-        drawLife(pieces,lives);//Draw number of lives left.
-        drawTimeLabel(this);//Draw Time Label.
-        drawScoreLabel(this);//Draw Score Label.
-        drawHighScoreLabel(this);//Draw High Score Label.
-        drawPauseButton(this);//Draw Pause Label.
-        drawSpeedLabel(this);//Draw Speed Label.
-        drawTime(0,pieces);//Update Time Label with current Time.
-        drawFruitsLabel(this);//Draw Eaten Fruits Label.
-        drawGhostsAddLabel(this);//Draw Ghosts add label (BONUS).
-    }//Draw Info Surrounding the board.
-
-    private void swapIn() {
-        pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].setWorth(0);
-        pieces[pacman.getLocation()[0]][pacman.getLocation()[1]].getImage().getGraphics().drawImage(pacman.getImage(),0,0,null);//setImage(pacman.getImage());
-    }//Swap Pacman into location as recognized on CSV by board Construction.
-
-    //---------------------First Draw Methods END-----------------------//
     //------------------------Fruits-----------------------------//
     private void insertFruits(){
         Piece piece;
@@ -347,7 +352,7 @@ public class Board extends JPanel {
         ghost.fire(pieces);
     }//Fire ghost's Weapon.
 
-    private void checkImpact(){
+    public void checkImpact(){
         int myX,myY;
         for (int i=0;i<7;i++){
             if (ghosts[i]!=null){
@@ -469,6 +474,20 @@ public class Board extends JPanel {
         getGraphics().dispose();
         gameFrame.finishBoard(id, lives, level, currentScore);
     }//Check if All pills were Eaten.
+
+
+    private void cleanGarbage(){
+
+        for (int i=0;i<32;i++){
+            for (int j=0;j<32; j++){
+                if (!pieces[i][j].isWall()&&!pieces[i][j].isGhostHouse()&&!(i==pacman.getLocation()[0]&&j==pacman.getLocation()[1])&&checkCell(i,j))
+                    pieces[i][j].reDrawMe();
+            }
+        }
+
+
+    }//All the Image Switching done might cause tiles no to display the correct image. Redraw those tiles.
+
 
     public void addExtraGhost(int id){
         ghosts[id] = new ExtraGhost(id,pieces[12][16].getImage());

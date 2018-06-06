@@ -4,6 +4,7 @@ import GameComponents.Board;
 import GameComponents.Fruit;
 import GameComponents.Piece;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -185,8 +186,44 @@ public class Drawings {
                 board.addExtraGhost(6);
             }
         });
-
     }
+
+    public static void mainMenuLabel(Board board){
+        Piece mainMenuPiece = board.replaceLabels(10, 2, 3, 2);
+        mainMenuPiece.drawData("1234");
+        Graphics g = mainMenuPiece.getImage().getGraphics();
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("  Main",10,20);
+        g.drawString(" Menu",10,40);
+        mainMenuPiece.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                board.stop();
+                int n = JOptionPane.showInternalConfirmDialog(null, "Are you Sure you Want Leave Game?.", "Alert", JOptionPane.OK_CANCEL_OPTION);
+                if (n==JOptionPane.YES_OPTION){
+                    gameFrame.endGame(board.getCurrentScore());
+                } else board.start();
+            }
+        });
+    }
+
+    public static void fruitCounterPiece(Board board){
+        Piece fruitCounterPiece = board.replaceLabels(8,27,1,1);
+        fruitCounterPiece.drawData("4");
+    }
+
+    public static void drawLevelPiece(Board board){
+        Piece levelPiece = board.replaceLabels(1,18,3,1);
+        levelPiece.drawData("3");
+        Graphics g = levelPiece.getImage().getGraphics();
+        g.setColor(Color.GREEN);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString("Level "+board.getLevel(),5,20);
+    }
+
+
     //---------------------First Draw Methods END-----------------------//
 
     //--------------------- re-draw Methods-----------------------//
@@ -268,8 +305,9 @@ public class Drawings {
 
     public static void reDrawFruitsLabel(Board board, int eatenFruits, Fruit fruit){
         Piece fruitPiece = board.getPieces()[9][27];
-        fruitPiece.getImage().getGraphics().drawImage(fruit.getMyImage(),2,(pieceSize-1)*eatenFruits,null);
+        fruitPiece.getImage().getGraphics().drawImage(fruit.getMyImage(),2,(pieceSize-1)*(eatenFruits-1) ,null);
         fruitPiece.repaint();
+        reDrawFruitCounterPiece(board.getPieces()[8][27],eatenFruits);
     }
 
     private static void reDrawGhostLabel(Piece piece){
@@ -281,6 +319,14 @@ public class Drawings {
         g.drawString("ADD", 22, 30);
         g.drawString("GHOST", 5, 60);
         piece.repaint();
+    }
+
+    private static void reDrawFruitCounterPiece(Piece piece,int fruitsEaten){
+        piece.drawData("4");
+        Graphics g = piece.getImage().getGraphics();
+        g.setColor(Color.YELLOW);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 18));
+        g.drawString(String.valueOf(fruitsEaten),5,20);
     }
 
 

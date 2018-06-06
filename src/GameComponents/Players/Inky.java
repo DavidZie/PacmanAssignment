@@ -37,6 +37,10 @@ public class Inky extends Ghost implements Visited {
             if (repeats==18)
                 setChasing(true);
 
+            if (repeats==26)
+                setChasing(true);//Used for when Inky Freezes Pacmen.
+            // Chasing was stopped because pacman was frozen and ticker was reset to 19. So we need to get away from pacman until it unfreezes.
+
             if (repeats==21&level>1)
                 charging=true;
 

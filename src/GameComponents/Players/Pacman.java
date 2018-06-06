@@ -231,6 +231,7 @@ public class Pacman implements Visited,Visitor {
             case 2:
                 freeze();
                 inky.setChasing(false);
+                inky.setRepeats(19);
                 board.getCurrentScore()[0]=board.getCurrentScore()[0]-10;
                 break;
             case 3:

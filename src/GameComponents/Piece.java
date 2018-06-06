@@ -180,6 +180,23 @@ public class Piece extends JLabel {
         worth = 50;
     }
 
+    public void reDrawMe(){
+        switch (worth){
+            case 0:
+                drawBlackImage();
+                break;
+            case 10:
+                drawData("0");
+                break;
+            case 50:
+                drawData("6");
+        }
+        if (worth>=100){
+            addFruit(fruit);
+        }
+        repaint();
+    }
+
     //-----------------------Methods--------------------------//
 
     public void addFruit(Fruit fruit){
@@ -216,10 +233,10 @@ public class Piece extends JLabel {
                 g.setComposite(AlphaComposite.SrcOver.derive(0.15f));
                 g.drawImage(blackImage, 0, 0, null);
                 repaint();
-            } else if (repeats==40) {
+            } else if (repeats==38) {
                 fruitTimer.stop();
                 killFruit();
-            }//20 seconds After Inserting Fruit Kick it out.
+            }// About 20 seconds After Inserting Fruit Kick it out.
 
         });
         fruitTimer.start();
@@ -237,6 +254,7 @@ public class Piece extends JLabel {
             }
             drawData(dataString);
             fruit.setOut(false);
+            this.fruit=null;
         }
     }//Kill Fruit. If it was Eaten no need to do anything. If It disappeared reset the piece into the state it was before the Fruit Was Added.
 }
