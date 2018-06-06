@@ -60,15 +60,15 @@ class GameOverFrame extends JFrame{
 
         JPanel panel=new JPanel();
         if (record)
-            panel.setPreferredSize(new Dimension(400,180));
+            panel.setPreferredSize(new Dimension(400,200));
         else
             panel.setPreferredSize(new Dimension(400,240));
         JLabel label= new JLabel();
         label.setText("<html> Total Score: "+points[0] + "<br>Regular Pills: "+points[1]+ "<br>Energy Pills: "+points[2]+"<br>Pineapples : "+points[3]+"<br>Apples: "+points[4]+"<br>Strawberries: "+points[5]+"<br></html>");
         if (record)
-            label.setFont(new Font("David",Font.BOLD,35));
+            label.setFont(new Font("David",Font.BOLD,30));
         else
-            label.setFont(new Font("David",Font.BOLD,22));
+            label.setFont(new Font("David",Font.BOLD,38));
         label.setForeground(Color.white);
         label.setBackground(Color.black);
         panel.setBackground(Color.BLACK);
