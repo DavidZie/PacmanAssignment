@@ -53,11 +53,22 @@ class GameOverFrame extends JFrame{
         backBtn2.setFont(new Font("Matura MT Script Capitals",Font.PLAIN,30));
         backBtn2.addActionListener(backToMainListener);
         cont.add(backBtn2,BorderLayout.EAST);
+
+        JLabel label= new JLabel();
+        label.setText("<html> Your Score: "+points[0] + "<br>The number of the regular pills you collate : "+points[1]+ "<br>The number of the energy pills you collate : "+points[2]+"<br>The number of the pineapples you collate : "+points[3]+"<br>The number of the apples you collate : "+points[4]+"<br>The number of the strawberrys you collate: "+points[5]+"<br></html>");
+        label.setFont(new Font("David",Font.BOLD,20));
+        label.setForeground(Color.white);
+        label.setBackground(Color.black);
+        JPanel cont2 =new JPanel();
+        cont2.setBackground(Color.BLACK);
+        cont2.add(label);
+        containerPanel.add(cont2);
+
         containerPanel.add(cont,BorderLayout.PAGE_END);
     }//Constructor
 
     private void createFrame(){
-        setSize(596,573);//Set Frame dimensions.
+        setSize(596,678);//Set Frame dimensions.
         setResizable(false);//Lock Frame Size.
         setVisible(true);//Make Frame Visible.
         setLocationRelativeTo(null);//Center the frame on the screen.

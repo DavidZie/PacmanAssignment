@@ -29,6 +29,8 @@ public class MainFrame extends JFrame {
             ActionListener startGameListener = e -> {
                 setVisible(false);
                 OptionsFrame.getInstance().setVisible(true);
+                int[] a={0,0,0,0,0,0};
+                new GameOverFrame(a);
             };
             ActionListener winTableListener = e -> {
                 setVisible(false);
