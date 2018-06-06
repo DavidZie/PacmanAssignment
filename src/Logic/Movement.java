@@ -87,6 +87,7 @@ public class Movement {
                 break;
         }
         board.getPacman().setFacing(direction);
+        board.checkImpact();//Check if 2 players are on the same Piece.
         gameFrame.repaint();
     }//move the Pacman and leave a black Tile Behind it.
 
@@ -165,6 +166,7 @@ public class Movement {
                 ghost.getLocation()[1] -= 1;
                 break;
         }
+        board.checkImpact();//Check if 2 players are on the same Piece.
         gameFrame.repaint();
     }//Move Ghost by setting the destination tile image to be the ghost's image, put back on the Ghost's previous tile it's original image.
 

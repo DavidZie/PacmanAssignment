@@ -46,7 +46,7 @@ public class Ginky extends Ghost implements Visited {
             }//Do nothing first 7 seconds.
 
             if (disappear) {//If disappeared, reappear after 5 seconds.
-                if (repeats==37)
+                if (repeats>=37)
                     disappear=false;
                 else image.getGraphics().drawImage(getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
             } else image.getGraphics().drawImage(gameImagesArray[4][0], 0, 0, pieceSize, pieceSize, null);
@@ -54,7 +54,7 @@ public class Ginky extends Ghost implements Visited {
             if (!getRoute().empty())
                 Movement.moveGhost((int)getRoute().pop(), this,gameFrame.getBoard());
 
-            if (repeats==27)
+            if (repeats>=27)
                 setChasing(true);//Start Chasing 2 seconds after exiting cage.
 
             repeats++;
