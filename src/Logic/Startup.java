@@ -18,7 +18,7 @@ public class Startup {
     }
 
     private static void music() {
-        File clap = new File(songPath + "\\PacmanRemix.wav");
+        File clap = new File(songPath + "\\PacManOriginal.wav");
         playSound(clap);
     }
 
