@@ -31,7 +31,7 @@ public class Piece extends JLabel {
 
 
     public boolean isEaten() {
-        return eaten;
+        return !eaten;
     }
 
     public void setEaten(boolean eaten) {
@@ -184,15 +184,14 @@ public class Piece extends JLabel {
         switch (worth){
             case 0:
                 drawBlackImage();
+                eaten=true;
                 break;
             case 10:
                 drawData("0");
                 break;
             case 50:
                 drawData("6");
-        }
-        if (worth>=100){
-            addFruit(fruit);
+                break;
         }
         repaint();
     }

@@ -212,11 +212,22 @@ public class Pacman implements Visited,Visitor {
                 ginky.setDisappear(true);
                 image.getGraphics().drawImage(ginky.getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
                 ginky.setChasing(false);
+                for (int j=6;j<27;j++){
+                    board.cleanGarbage(location[0]-1,j);
+                    board.cleanGarbage(location[0],j);
+                    board.cleanGarbage(location[0]+1,j);
+                }//On Impact, Clean Garbage from pacman's row and the rows above and below.
+
                 break;
             case 3:
                 ginky.getTimer().stop();
                 image.getGraphics().drawImage(ginky.getCoveredImage(), 0, 0, pieceSize, pieceSize, null);
                 ginky.setDead(true);
+                for (int j=6;j<27;j++){
+                    board.cleanGarbage(location[0]-1,j);
+                    board.cleanGarbage(location[0],j);
+                    board.cleanGarbage(location[0]+1,j);
+                }//On Impact, Clean Garbage from pacman's row and the rows above and below.
                 break;
         }
     }//In Case Ginky is visiting, act according to pacman level.
@@ -233,6 +244,7 @@ public class Pacman implements Visited,Visitor {
                 inky.setChasing(false);
                 inky.setRepeats(19);
                 board.getCurrentScore()[0]=board.getCurrentScore()[0]-10;
+                board.updateScore(board.getPieces()[location[0]][location[1]]);
                 break;
             case 3:
                 inky.freeze();

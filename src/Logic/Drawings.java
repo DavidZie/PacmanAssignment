@@ -200,8 +200,8 @@ public class Drawings {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                int n = JOptionPane.showInternalConfirmDialog(null, "Are you Sure you Want Leave Game?.", "Alert", JOptionPane.OK_CANCEL_OPTION);
                 board.stop();
+                int n = JOptionPane.showInternalConfirmDialog(null, "Are you Sure you Want Leave Game?.", "Alert", JOptionPane.OK_CANCEL_OPTION);
                 if (n==JOptionPane.YES_OPTION){
                     gameFrame.endGame(board.getCurrentScore());
                 } else board.start();

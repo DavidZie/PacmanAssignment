@@ -149,10 +149,11 @@ public class Board extends JPanel {
 
             if (level>2&&ghosts[2].isLoaded())//Blinky can fire only on level 3.
                 fire(ghosts[2]);
-
             timerRepeats++;//Ticks.
             checkCompletion();//Check if Board is Completed.
-
+            for (int j=6;j<27;j++){
+                cleanGarbage(j,2+timerRepeats%21);
+            }//Every Tick Redraw row of cells (Excluding Cells with Fruits, Ghosts or pacman) to avoid overwriting existing pills.
         });
     }
 //-----------------------First Draw Methods------------------//
@@ -210,7 +211,7 @@ public class Board extends JPanel {
     }//Take a piece and draw it black.
 
     public void updateScore(Piece piece){
-        if (!piece.isEaten()){
+        if (piece.isEaten()){
             currentScore[0]+=piece.getWorth();
             switch (piece.getWorth()){
                 case 10:
@@ -345,7 +346,7 @@ public class Board extends JPanel {
             }
         }
         return true;
-    }//Check if a cell at x,y is occupied.
+    }//Check if a cell at x,y is NOT occupied.
 
     private void fire(Ghost ghost){
         ghosts[ghost.getId()+2] = ghost.getWeapon();
@@ -450,7 +451,22 @@ public class Board extends JPanel {
     public void speedDown(){
         for (int i=0;i<7;i++){
             try{ghosts[i].getTimer().setDelay(ghosts[i].getTimer().getDelay()*2);
-            ghosts[i].setRepeats(ghosts[i].getRepeats()/2);}
+            ghosts[i].setRepeats(ghosts[i].getRepeats()/2);
+            switch (i){
+                case 0:
+                    if (ghosts[i].getRepeats()*2>22&&ghosts[i].getRepeats()<22)
+                        ghosts[i].setRepeats(22);
+                    break;
+                case 1:
+                    if (ghosts[i].getRepeats()*2>16&&ghosts[i].getRepeats()<16)
+                        ghosts[i].setRepeats(16);
+                    break;
+                case 2:
+                    if (ghosts[i].getRepeats()*2>14&&ghosts[i].getRepeats()<14)
+                        ghosts[i].setRepeats(14);
+                    break;
+                }//Avoid Freezing Ghosts if Speeding down caused timer to get below Cage Exit Time.
+            }
             catch (NullPointerException ignored){}
         }
         timer.setDelay(timer.getDelay()*2);
@@ -466,8 +482,11 @@ public class Board extends JPanel {
     private void checkCompletion(){
         for (int i=0;i<32;i++){
             for (int j=0;j<32; j++){
-                if (!pieces[i][j].isEaten()&&pieces[i][j].getFruit()==null)
+                if (pieces[i][j].isEaten() &&pieces[i][j].getFruit()==null) {
+                    if (checkCell(i,j))
+                        pieces[i][j].reDrawMe();
                     return;
+                }
             }
         }
         stop();
@@ -475,18 +494,11 @@ public class Board extends JPanel {
         gameFrame.finishBoard(id, lives, level, currentScore);
     }//Check if All pills were Eaten.
 
-
-    private void cleanGarbage(){
-
-        for (int i=0;i<32;i++){
-            for (int j=0;j<32; j++){
-                if (!pieces[i][j].isWall()&&!pieces[i][j].isGhostHouse()&&!(i==pacman.getLocation()[0]&&j==pacman.getLocation()[1])&&checkCell(i,j))
-                    pieces[i][j].reDrawMe();
-            }
+    public void cleanGarbage(int rowIndex, int colIndex){
+        if (!pieces[colIndex][rowIndex].isWall()&&!pieces[colIndex][rowIndex].isGhostHouse()&&checkCell(colIndex,rowIndex)&&pacman.getLocation()[0]!=colIndex&&pacman.getLocation()[1]!=rowIndex){
+            pieces[colIndex][rowIndex].reDrawMe();
         }
-
-
-    }//All the Image Switching done might cause tiles no to display the correct image. Redraw those tiles.
+    }//Redraw row  cell (Unless Cell has a Fruit, ghost or pacman on it) to avoid overwriting existing pills.
 
 
     public void addExtraGhost(int id){
